@@ -1,0 +1,56 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/lead-beta-systematic/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-19",
+  "criteria": {
+    "C1": [
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_hand_moves_positive_and_negative_covariance",
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_lead_unknown_and_duplicates_left_out",
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_at_lead_mean_every_target_at_its_mean",
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_iterable_targets_and_inputs_not_mutated",
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_refusals",
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_property_matches_hand_formula_and_single_driver_conditional_mean",
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_property_affine_in_lead_move",
+      "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_property_invariant_to_covariance_scale"
+    ]
+  },
+  "files": {
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py": "7533818ec83f87761d1864f0ae1113154f05e20c990788e54fd2bf0647f97560"
+  },
+  "id": "lead-beta-systematic",
+  "interface": [
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "lead_systematic",
+      "signature": "def lead_systematic(cov: FactorCovariance, lead: str, lead_move: float, targets: collections.abc.Iterable[str]) -> dict[str, float]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_at_lead_mean_every_target_at_its_mean",
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_hand_moves_positive_and_negative_covariance",
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_iterable_targets_and_inputs_not_mutated",
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_lead_unknown_and_duplicates_left_out",
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_point_refusals",
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_property_affine_in_lead_move",
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_property_invariant_to_covariance_scale",
+    "tests/spec/lead-beta-systematic/test_lead_systematic.py::test_c1_property_matches_hand_formula_and_single_driver_conditional_mean"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/lead-beta-systematic.md",
+    "sha256": "9cf4c237a2559a820227b9c82f5f08228cc1c5e108ed1b62fee59b88ffaad6dc"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

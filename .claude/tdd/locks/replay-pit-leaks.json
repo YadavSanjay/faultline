@@ -1,0 +1,87 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/replay-pit-leaks/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-19",
+  "criteria": {
+    "C1": [
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_string_dates_cut_after_as_of",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_datetime_index_cut_after_as_of",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_original_order_kept_for_unsorted_index",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_none_returns_whole_series_as_a_copy",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_as_of_before_every_date_is_empty",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_unparseable_index_raises",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_input_not_mutated",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_property_kept_exactly_the_dates_on_or_before_as_of",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_property_never_grows_when_as_of_moves_earlier",
+      "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_metamorphic_none_equals_cut_at_last_date"
+    ],
+    "C2": [
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_before_on_after_missing_empty_lowercase",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_empty_input_and_start_day_boundary",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[2025/01/02]",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[2025-13-01]",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[Jan 2 2025]",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[not-a-date]",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_input_not_mutated",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_property_dropped_exactly_when_missing_empty_or_after",
+      "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_metamorphic_later_cutoff_never_adds_a_key"
+    ]
+  },
+  "files": {
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py": "fe0775d7ad4a344c41e1103f63cf8f0c2251eb21c1e36061bd85c8e1467ab7d7",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py": "cd7f65542528c8ee6a73e2b2962ea163da8aa81f34b2764c3f2e997a5e634c22"
+  },
+  "id": "replay-pit-leaks",
+  "interface": [
+    {
+      "file": "src/scenariogen/event_replay.py",
+      "module": "src.scenariogen.event_replay",
+      "qualname": "pit_issuer_drops",
+      "signature": "def pit_issuer_drops(issuer_info: Mapping[str, Mapping[str, Any]], cutoff: date) -> set[str]"
+    },
+    {
+      "file": "src/scenariogen/implied_corr.py",
+      "module": "src.scenariogen.implied_corr",
+      "qualname": "series_as_of",
+      "signature": "def series_as_of(series: pd.Series, as_of: date | None) -> pd.Series"
+    }
+  ],
+  "nodes": [
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_metamorphic_later_cutoff_never_adds_a_key",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_before_on_after_missing_empty_lowercase",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_empty_input_and_start_day_boundary",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_input_not_mutated",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[2025-13-01]",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[2025/01/02]",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[Jan 2 2025]",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_point_malformed_start_raises[not-a-date]",
+    "tests/spec/replay-pit-leaks/test_pit_issuer_drops.py::test_c2_property_dropped_exactly_when_missing_empty_or_after",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_metamorphic_none_equals_cut_at_last_date",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_as_of_before_every_date_is_empty",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_datetime_index_cut_after_as_of",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_input_not_mutated",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_none_returns_whole_series_as_a_copy",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_original_order_kept_for_unsorted_index",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_string_dates_cut_after_as_of",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_point_unparseable_index_raises",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_property_kept_exactly_the_dates_on_or_before_as_of",
+    "tests/spec/replay-pit-leaks/test_series_as_of.py::test_c1_property_never_grows_when_as_of_moves_earlier"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/replay-pit-leaks.md",
+    "sha256": "94b86325ddd3632959978f0d0190e3201d76ee7825788a47380c4f10ae6c9cd3"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

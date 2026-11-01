@@ -1,0 +1,32 @@
+{
+  "_env_note": "Service LOCATION is env-overridable in one place (harness-audit F6): set ARAG_HOME / MACRORAG_HOME (host repo roots), MCP_PYTHON (interpreter), or RAGINFER_URL (shared inference svc) in the environment; the ${VAR:-default} values below assume ARag (XbrlRag) and MacroRAG are checked out next to this repo and that `python` on PATH is the py312 interpreter.",
+  "servers": {
+    "arag": {
+      "command": "${MCP_PYTHON:-python}",
+      "args": ["-m", "src.mcp_server.server"],
+      "cwd": "${ARAG_HOME:-../XbrlRag}",
+      "env": {"PYTHONPATH": "${ARAG_HOME:-../XbrlRag}/src", "ARAG_MCP_TRANSPORT": "stdio", "RAGINFER_URL": "${RAGINFER_URL:-http://127.0.0.1:8799}"},
+      "tool_prefix": "arag",
+      "note": "ARag fundamentals (SEC 10-K/Q). The runnable entry is `python -m src.mcp_server.server` (cwd=ARag); ARag has no __main__.py and no argparse, so --transport/--tenant from the original block are dropped and transport is set via ARAG_MCP_TRANSPORT (tenant is a no-op for ARag)."
+    },
+    "macro": {
+      "command": "${MCP_PYTHON:-python}",
+      "args": ["-m", "mcp_server", "--transport", "stdio", "--tenant", "scenariogen"],
+      "cwd": "${MACRORAG_HOME:-../MacroRag}",
+      "env": {"PYTHONPATH": "${MACRORAG_HOME:-../MacroRag}/src","RAGINFER_URL": "${RAGINFER_URL:-http://127.0.0.1:8799}"},
+      "tool_prefix": "macro",
+      "note": "MacroRAG macro factors + citation-gated shock vectors. --tenant scenariogen scopes retrieval (currently the shared corpus)."
+    }
+  },
+  "timeout_s": 1200,
+  "call_timeout_s": 300,
+  "tool_timeouts_s": {"macro__macro_synthesize_shock_vector": 900},
+  "degrade_after_timeouts": 1,
+  "_note_timeouts": "Per tool (spec mcp-call-timeouts): a call gets its tool_timeouts_s entry, else call_timeout_s; a tool that times out degrade_after_timeouts times is skipped for the rest of the run, other tools on its server keep working. Every call timeout must be <= timeout_s. Synthesize (retrieval + LLM synthesis) exceeded 300s in a live run, hence 900s.",
+  "phase_allowlists": {
+    "discover": ["macro__macro_discover_factors", "macro__macro_vocabulary", "arag__coverage", "arag__narrative_search"],
+    "evidence": ["arag__facts_lookup", "arag__facts_compute", "arag__narrative_search", "macro__macro_query", "macro__macro_get_citations"],
+    "calibrate": ["macro__macro_shock_schema", "macro__macro_synthesize_shock_vector", "macro__macro_get_citations"]
+  },
+  "_note_macro_names": "MacroRAG's tools are themselves named macro_* (e.g. macro_query), so the server-prefixed names are macro__macro_query etc. ARag tools are bare, so arag__coverage etc."
+}

@@ -1,0 +1,126 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/scenario-layer-ablation/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-15",
+  "criteria": {
+    "C1": [
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_base_set",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_macrorag_only",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_full_set_anchored_scenario",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_full_set_idiosyncratic_only_scenario",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_news_and_crowding_without_narrative_equal_base",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_narrative_without_facts_uses_seed_moves",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_leg_missing_from_news_mult_gets_one",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_macro_none_with_macrorag_equals_base",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_state_only_scales_severity",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_inputs_not_mutated",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_property_matches_requirement",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_metamorphic_leg_layers_inert_without_narrative"
+    ],
+    "C2": [
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_unknown_layer_raises",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_no_drivers_raises",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_mismatched_leg_keys_raise",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_bad_scales_raise",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_property_any_unknown_layer_raises",
+      "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_property_non_positive_or_non_finite_scale_raises"
+    ],
+    "C3": [
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_hand_example_fields",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_layers_sorted_and_gross_over_union_of_trades",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_spearman_ties_and_constant_vectors",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_spearman_none_when_previous_is_constant",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_bad_order_raises",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_authored_in_order_raises",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_base_step_has_no_gross_or_rank",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_spearman_over_union_of_trades",
+      "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_property_telescoping_and_definitions"
+    ],
+    "C4": [
+      "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_glove_game",
+      "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_additive_game_with_nonzero_base",
+      "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_repeated_players_raise",
+      "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_property_efficiency",
+      "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_property_symmetry",
+      "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_metamorphic_null_player"
+    ]
+  },
+  "files": {
+    "tests/spec/scenario-layer-ablation/test_compose.py": "98baa8137d1467e8bf27874d3b5ab9aaa1e4e80ed467b42071cfdf5e3edd7683",
+    "tests/spec/scenario-layer-ablation/test_ladder.py": "5b6817217033e79041e405edc8041773d4c451c65c93ee6af247a374c38d4373",
+    "tests/spec/scenario-layer-ablation/test_shapley.py": "ccc3478f07cdd5286f0096d94eefda5f7cfb149fe89bee2d4b3c667ad127ddc9"
+  },
+  "id": "scenario-layer-ablation",
+  "interface": [
+    {
+      "file": "src/scenariogen/ablation.py",
+      "module": "src.scenariogen.ablation",
+      "qualname": "compose_definition",
+      "signature": "def compose_definition(*, layers: frozenset[str], authored_drivers: dict[str, float], authored_overlays: dict[str, float], macro_drivers: dict[str, float] | None, seed_legs: dict[str, float], calibrated_legs: dict[str, float], news_mult: dict[str, float], crowding_mult: dict[str, float], tier_scale: float, state_mult: float) -> tuple[dict[str, float], dict[str, float], float]"
+    },
+    {
+      "file": "src/scenariogen/ablation.py",
+      "module": "src.scenariogen.ablation",
+      "qualname": "ladder_attribution",
+      "signature": "def ladder_attribution(pnl_for: Callable[[frozenset[str]], Mapping[str, float]], order: Sequence[str]) -> list[dict[str, Any]]"
+    },
+    {
+      "file": "src/scenariogen/ablation.py",
+      "module": "src.scenariogen.ablation",
+      "qualname": "shapley_attribution",
+      "signature": "def shapley_attribution(value_for: Callable[[frozenset[str]], float], players: Sequence[str]) -> dict[str, float]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_base_set",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_full_set_anchored_scenario",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_full_set_idiosyncratic_only_scenario",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_inputs_not_mutated",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_leg_missing_from_news_mult_gets_one",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_macro_none_with_macrorag_equals_base",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_macrorag_only",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_metamorphic_leg_layers_inert_without_narrative",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_narrative_without_facts_uses_seed_moves",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_news_and_crowding_without_narrative_equal_base",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_property_matches_requirement",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c1_state_only_scales_severity",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_bad_scales_raise",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_mismatched_leg_keys_raise",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_no_drivers_raises",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_property_any_unknown_layer_raises",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_property_non_positive_or_non_finite_scale_raises",
+    "tests/spec/scenario-layer-ablation/test_compose.py::test_c2_unknown_layer_raises",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_authored_in_order_raises",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_bad_order_raises",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_base_step_has_no_gross_or_rank",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_hand_example_fields",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_layers_sorted_and_gross_over_union_of_trades",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_property_telescoping_and_definitions",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_spearman_none_when_previous_is_constant",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_spearman_over_union_of_trades",
+    "tests/spec/scenario-layer-ablation/test_ladder.py::test_c3_spearman_ties_and_constant_vectors",
+    "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_additive_game_with_nonzero_base",
+    "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_glove_game",
+    "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_metamorphic_null_player",
+    "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_property_efficiency",
+    "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_property_symmetry",
+    "tests/spec/scenario-layer-ablation/test_shapley.py::test_c4_repeated_players_raise"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/scenario-layer-ablation.md",
+    "sha256": "140e1f078133898074ad99f9190cc48605727756b6f913b91785015e368b0be1"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

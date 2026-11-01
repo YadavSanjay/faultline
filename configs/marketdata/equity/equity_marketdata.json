@@ -1,0 +1,214 @@
+{
+  "asset_class": "equity",
+  "description": "Market data for Cash Equity trades #1-6 (NVDA, TSM ADR, AVGO, MU, XLK ETF, SMH ETF) + Part 2 rebalance diversifiers #31-34 (CEG, VST, GOOGL, GLD). See docs/design §1.1, §3.2, §4.1 and portfolio_rebalance_review.md.",
+
+  "portfolio": [
+    {
+      "trade": 1, "ticker": "NVDA", "stooq": "nvda.us", "yahoo": "NVDA",
+      "type": "stock", "name": "NVIDIA Corporation",
+      "position": "long", "notes": "Core AI beta"
+    },
+    {
+      "trade": 2, "ticker": "TSM", "stooq": "tsm.us", "yahoo": "TSM",
+      "type": "adr", "name": "Taiwan Semiconductor Mfg ADR",
+      "position": "long",
+      "adr_ratio": 5,
+      "adr_notes": "1 ADR = 5 TWD ordinary shares. Ratio changed from 1:1 to 1:5 in 2023. FX risk vs TWD is implicit in the ADR price."
+    },
+    {
+      "trade": 3, "ticker": "AVGO", "stooq": "avgo.us", "yahoo": "AVGO",
+      "type": "stock", "name": "Broadcom Inc.",
+      "position": "long", "notes": "Networking/custom silicon"
+    },
+    {
+      "trade": 4, "ticker": "MU", "stooq": "mu.us", "yahoo": "MU",
+      "type": "stock", "name": "Micron Technology Inc.",
+      "position": "long", "notes": "HBM cycle play"
+    },
+    {
+      "trade": 5, "ticker": "XLK", "stooq": "xlk.us", "yahoo": "XLK",
+      "type": "etf", "name": "Technology Select Sector SPDR ETF",
+      "position": "long", "issuer": "SSGA",
+      "notes": "Sector hedge via listed options"
+    },
+    {
+      "trade": 6, "ticker": "SMH", "stooq": "smh.us", "yahoo": "SMH",
+      "type": "etf", "name": "VanEck Semiconductor ETF",
+      "position": "short", "issuer": "VanEck",
+      "notes": "Relative-value pair vs single-name semi longs"
+    },
+    {
+      "ticker": "AAPL", "stooq": "aapl.us", "yahoo": "AAPL",
+      "type": "stock", "name": "Apple Inc.", "underlier_for": "options #7-14",
+      "notes": "Option-underlier spot history for risk factors (GAP 2); not a cash position"
+    },
+    {
+      "ticker": "MSFT", "stooq": "msft.us", "yahoo": "MSFT",
+      "type": "stock", "name": "Microsoft Corporation", "underlier_for": "options #7-14",
+      "notes": "Option-underlier spot history for risk factors (GAP 2); not a cash position"
+    },
+    {
+      "ticker": "META", "stooq": "meta.us", "yahoo": "META",
+      "type": "stock", "name": "Meta Platforms Inc.", "underlier_for": "options #7-14",
+      "notes": "Option-underlier spot history for risk factors (GAP 2); not a cash position"
+    },
+    {
+      "ticker": "TSLA", "stooq": "tsla.us", "yahoo": "TSLA",
+      "type": "stock", "name": "Tesla Inc.", "underlier_for": "options #7-14",
+      "notes": "Option-underlier spot history for risk factors (GAP 2); not a cash position"
+    },
+    {
+      "ticker": "QQQ", "stooq": "qqq.us", "yahoo": "QQQ",
+      "type": "etf", "name": "Invesco QQQ Trust", "underlier_for": "options #7-14",
+      "notes": "Option-underlier spot history for risk factors (GAP 2); not a cash position"
+    },
+    {
+      "ticker": "SPX", "stooq": "^spx", "yahoo": "^GSPC",
+      "type": "index", "name": "S&P 500 Index", "underlier_for": "options #7-14",
+      "notes": "Option-underlier spot history for risk factors (GAP 2); index level, not a cash position"
+    },
+    {
+      "trade": 31, "ticker": "CEG", "stooq": "ceg.us", "yahoo": "CEG",
+      "type": "stock", "name": "Constellation Energy Corp",
+      "position": "long", "notes": "Part 2 rebalance: AI-power/nuclear diversifier (XLK risk proxy)"
+    },
+    {
+      "trade": 32, "ticker": "VST", "stooq": "vst.us", "yahoo": "VST",
+      "type": "stock", "name": "Vistra Corp",
+      "position": "long", "notes": "Part 2 rebalance: AI-power/IPP diversifier (XLK risk proxy)"
+    },
+    {
+      "trade": 33, "ticker": "GOOGL", "stooq": "googl.us", "yahoo": "GOOGL",
+      "type": "stock", "name": "Alphabet Inc. Class A",
+      "position": "long", "notes": "Part 2 rebalance: hyperscaler / app-layer AI monetization (XLK risk proxy)"
+    },
+    {
+      "trade": 34, "ticker": "GLD", "stooq": "gld.us", "yahoo": "GLD",
+      "type": "etf", "name": "SPDR Gold Shares", "issuer": "State Street",
+      "position": "long", "notes": "Part 2 rebalance: gold ballast/diversifier — OWN risk factor (not XLK proxy)"
+    },
+    {
+      "trade": 37, "ticker": "INTC", "stooq": "intc.us", "yahoo": "INTC",
+      "type": "stock", "name": "Intel Corporation",
+      "position": "long", "notes": "Part 2 N5: semis dispersion pair (laggard leg, long); own risk factor"
+    },
+    {
+      "trade": 38, "ticker": "AMD", "stooq": "amd.us", "yahoo": "AMD",
+      "type": "stock", "name": "Advanced Micro Devices Inc.",
+      "position": "short", "notes": "Part 2 N5: semis dispersion pair (leader leg, short); own risk factor"
+    }
+  ],
+
+  "time_window": {
+    "start_date": "2018-01-01",
+    "end_date": "today",
+    "granularity": "daily",
+    "stress_cadence": "weekly",
+    "notes": [
+      "8-year history from 2018 captures the pre-COVID baseline, 2020 COVID crash, 2022 rate shock, and 2023-2026 AI bull market — sufficient for all stress scenario calibration.",
+      "Daily granularity preserved; weekly resampling (Friday close) done client-side for stress scenarios.",
+      "Yahoo corporate actions fetched with 10y range to capture full NVDA/TSM split history."
+    ]
+  },
+
+  "sources": {
+
+    "stooq": {
+      "enabled": false,
+      "_disabled_note": "DISABLED 2026-07: Stooq's CSV endpoint now returns JS-rendered HTML for automated requests (even with the API key) — it is broken as an automated feed. Yahoo (yahoo_events) is the primary price source; this block is retained as a fallback if Stooq's CSV ever works again.",
+      "name": "Stooq Daily OHLCV",
+      "description": "Fallback daily price source (disabled — broken). Requires STOOQ_API_KEY passed as ?key= URL param.",
+      "base_url": "https://stooq.com",
+      "auth": { "type": "api_key_param", "key_env": "STOOQ_API_KEY", "param_name": "key" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/q/d/l/?s={stooq_ticker}&i=d&d1={start_yyyymmdd}&d2={end_yyyymmdd}",
+      "output_file": "prices_daily.csv"
+    },
+
+    "nasdaq_data_link": {
+      "enabled": false,
+      "name": "Nasdaq Data Link EOD Prices — backup",
+      "description": "Backup if Stooq is unavailable. Free tier: 50 calls/day. Returns OHLCV + Dividend + Split. API key in .env as STOOQ_API_KEY.",
+      "base_url": "https://data.nasdaq.com",
+      "auth": { "type": "api_key_param", "key_env": "STOOQ_API_KEY", "param_name": "api_key" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/api/v3/datasets/EOD/{ticker}/data.csv?start_date={start_date}&end_date={end_date}",
+      "output_files": {
+        "prices":    "prices_daily.csv",
+        "dividends": "dividends.csv",
+        "splits":    "splits.csv"
+      }
+    },
+
+    "yahoo_events": {
+      "enabled": true,
+      "name": "Yahoo Finance — OHLCV + Corporate Actions + Adjusted Close",
+      "description": "PRIMARY price source (Stooq is broken). OHLCV prices (prices_daily.csv), dividends, splits, and adjusted close via the Yahoo chart endpoint in a single call. Requires a real User-Agent header. Also builds the discrete dividend schedule for the QL dividend curve.",
+      "base_url": "https://query1.finance.yahoo.com",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/v8/finance/chart/{yahoo_ticker}?interval=1d&range=10y&events=div,split",
+      "output_files": {
+        "prices":    "prices_daily.csv",
+        "dividends": "dividends.csv",
+        "splits":    "splits.csv",
+        "adj_close": "prices_adj_close.csv"
+      }
+    },
+
+    "yahoo_history": {
+      "enabled": true,
+      "name": "Yahoo Finance — long adjusted-close history (severity anchors)",
+      "description": "Daily adjusted closes from 1990 for the book's names that existed then plus the long-history indices (^SOX semis from 1994, ^IXIC, ^GSPC, XLU as the power proxy), for the scenario severity anchors (docs/design/scenario_set_and_ablation_design.md §3.3; mapping in configs/scenariogen/long_history.json). Writes its OWN file — never prices_daily.csv / dividends.csv (a partial yahoo_events ingest clobbers those). Required tickers are fail-loud; the rest are skipped with a warning.",
+      "base_url": "https://query1.finance.yahoo.com",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/v8/finance/chart/{yahoo_ticker}?interval=1d&period1={period1}&period2={period2}&events=div,split",
+      "start_date": "1990-01-01",
+      "min_rows": 250,
+      "required": ["NVDA", "XLK", "^SOX", "^IXIC", "^GSPC"],
+      "tickers": [
+        { "ticker": "NVDA",  "yahoo": "NVDA" },
+        { "ticker": "TSM",   "yahoo": "TSM" },
+        { "ticker": "AVGO",  "yahoo": "AVGO" },
+        { "ticker": "MU",    "yahoo": "MU" },
+        { "ticker": "XLK",   "yahoo": "XLK" },
+        { "ticker": "SMH",   "yahoo": "SMH" },
+        { "ticker": "AAPL",  "yahoo": "AAPL" },
+        { "ticker": "MSFT",  "yahoo": "MSFT" },
+        { "ticker": "META",  "yahoo": "META" },
+        { "ticker": "TSLA",  "yahoo": "TSLA" },
+        { "ticker": "QQQ",   "yahoo": "QQQ" },
+        { "ticker": "CEG",   "yahoo": "CEG" },
+        { "ticker": "VST",   "yahoo": "VST" },
+        { "ticker": "GOOGL", "yahoo": "GOOGL" },
+        { "ticker": "GLD",   "yahoo": "GLD" },
+        { "ticker": "INTC",  "yahoo": "INTC" },
+        { "ticker": "AMD",   "yahoo": "AMD" },
+        { "ticker": "^SOX",  "yahoo": "^SOX" },
+        { "ticker": "^IXIC", "yahoo": "^IXIC" },
+        { "ticker": "^GSPC", "yahoo": "^GSPC" },
+        { "ticker": "XLU",   "yahoo": "XLU" }
+      ],
+      "output_file": "long_history_prices.csv"
+    }
+
+  }
+}

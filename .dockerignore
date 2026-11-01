@@ -1,0 +1,23 @@
+# Keep the build context small & the image clean (P0d).
+.git
+# Secrets: never bake an env file into an image. `.env` is gitignored; `.env.example` is the
+# committed template and is not needed in any image (Dockerfiles COPY only src/configs/ui).
+.env
+.env.*
+data/
+logs/
+notebooks/
+scripts/
+tests/
+docs/design/
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+.deepeval/
+.claude/
+*.md
+# Node build artifacts (the UI image rebuilds from source in a multi-stage node stage).
+**/node_modules/
+ui/app/dist/
+**/.vite/
+**/*.tmp

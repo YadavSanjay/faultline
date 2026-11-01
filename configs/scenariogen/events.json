@@ -1,0 +1,55 @@
+{
+  "description": "Theme-relevant key events and crowding (event-scenario-mapping, design docs/design/scenario_set_and_ablation_design.md §5.1/§5.3, step 9). Per scenario: which 8-K items count toward its news multiplier (each with its own item weight, decayed as in news.json), whether GDELT tone counts, whether crowding applies (only for names whose short-interest history passes the reliability check), and which items on which names mark it live. News and crowding scale every single-name equity driver of the scenario that is not an XbrlRag leg on its company-specific part only; tickers in 'excluded' and the scenario's severity lead are never scaled. Scenarios without a theme get no news, no crowding and no triggers. Composition rule dualrag-v3.",
+  "item_weights": {
+    "2.02": 0.6,
+    "5.02": 1.0,
+    "4.02": 1.0,
+    "2.06": 0.8,
+    "1.01": 0.5,
+    "1.02": 0.5,
+    "1.05": 0.7,
+    "2.01": 0.5,
+    "2.03": 0.6,
+    "2.04": 0.8,
+    "7.01": 0.2,
+    "8.01": 0.2
+  },
+  "_item_weights": "Must equal item_allowlist in configs/marketdata/news/news_marketdata.json (a unit test checks).",
+  "excluded": ["XLK", "SMH", "QQQ", "SPX", "GLD"],
+  "crowding_min_obs": 24,
+  "crowding_max_staleness_days": 30,
+  "themes": {
+    "ai_deflation": {
+      "news_items": ["2.02", "7.01", "2.06"], "tone": true, "crowding": true,
+      "trigger_items": ["2.02"], "trigger_names": ["GOOGL", "META", "MSFT", "AMZN", "ORCL"],
+      "_why": "Results and guidance (capex), Reg FD updates and impairments; hyperscaler results make it live."
+    },
+    "ai_efficiency_shock": {
+      "news_items": ["2.02", "7.01", "8.01"], "tone": true, "crowding": true
+    },
+    "taiwan_geopolitical": {
+      "news_items": ["7.01", "8.01"], "tone": true, "crowding": false,
+      "_why": "Export-control and supply-chain disclosures; the GPR index is its live trigger."
+    },
+    "tariff_shock": {
+      "news_items": ["7.01", "8.01"], "tone": true, "crowding": false
+    },
+    "crowded_unwind": {
+      "news_items": ["2.02"], "tone": false, "crowding": true,
+      "_why": "Positioning sets the cross-section; earnings 8-Ks are single-name amplifiers."
+    },
+    "ai_rotation": {
+      "news_items": [], "tone": false, "crowding": true
+    },
+    "ai_capex_credit": {
+      "news_items": ["2.03", "1.01"], "tone": false, "crowding": false,
+      "trigger_items": ["2.03"], "trigger_names": ["ORCL", "META", "AMZN", "MSFT", "AAPL"],
+      "_why": "Debt issuance (2.03) and material agreements (1.01, e.g. data-center leases) by the AI-capex issuers."
+    },
+    "keyman_nvda": {
+      "news_items": ["5.02", "4.02", "2.02"], "tone": true, "crowding": false,
+      "trigger_items": ["5.02", "4.02"], "trigger_names": ["NVDA"]
+    }
+  },
+  "_themes": "inflation_repricing and rate_capital have no theme. Item 2.03 triggers AI-capex credit (#8, step 11b)."
+}

@@ -1,0 +1,16 @@
+# .claude/tdd/profile.toml: the gate's settings for this repo (a maintenance path).
+# The gate reads this file from origin/main, never from the working tree. Unknown keys are an error.
+spec_root = "tests/spec"
+unit_root = "tests/unit"
+dispute_dir = ".claude/tdd/disputes"
+specs_dir = "docs/specs"
+src_roots = ["src"]               # where interface stubs live
+pythonpath = ["."]                # faultline imports as `src.pricer...` from the repo root; adding "src"
+                                  # too would let a module load twice (`pricer.x` and `src.pricer.x`)
+plugins = ["hypothesispytest"]    # pytest plugins enabled with -p (autoload is off)
+budget = 8                        # blocked stops per change before the gate gives way
+valuation_date = "2026-10-05"     # last row of tests/spec/_shared/snapshots/ust_par_yields_*.csv
+
+[hypothesis]
+gate_profile = "tdd-gate"         # registered in <spec_root>/conftest.py
+verify_profile = "tdd-verify"

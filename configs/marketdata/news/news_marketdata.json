@@ -1,0 +1,97 @@
+{
+  "asset_class": "news",
+  "description": "News & events (market-intelligence P3, workstream A). Two compact CSVs, no document store: SEC Form 8-K structured metadata (item codes, dates, accession) as a pre-classified, legally-mandated event spine, plus GDELT article-volume/tone salience as intensity. News enters scenariogen as a NUMERIC feature with a citation (a clamped multiplier on the ARag idiosyncratic leg), never as retrieved text — the architectural guard against overload. See docs/design/AITrade_market_intelligence_design.md §2.",
+
+  "time_window": { "start_date": "2024-01-01", "end_date": "today", "granularity": "daily" },
+
+  "tickers": ["NVDA", "AVGO", "MU", "AAPL", "MSFT", "META", "TSLA", "AMZN", "ORCL", "GOOGL", "INTC", "AMD", "CEG", "VST", "TSM"],
+  "cik_coverage_floor": 7,
+  "cik_map_file": "cik_map.csv",
+
+  "item_allowlist": {
+    "2.02": 0.6,
+    "5.02": 1.0,
+    "4.02": 1.0,
+    "2.06": 0.8,
+    "1.01": 0.5,
+    "1.02": 0.5,
+    "1.05": 0.7,
+    "2.01": 0.5,
+    "2.03": 0.6,
+    "2.04": 0.8,
+    "7.01": 0.2,
+    "8.01": 0.2
+  },
+  "gdelt_queries": {
+    "NVDA": "NVIDIA",
+    "AVGO": "Broadcom",
+    "MU": "Micron Technology",
+    "AAPL": "Apple Inc",
+    "MSFT": "Microsoft",
+    "META": "Meta Platforms",
+    "TSLA": "Tesla Inc",
+    "AMZN": "Amazon.com",
+    "ORCL": "Oracle Corporation",
+    "GOOGL": "Alphabet Google",
+    "INTC": "Intel Corporation",
+    "AMD": "Advanced Micro Devices",
+    "CEG": "Constellation Energy",
+    "VST": "Vistra Corp",
+    "TSM": "TSMC"
+  },
+  "_six_k_rules_comment": "Form 6-K (foreign private issuers, e.g. TSM) carries no item codes. Each 6-K maps to the 8-K item it is equivalent to by the FIRST rule whose regex matches its EDGAR primary-document file name (case-insensitive); item null = routine, dropped; no match = dropped, like an 8-K with no allowlisted item. The patterns follow TSM's own file naming, not an SEC taxonomy -- review them like the allowlist. docs/specs/sec-6k-events.md.",
+  "six_k_rules": [
+    {"pattern": "revenue|monthend|dividend|fsx|agm", "item": null},
+    {"pattern": "changeof", "item": "5.02"},
+    {"pattern": "^tsm-\\d{8}x6k\\.htm$", "item": "2.02"},
+    {"pattern": "board|directorsresolut", "item": "8.01"},
+    {"pattern": "tosell|acqui", "item": "2.01"}
+  ],
+
+  "sources": {
+    "sec_company_tickers": {
+      "enabled": true,
+      "name": "SEC company_tickers.json — ticker→CIK map (A0)",
+      "description": "The authoritative SEC-published ticker→CIK map. A0 resolves the portfolio's 8-K filers to CIKs from this file, fails loud below the coverage floor, and drift-checks the result against the in-repo bond-issuer CIKs.",
+      "base_url": "https://www.sec.gov",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": { "Accept-Encoding": "gzip, deflate" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.15,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint": "/files/company_tickers.json",
+      "output_file": "cik_map.csv"
+    },
+
+    "sec_events": {
+      "enabled": true,
+      "name": "SEC EDGAR 8-K item-code event stream (A1)",
+      "description": "Per-CIK submissions JSON, filtered to Form 8-K with allowlisted item codes. Structured metadata only (no NLP): item codes, filing dates, accession numbers, doc URLs. Requires a User-Agent with contact per SEC policy.",
+      "base_url": "https://data.sec.gov",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": { "Accept-Encoding": "gzip, deflate" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.15,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/submissions/CIK{cik}.json",
+      "min_expected_events": 5,
+      "output_file": "sec_events.csv"
+    },
+
+    "gdelt": {
+      "enabled": true,
+      "name": "GDELT 2.0 article-volume / tone salience (A2)",
+      "description": "Per-entity daily article volume + average tone with a historical series (timelinevolinfo / timelinetone), so vol/tone z-scores are available immediately without an accumulation wait. GDELT asks for one request every 5s.",
+      "base_url": "https://api.gdeltproject.org",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 5.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 6.0, "wait_max_s": 30.0 },
+      "vol_endpoint_template": "/api/v2/doc/doc?query={query}&mode=timelinevolinfo&format=json&timespan={timespan}",
+      "tone_endpoint_template": "/api/v2/doc/doc?query={query}&mode=timelinetone&format=json&timespan={timespan}",
+      "timespan": "6m",
+      "z_window_days": 63,
+      "output_file": "gdelt_salience.csv"
+    }
+  }
+}

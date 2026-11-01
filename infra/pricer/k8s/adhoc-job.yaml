@@ -1,0 +1,37 @@
+# One-shot ad-hoc pricing Job (P0d) — e.g. re-price a single asset class or date.
+# Apply:  kubectl apply -f adhoc-job.yaml   (edit args/name first)
+# Cleans itself up 1h after finishing (ttlSecondsAfterFinished).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pricer-adhoc-rates
+  labels: { app: faultline, tier: batch }
+spec:
+  ttlSecondsAfterFinished: 3600
+  backoffLimit: 1
+  activeDeadlineSeconds: 1800
+  template:
+    metadata:
+      labels: { app: faultline, tier: batch }
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: pricer
+          # The qlp-backend image (infra/backend/Dockerfile). It sets CMD (not ENTRYPOINT), so
+          # give the FULL command here, not just args. Pin to a git-SHA tag in prod.
+          image: REGISTRY/qlp-backend:latest
+          command: ["python", "-m", "src.pricer.runner", "--asset-class", "rates", "--valuation-date", "2026-05-29"]
+          resources:
+            requests: { cpu: "500m", memory: "1Gi" }
+            limits:   { cpu: "2",    memory: "2Gi" }
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pricer-data

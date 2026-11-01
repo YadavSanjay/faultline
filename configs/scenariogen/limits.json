@@ -1,0 +1,11 @@
+{
+  "description": "Risk limits + reverse-stress settings (S5). 'loss_limit' and 'capital_limit' are the book's economic-loss and capital (ES-under-shock increase) thresholds, in USD; the dashboard flags scenarios that breach them and reverse stress solves the severity that reaches 'loss_limit'. 'loss_warning' is an early-warning trigger below the loss limit, shown on the UI stress overview (the runner's breach log uses 'loss_limit' only). 'reverse_stress' tunes the bisection solver. Set 2026-10-19: loss_limit $120mm = 12% of the $1bn sizing capital_base, i.e. 6x the core profile's $20mm daily VaR budget (the same bound as sizing.json stress_constraint, decided 2026-10-17); loss_warning $80mm = 8% of capital. capital_limit is still a placeholder.",
+  "loss_limit": 120000000,
+  "loss_warning": 80000000,
+  "capital_limit": 20000000,
+  "reverse_stress": {
+    "max_scale": 10.0,
+    "tol_rel": 0.01,
+    "max_iter": 40
+  }
+}

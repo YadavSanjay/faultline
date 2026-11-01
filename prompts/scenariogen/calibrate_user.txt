@@ -1,0 +1,10 @@
+Calibrate driver shocks for this scenario proposal:
+{proposal}
+
+Grounding evidence (company + macro):
+{evidence}
+
+MacroRAG shock-vector synthesis for this scenario (source of the macro legs and their citations):
+{macro_synthesis}
+
+Emit the calibrated driver legs and any idiosyncratic overlays.

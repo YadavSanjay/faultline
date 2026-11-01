@@ -1,0 +1,22 @@
+{
+  "description": "Point-in-time event replay (scenario-event-replay; design docs/design/scenario_set_and_ablation_design.md §7.4, step 14b): could the scenario set as it stood the day before each episode have represented what happened? Each episode's as_of is the last trading day before it; horizon_days is the number of trading days of its realised window (yen carry 11 Jul - 5 Aug 2024, DeepSeek 27 Jan 2025, tariff 3-8 Apr 2025). Scenarios whose replay window ends on or after the as_of drop out. min_abs_z: smallest realised |z| that counts towards direction accuracy. sleeves: book factor -> sleeve for the per-sleeve direction accuracy.",
+  "episodes": [
+    {"name": "yen_carry", "as_of": "2024-07-10", "horizon_days": 18},
+    {"name": "deepseek", "as_of": "2025-01-24", "horizon_days": 1},
+    {"name": "tariff", "as_of": "2025-04-02", "horizon_days": 4}
+  ],
+  "min_abs_z": 1.0,
+  "sleeves": {
+    "eq:NVDA": "semis", "eq:TSM": "semis", "eq:AVGO": "semis", "eq:MU": "semis", "eq:AMD": "semis",
+    "eq:INTC": "semis", "eq:SMH": "semis",
+    "eq:AAPL": "platforms", "eq:MSFT": "platforms", "eq:META": "platforms", "eq:GOOGL": "platforms",
+    "eq:TSLA": "platforms",
+    "eq:CEG": "power", "eq:VST": "power",
+    "eq:XLK": "index", "eq:QQQ": "index", "eq:SPX": "index",
+    "eq:GLD": "gold",
+    "ir:DGS2": "rates", "ir:DGS5": "rates", "ir:DGS10": "rates", "ir:DGS30": "rates",
+    "credit": "credit", "credit:ORCL": "credit", "credit:META": "credit",
+    "eqvol": "vol", "ratesvol": "vol",
+    "fx:JPY": "fx", "fx:TWD": "fx"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "description": "Option-implied sizing (options-shock-sizing, design docs/design/scenario_set_and_ablation_design.md §5.3 / step 10). Option signals are read point-in-time: per name, the latest snapshot on or before the run's as_of and at most max_staleness_days old. A name with no qualifying snapshot falls back to its own CBOE vol index (lognormal, 30-day horizon) when listed in vol_index; other names get no option data (an index vol understates a single name's tail). A scenario whose severity block says \"source\": \"options\" (keyman_nvda) takes its lead's tiers from the option-implied distribution: mild = mild_q quantile, adverse = adverse_q quantile, severe = adverse x severity.json severe_factor capped at the hard bound; with no option data it falls back to the history anchors and is flagged option_anchor_unavailable. Every scenario's adverse tier with horizon <= check_max_horizon_days is flagged below_option_tail when the option market's check_q quantile is more extreme than its lead's move (report only).",
+  "max_staleness_days": 30,
+  "mild_q": 0.05,
+  "adverse_q": 0.01,
+  "check_q": 0.01,
+  "check_max_horizon_days": 21,
+  "vol_index": {"AAPL": "VXAPL", "AMZN": "VXAZN", "GOOGL": "VXGOG", "QQQ": "VXN", "SPX": "VIX"}
+}

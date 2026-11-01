@@ -1,0 +1,90 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-07",
+  "criteria": {
+    "C1": [
+      "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c1_hand_built_chains_resolve_like_merge_sdr_records",
+      "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c1_property_matches_merge_sdr_records_on_rates_columns"
+    ],
+    "C2": [
+      "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c2_credit_columns_kept_exactly_and_values_as_strings",
+      "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c2_legacy_existing_is_discarded",
+      "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c2_property_columns_are_union_and_values_identical"
+    ],
+    "C3": [
+      "tests/spec/credit-sdr-dedup/test_filter_credit.py::test_c3_labelled_rows_schema_and_exact_strings",
+      "tests/spec/credit-sdr-dedup/test_filter_credit.py::test_c3_property_keyword_rule_any_action_and_exact_values"
+    ],
+    "C4": [
+      "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c4_labelled_prints",
+      "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c4_extra_columns_and_values_unchanged",
+      "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c4_property_rule"
+    ],
+    "C5": [
+      "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_window_boundaries",
+      "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_boundaries_across_month_end",
+      "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_widening_lookback_never_removes",
+      "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_moving_as_of_later_keeps_rows_still_inside"
+    ]
+  },
+  "files": {
+    "tests/spec/credit-sdr-dedup/conftest.py": "d5725907e9bca6906225edfbb411f1373c4bffb96b1a96ee8cd2824f8f5c9b97",
+    "tests/spec/credit-sdr-dedup/test_filter_credit.py": "ea2247bf982a8297cda564a291a555506d8c64da39a6741a9599988fcdf14470",
+    "tests/spec/credit-sdr-dedup/test_merge_chains.py": "65779e870225cad5de1a52a9cae3e671054530e64300ce209d52551a3560db28",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py": "e96797a74fb2f48eb442a96067144ba47a2aa72b1beaff7cad4b8e0ddf4b4be2"
+  },
+  "id": "credit-sdr-dedup",
+  "interface": [
+    {
+      "file": "src/marketdata/credit/sdr_credit_records.py",
+      "module": "src.marketdata.credit.sdr_credit_records",
+      "qualname": "filter_credit_records",
+      "signature": "def filter_credit_records(raw: pd.DataFrame, day: str, filter_column: str, include_keywords: list[str], exclude_keywords: list[str]) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/credit/sdr_credit_records.py",
+      "module": "src.marketdata.credit.sdr_credit_records",
+      "qualname": "price_forming_prints",
+      "signature": "def price_forming_prints(records: pd.DataFrame, as_of: str, lookback_days: int) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/rates/sdr_records.py",
+      "module": "src.marketdata.rates.sdr_records",
+      "qualname": "merge_sdr_chains",
+      "signature": "def merge_sdr_chains(existing: pd.DataFrame, new: pd.DataFrame) -> pd.DataFrame"
+    }
+  ],
+  "nodes": [
+    "tests/spec/credit-sdr-dedup/test_filter_credit.py::test_c3_labelled_rows_schema_and_exact_strings",
+    "tests/spec/credit-sdr-dedup/test_filter_credit.py::test_c3_property_keyword_rule_any_action_and_exact_values",
+    "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c1_hand_built_chains_resolve_like_merge_sdr_records",
+    "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c1_property_matches_merge_sdr_records_on_rates_columns",
+    "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c2_credit_columns_kept_exactly_and_values_as_strings",
+    "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c2_legacy_existing_is_discarded",
+    "tests/spec/credit-sdr-dedup/test_merge_chains.py::test_c2_property_columns_are_union_and_values_identical",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c4_extra_columns_and_values_unchanged",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c4_labelled_prints",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c4_property_rule",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_boundaries_across_month_end",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_moving_as_of_later_keeps_rows_still_inside",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_widening_lookback_never_removes",
+    "tests/spec/credit-sdr-dedup/test_price_forming.py::test_c5_window_boundaries"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/credit-sdr-dedup.md",
+    "sha256": "dbff518b3d28e4242deadfd1695cf4255f2afa3b8781df085ec8e096e94b68b6"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

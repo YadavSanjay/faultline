@@ -1,0 +1,145 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/long-history-ingest/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-15",
+  "criteria": {
+    "C1": [
+      "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_point_new_york_offset_nulls_repeats_and_sorting",
+      "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_point_positive_offset_moves_utc_date_forward",
+      "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_error_or_empty_result_raises",
+      "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_property_matches_requirement",
+      "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_metamorphic_shifting_all_timestamps_shifts_dates"
+    ],
+    "C2": [
+      "tests/spec/long-history-ingest/test_downloaders.py::test_c2_yahoo_point_successes_skips_and_configured_ticker",
+      "tests/spec/long-history-ingest/test_downloaders.py::test_c2_yahoo_required_failure_raises_naming_ticker",
+      "tests/spec/long-history-ingest/test_downloaders.py::test_c2_yahoo_property_period1_and_survivors",
+      "tests/spec/long-history-ingest/test_downloaders.py::test_c2_parse_fredgraph_drops_missing_and_blank",
+      "tests/spec/long-history-ingest/test_downloaders.py::test_c2_fred_point_wide_frame_restricted_and_skips",
+      "tests/spec/long-history-ingest/test_downloaders.py::test_c2_fred_required_failure_raises_naming_series",
+      "tests/spec/long-history-ingest/test_downloaders.py::test_c2_fred_property_start_date_and_missing"
+    ],
+    "C3": [
+      "tests/spec/long-history-ingest/test_level_moves.py::test_c3_point_returns_for_eq_and_fx",
+      "tests/spec/long-history-ingest/test_level_moves.py::test_c3_point_percent_point_changes_for_other_factors",
+      "tests/spec/long-history-ingest/test_level_moves.py::test_c3_property_matches_formula",
+      "tests/spec/long-history-ingest/test_level_moves.py::test_c3_metamorphic_scaling_levels"
+    ],
+    "C4": [
+      "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_point_splice_with_beta",
+      "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_point_below_overlap_no_splice",
+      "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_point_fallback_missing_own_and_fred_factors",
+      "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_property_splice_matches_requirement",
+      "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_metamorphic_proxy_price_scale_invariance"
+    ]
+  },
+  "files": {
+    "tests/spec/long-history-ingest/test_build_long_history.py": "033feb383ab38211d37a250439b8793b0cef8bb9e5707a371a6624676b6eed87",
+    "tests/spec/long-history-ingest/test_downloaders.py": "0946d17ab7db12e06419179e217a7c1b69431311f2ff2cd3f21b12f7d11f9819",
+    "tests/spec/long-history-ingest/test_level_moves.py": "301b650bf67a8ac8f307bb79bc76fb69bc7a07924833cd8b7b2d86a8d0fb372c",
+    "tests/spec/long-history-ingest/test_parse_chart.py": "93d69ab3e2f1845a4480726c0abb311f28033c979bf4f4ef966d07069c5e66f3"
+  },
+  "id": "long-history-ingest",
+  "interface": [
+    {
+      "file": "src/marketdata/equity/yahoo_history_downloader.py",
+      "module": "src.marketdata.equity.yahoo_history_downloader",
+      "qualname": "parse_chart",
+      "signature": "def parse_chart(payload: dict[str, Any], ticker: str) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/equity/yahoo_history_downloader.py",
+      "module": "src.marketdata.equity.yahoo_history_downloader",
+      "qualname": "YahooHistoryDownloader.__init__",
+      "signature": "def __init__(self, config: dict, credentials: dict[str, str], *, client: Any=None) -> None"
+    },
+    {
+      "file": "src/marketdata/equity/yahoo_history_downloader.py",
+      "module": "src.marketdata.equity.yahoo_history_downloader",
+      "qualname": "YahooHistoryDownloader.collect",
+      "signature": "def collect(self) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/equity/yahoo_history_downloader.py",
+      "module": "src.marketdata.equity.yahoo_history_downloader",
+      "qualname": "YahooHistoryDownloader.run",
+      "signature": "def run(self) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/stress/fred_long_downloader.py",
+      "module": "src.marketdata.stress.fred_long_downloader",
+      "qualname": "parse_fredgraph",
+      "signature": "def parse_fredgraph(text: str, series_id: str) -> pd.Series"
+    },
+    {
+      "file": "src/marketdata/stress/fred_long_downloader.py",
+      "module": "src.marketdata.stress.fred_long_downloader",
+      "qualname": "FredLongDownloader.__init__",
+      "signature": "def __init__(self, config: dict, credentials: dict[str, str], *, client: Any=None) -> None"
+    },
+    {
+      "file": "src/marketdata/stress/fred_long_downloader.py",
+      "module": "src.marketdata.stress.fred_long_downloader",
+      "qualname": "FredLongDownloader.collect",
+      "signature": "def collect(self) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/stress/fred_long_downloader.py",
+      "module": "src.marketdata.stress.fred_long_downloader",
+      "qualname": "FredLongDownloader.run",
+      "signature": "def run(self) -> pd.DataFrame"
+    },
+    {
+      "file": "src/scenariogen/long_history.py",
+      "module": "src.scenariogen.long_history",
+      "qualname": "level_moves",
+      "signature": "def level_moves(levels: pd.Series, factor: str) -> pd.Series"
+    },
+    {
+      "file": "src/scenariogen/long_history.py",
+      "module": "src.scenariogen.long_history",
+      "qualname": "build_long_history",
+      "signature": "def build_long_history(prices: pd.DataFrame, fred: pd.DataFrame, mapping: Mapping[str, Mapping[str, Any]], *, min_overlap: int=250) -> tuple[dict[str, pd.Series], dict[str, dict[str, Any]]]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_metamorphic_proxy_price_scale_invariance",
+    "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_point_below_overlap_no_splice",
+    "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_point_fallback_missing_own_and_fred_factors",
+    "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_point_splice_with_beta",
+    "tests/spec/long-history-ingest/test_build_long_history.py::test_c4_property_splice_matches_requirement",
+    "tests/spec/long-history-ingest/test_downloaders.py::test_c2_fred_point_wide_frame_restricted_and_skips",
+    "tests/spec/long-history-ingest/test_downloaders.py::test_c2_fred_property_start_date_and_missing",
+    "tests/spec/long-history-ingest/test_downloaders.py::test_c2_fred_required_failure_raises_naming_series",
+    "tests/spec/long-history-ingest/test_downloaders.py::test_c2_parse_fredgraph_drops_missing_and_blank",
+    "tests/spec/long-history-ingest/test_downloaders.py::test_c2_yahoo_point_successes_skips_and_configured_ticker",
+    "tests/spec/long-history-ingest/test_downloaders.py::test_c2_yahoo_property_period1_and_survivors",
+    "tests/spec/long-history-ingest/test_downloaders.py::test_c2_yahoo_required_failure_raises_naming_ticker",
+    "tests/spec/long-history-ingest/test_level_moves.py::test_c3_metamorphic_scaling_levels",
+    "tests/spec/long-history-ingest/test_level_moves.py::test_c3_point_percent_point_changes_for_other_factors",
+    "tests/spec/long-history-ingest/test_level_moves.py::test_c3_point_returns_for_eq_and_fx",
+    "tests/spec/long-history-ingest/test_level_moves.py::test_c3_property_matches_formula",
+    "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_error_or_empty_result_raises",
+    "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_metamorphic_shifting_all_timestamps_shifts_dates",
+    "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_point_new_york_offset_nulls_repeats_and_sorting",
+    "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_point_positive_offset_moves_utc_date_forward",
+    "tests/spec/long-history-ingest/test_parse_chart.py::test_c1_property_matches_requirement"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/long-history-ingest.md",
+    "sha256": "a5bad0af1f28dec26810caad1c6a65a2e2118a731eb941092c0e6bad185e71df"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

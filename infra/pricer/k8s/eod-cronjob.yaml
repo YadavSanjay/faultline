@@ -1,0 +1,65 @@
+# EOD batch pricing on Kubernetes (P0d).
+#
+# A CronJob runs the full-portfolio valuation each weekday evening; results + the
+# provenance/snapshot/quality artifacts land on a shared PVC. Replace REGISTRY/IMAGE
+# and the schedule/timezone for your cluster. Apply:  kubectl apply -f eod-cronjob.yaml
+#
+# The image is the qlp-backend image (infra/backend/Dockerfile — python:3.12-slim + the QuantLib
+# PyPI wheel), tagged with the git SHA so the running code is identifiable (and it matches the
+# provenance git_sha in results). It sets CMD (not ENTRYPOINT), so give the FULL command below.
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pricer-data
+  labels: { app: faultline }
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pricer-eod
+  labels: { app: faultline, tier: batch }
+spec:
+  # 22:30 on weekdays. Set spec.timeZone (k8s >=1.27) to your valuation timezone.
+  schedule: "30 22 * * 1-5"
+  timeZone: "America/New_York"
+  concurrencyPolicy: Forbid          # never overlap two EOD runs
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 7
+  jobTemplate:
+    spec:
+      backoffLimit: 1                 # one retry; per-trade faults are handled in-process
+      activeDeadlineSeconds: 3600
+      template:
+        metadata:
+          labels: { app: faultline, tier: batch }
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1000
+          containers:
+            - name: pricer
+              image: REGISTRY/qlp-backend:latest       # pin to a git-SHA tag in prod
+              imagePullPolicy: IfNotPresent
+              command: ["python", "-m", "src.pricer.runner", "--valuation-type", "PV"]   # full portfolio at the default date
+              env:
+                - name: TZ
+                  value: "America/New_York"
+              resources:
+                requests: { cpu: "500m", memory: "1Gi" }
+                limits:   { cpu: "2",    memory: "2Gi" }
+              volumeMounts:
+                - name: data
+                  mountPath: /app/data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: pricer-data

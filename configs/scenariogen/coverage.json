@@ -1,0 +1,9 @@
+{
+  "description": "Scenario-set coverage and diversity report (docs/design/scenario_set_and_ablation_design.md §7.3; docs/specs/scenario-set-coverage.md; src/scenariogen/coverage_runner.py). The book's principal loss directions come from each trade's daily full-revaluation P&L over the VaR lookback: as many as reach variance_share of the total variance, at most max_components. Coverage is the variance-weighted share of those directions spanned by the scenarios' per-trade P&L at the tier; a direction spanned less than uncovered_below is flagged uncovered. Diversity is the loss-weighted participation ratio of the scenarios after removing the book's first direction, against diversity_target; pairs above merge_threshold cosine on those beta-removed vectors are merge candidates (§4.2 merge rule, applied by hand).",
+  "tier": "mild",
+  "variance_share": 0.9,
+  "max_components": 10,
+  "uncovered_below": 0.5,
+  "merge_threshold": 0.85,
+  "diversity_target": [3, 4]
+}

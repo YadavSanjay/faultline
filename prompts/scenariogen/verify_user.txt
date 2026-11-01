@@ -1,0 +1,17 @@
+Verify each of the following calibrated shock legs against its OWN cited evidence.
+
+Legs (each has a factor id, move, origin, rationale, and its citations):
+{statements}
+
+Resolved evidence:
+{evidence}
+
+For every leg decide whether the cited evidence supports the direction and magnitude of its move:
+- SUPPORTED — a cited fact backs the move (a citation-gated macro shock counts as supported when
+  its citation resolves).
+- UNSUPPORTED — no citation, or the cited fact does not support the move.
+
+Return a single JSON object and nothing else, in exactly this shape:
+{{"verdicts": [{{"factor": "<the leg's factor id, verbatim>", "verdict": "SUPPORTED", "reason": "<one line>"}}]}}
+
+Include exactly one entry per leg, echoing each leg's factor id verbatim.

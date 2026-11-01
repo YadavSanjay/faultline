@@ -1,0 +1,73 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/signoff-legacy-seq/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-16",
+  "criteria": {
+    "C1": [
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_union_read_float_seq_with_nan_legacy_rows",
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_seq_column_absent",
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_integer_seq_ties_broken_by_recorded_at_text",
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_index_reset_from_non_default_index",
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_input_not_modified",
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_empty_frames",
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_property_permutation_and_non_increasing_seq",
+      "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_metamorphic_shuffle_invariant"
+    ],
+    "C2": [
+      "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_point_max_plus_one_over_sequenced_records",
+      "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_point_zero_when_no_sequenced_records",
+      "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_property_hand_max_and_legacy_append",
+      "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_metamorphic_appending_next_seq_raises_by_one"
+    ]
+  },
+  "files": {
+    "tests/spec/signoff-legacy-seq/test_next_seq.py": "9d2f582993d21bbe579e68e65d4cc72756af5e5d20a8fc772b04c4c8f5d32ca1",
+    "tests/spec/signoff-legacy-seq/test_order_records.py": "dae64ab4616717bac0d3a8e32d0483e7c54c90992b53736be419e63b1fa9da2c"
+  },
+  "id": "signoff-legacy-seq",
+  "interface": [
+    {
+      "file": "src/scenariogen/signoff.py",
+      "module": "src.scenariogen.signoff",
+      "qualname": "order_records",
+      "signature": "def order_records(df: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "file": "src/scenariogen/signoff.py",
+      "module": "src.scenariogen.signoff",
+      "qualname": "next_seq",
+      "signature": "def next_seq(df: pd.DataFrame) -> int"
+    }
+  ],
+  "nodes": [
+    "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_metamorphic_appending_next_seq_raises_by_one",
+    "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_point_max_plus_one_over_sequenced_records",
+    "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_point_zero_when_no_sequenced_records",
+    "tests/spec/signoff-legacy-seq/test_next_seq.py::test_c2_property_hand_max_and_legacy_append",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_metamorphic_shuffle_invariant",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_empty_frames",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_index_reset_from_non_default_index",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_input_not_modified",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_integer_seq_ties_broken_by_recorded_at_text",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_seq_column_absent",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_point_union_read_float_seq_with_nan_legacy_rows",
+    "tests/spec/signoff-legacy-seq/test_order_records.py::test_c1_property_permutation_and_non_increasing_seq"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/signoff-legacy-seq.md",
+    "sha256": "d47cd7c09d644596767f0cf7dfe8c77d1ee34be270ad25589417d8e608836caf"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

@@ -1,0 +1,342 @@
+{
+  "description": "MacroRAG integration (S4). 'connection' targets MacroRAG's REST API (live endpoints: POST /query incl. mode=synthesize, GET /citations/{id}, GET /healthz). The MacroRAG-side scenario-synthesis endpoint (see docs/design/MacroRAG_synthesis_endpoint_spec.md) is now deployed, so 'enabled' is true; on any failure (service down, refusal, stale/uncited chunks failing the GATE) plain --macro falls back to the static scenarios.json drivers, while --dual-rag stops a scenario whose arag.json required_services lists macro. Requests carry the scenario's scenarios.json horizon_days; fields MacroRAG flags with a hard validation code are dropped; market_episode chunks skip only the freshness check. Update 'base_url' to the deployed MacroRAG service URL and set the API key in the env var named by 'api_key_env'. NOTE: mode=synthesize runs a server-side LLM pipeline that can take minutes (~4 min observed), so 'timeout_s' is a generous 600s (10-min ceiling); the liveness probe uses the short 'health_timeout_s' instead so a dead service fails preflight fast. 'scenarios' defines, per stress scenario, the synthesis request we send MacroRAG: a question + facet filters (factor_tags/entity_tags from the catalog controlled vocabulary) and the macro shock-vector fields we expect back. MacroRAG returns a cited shock_vector (handoff §9B); mapping.py translates those fields to canonical factor keys, gate.py enforces freshness + citation coverage (catalog §10), and only the macro legs override the static drivers (per-name equity stays house/covariance-derived).",
+  "connection": {
+    "enabled": true,
+    "base_url": "${MACRORAG_BASE_URL:-http://localhost:8000}",
+    "api_key_env": "MACRORAG_API_KEY",
+    "health_timeout_s": 20,
+    "timeout_s": 600,
+    "max_attempts": 2,
+    "backoff_s": 1.0,
+    "backoff_max_s": 16.0,
+    "breaker_threshold": 5
+  },
+  "gate": {
+    "freshness_days": 550,
+    "min_chunks_per_driver": 1,
+    "require_citations": true
+  },
+  "units": {
+    "move_base": 100.0
+  },
+  "scenarios": {
+    "ai_deflation": {
+      "synthesis_question": "If AI data-center capex and hyperscaler guidance roll over and the AI trade unwinds over several months (as from the late-2021 peak to the October 2022 trough), a risk-off de-rating in which IG and HY credit spreads widen and MOVE and VIX rise, quantify the shocks over the scenario horizon to IG and HY credit spreads, MOVE, VIX and the UST 2/5/10/30 curve, with citations. (Equity legs are set separately.)",
+      "filters": {
+        "factor_tags": [
+          "credit_spread",
+          "equity_vol",
+          "rates_vol",
+          "ai_capex",
+          "data_center_power"
+        ],
+        "entity_tags": [
+          "nvidia",
+          "hyperscalers",
+          "semiconductors"
+        ]
+      },
+      "expect_fields": [
+        "IG_OAS",
+        "HY_OAS",
+        "MOVE",
+        "VIX",
+        "UST_2Y",
+        "UST_5Y",
+        "UST_10Y",
+        "UST_30Y"
+      ],
+      "directions": {
+        "IG_OAS": "up",
+        "HY_OAS": "up",
+        "MOVE": "up",
+        "VIX": "up"
+      }
+    },
+    "ai_efficiency_shock": {
+      "synthesis_question": "Given an AI model-efficiency shock like DeepSeek's January 2025 release, in which expected AI compute and data-center power demand are cut, semiconductor and power equities sell off, VIX rises and Treasury yields fall in a flight to quality, quantify the shocks over the scenario horizon to VIX, IG credit spreads and the UST 2/10/30 curve, with citations. (Equity legs are set separately.)",
+      "filters": {
+        "factor_tags": [
+          "equity_vol",
+          "ai_capex",
+          "data_center_power",
+          "credit_spread",
+          "flight_to_quality"
+        ],
+        "entity_tags": [
+          "ai",
+          "semiconductors",
+          "data_center"
+        ]
+      },
+      "expect_fields": [
+        "VIX",
+        "IG_OAS",
+        "UST_2Y",
+        "UST_10Y",
+        "UST_30Y"
+      ],
+      "directions": {
+        "VIX": "up",
+        "UST_2Y": "down",
+        "UST_10Y": "down",
+        "UST_30Y": "down"
+      }
+    },
+    "taiwan_geopolitical": {
+      "synthesis_question": "Given an escalation of US-China semiconductor export controls and a Taiwan foundry-supply disruption, a risk-off shock in which the Taiwan dollar weakens (USD/TWD rises), the yen strengthens as a haven (USD/JPY falls), IG and HY credit spreads widen, MOVE and VIX rise, and Treasury yields fall in a flight to quality, quantify the 10-day shocks to USD/TWD, USD/JPY, IG and HY credit spreads (OAS), the MOVE index, VIX, and the UST 2/5/10/30 curve, with citations.",
+      "filters": {
+        "factor_tags": [
+          "fx",
+          "credit_spread",
+          "rates_vol",
+          "equity_vol",
+          "term_premium"
+        ],
+        "entity_tags": [
+          "taiwan",
+          "china",
+          "TSMC"
+        ]
+      },
+      "expect_fields": [
+        "USDTWD",
+        "USDJPY",
+        "IG_OAS",
+        "HY_OAS",
+        "MOVE",
+        "VIX",
+        "UST_2Y",
+        "UST_5Y",
+        "UST_10Y",
+        "UST_30Y"
+      ],
+      "directions": {
+        "USDTWD": "up",
+        "USDJPY": "down",
+        "IG_OAS": "up",
+        "HY_OAS": "up",
+        "MOVE": "up",
+        "VIX": "up",
+        "UST_2Y": "down",
+        "UST_5Y": "down",
+        "UST_10Y": "down",
+        "UST_30Y": "down"
+      }
+    },
+    "tariff_shock": {
+      "synthesis_question": "Given a broad tariff and trade-war escalation like April 2025, in which equities, long Treasuries and gold sell off together, VIX and MOVE spike, IG and HY credit spreads widen, the yen strengthens (USD/JPY falls) and the curve steepens with the long end selling off, quantify the shocks over the scenario horizon to VIX, MOVE, IG and HY credit spreads, USD/JPY and the UST 2/10/30 curve, with citations.",
+      "filters": {
+        "factor_tags": [
+          "equity_vol",
+          "rates_vol",
+          "credit_spread",
+          "fx",
+          "term_premium",
+          "policy_uncertainty",
+          "supply_chain_disruption"
+        ],
+        "entity_tags": [
+          "china",
+          "semiconductors"
+        ]
+      },
+      "expect_fields": [
+        "VIX",
+        "MOVE",
+        "IG_OAS",
+        "HY_OAS",
+        "USDJPY",
+        "UST_2Y",
+        "UST_10Y",
+        "UST_30Y"
+      ],
+      "directions": {
+        "VIX": "up",
+        "MOVE": "up",
+        "IG_OAS": "up",
+        "HY_OAS": "up",
+        "USDJPY": "down",
+        "UST_30Y": "up"
+      }
+    },
+    "crowded_unwind": {
+      "synthesis_question": "Given a yen-carry-trade unwind like July-August 2024, in which the yen strengthens sharply (USD/JPY falls), VIX and MOVE spike, IG and HY credit spreads widen and Treasury yields fall, quantify the shocks over the scenario horizon to USD/JPY, VIX, MOVE, IG and HY credit spreads and the UST 2/10 curve, with citations.",
+      "filters": {
+        "factor_tags": [
+          "fx",
+          "monetary_policy",
+          "equity_vol",
+          "rates_vol",
+          "credit_spread",
+          "flight_to_quality"
+        ],
+        "entity_tags": []
+      },
+      "expect_fields": [
+        "USDJPY",
+        "VIX",
+        "MOVE",
+        "IG_OAS",
+        "HY_OAS",
+        "UST_2Y",
+        "UST_10Y"
+      ],
+      "directions": {
+        "USDJPY": "down",
+        "VIX": "up",
+        "MOVE": "up",
+        "IG_OAS": "up",
+        "HY_OAS": "up",
+        "UST_2Y": "down",
+        "UST_10Y": "down"
+      }
+    },
+    "inflation_repricing": {
+      "synthesis_question": "Given an inflation and real-rate repricing like August-October 2022, in which a hawkish Fed lifts Treasury yields across the curve, MOVE and VIX rise and IG credit spreads widen, quantify the shocks over the scenario horizon to the UST 2/5/10/30 curve, MOVE, VIX and IG credit spreads, with citations.",
+      "filters": {
+        "factor_tags": [
+          "inflation",
+          "discount_rate",
+          "term_premium",
+          "rates_vol",
+          "equity_vol",
+          "credit_spread"
+        ],
+        "entity_tags": [],
+        "publishers": [
+          "Federal Reserve",
+          "U.S. Treasury",
+          "MacroRAG (derived from FRED)"
+        ]
+      },
+      "expect_fields": [
+        "UST_2Y",
+        "UST_5Y",
+        "UST_10Y",
+        "UST_30Y",
+        "MOVE",
+        "VIX",
+        "IG_OAS",
+        "REAL_YIELD_10Y"
+      ],
+      "directions": {
+        "UST_2Y": "up",
+        "UST_5Y": "up",
+        "UST_10Y": "up",
+        "UST_30Y": "up",
+        "MOVE": "up",
+        "VIX": "up",
+        "IG_OAS": "up",
+        "REAL_YIELD_10Y": "up"
+      }
+    },
+    "rate_capital": {
+      "synthesis_question": "Given a term-premium repricing in which Treasury yields rise and the curve bear-steepens (in light of the latest FOMC/SEP guidance and the Treasury refunding/TBAC issuance outlook), with MOVE rising and IG credit spreads widening, quantify the 10-day shock to the UST 2/5/10/30 curve and term premium, the MOVE index, and IG credit spreads, with citations.",
+      "filters": {
+        "factor_tags": [
+          "term_premium",
+          "rates_vol",
+          "credit_spread"
+        ],
+        "entity_tags": [],
+        "publishers": [
+          "Federal Reserve",
+          "U.S. Treasury",
+          "CBO",
+          "MacroRAG (derived from FRED)"
+        ]
+      },
+      "expect_fields": [
+        "UST_2Y",
+        "UST_5Y",
+        "UST_10Y",
+        "UST_30Y",
+        "MOVE",
+        "IG_OAS",
+        "TERM_PREMIUM_10Y"
+      ],
+      "directions": {
+        "UST_2Y": "up",
+        "UST_5Y": "up",
+        "UST_10Y": "up",
+        "UST_30Y": "up",
+        "MOVE": "up",
+        "IG_OAS": "up",
+        "TERM_PREMIUM_10Y": "up"
+      }
+    },
+    "ai_rotation": {
+      "synthesis_question": "Given a rotation out of AI and mega-cap technology into the broad market like mid-July 2024, triggered by a soft CPI print and rate-cut repricing, in which front-end Treasury yields fall and VIX rises modestly, quantify the shocks over the scenario horizon to VIX and the UST 2/10 curve, with citations. (Equity legs are set separately.)",
+      "filters": {
+        "factor_tags": [
+          "equity_vol",
+          "inflation",
+          "discount_rate",
+          "valuation_stretch",
+          "hyperscaler_concentration"
+        ],
+        "entity_tags": [
+          "ai",
+          "semiconductors"
+        ]
+      },
+      "expect_fields": [
+        "VIX",
+        "UST_2Y",
+        "UST_10Y"
+      ],
+      "directions": {
+        "VIX": "up",
+        "UST_2Y": "down"
+      }
+    },
+    "keyman_nvda": {
+      "synthesis_question": "For an idiosyncratic NVIDIA key-man shock, a risk-off spillover in which IG credit spreads widen and MOVE and VIX rise, quantify any systematic one-month (21 trading days) spillover to IG credit spreads, MOVE, and VIX, with citations. (The single-name equity move is set separately.)",
+      "filters": {
+        "factor_tags": [
+          "equity_vol",
+          "credit_spread"
+        ],
+        "entity_tags": [
+          "nvidia"
+        ]
+      },
+      "expect_fields": [
+        "VIX",
+        "IG_OAS",
+        "MOVE"
+      ],
+      "directions": {
+        "VIX": "up",
+        "IG_OAS": "up",
+        "MOVE": "up"
+      }
+    },
+    "ai_capex_credit": {
+      "synthesis_question": "If debt-funded AI data-center capex leads credit markets to reprice the issuers funding it -- as when Oracle's CDS widened by about 100bp between October 2025 and January 2026 while IG credit overall stayed calm -- quantify the shocks over the scenario horizon to IG and HY credit spreads, VIX and the UST 10/30 yields, with citations. (Issuer credit and equity legs are set separately.)",
+      "filters": {
+        "factor_tags": [
+          "credit_spread",
+          "ai_capex",
+          "equity_vol"
+        ],
+        "entity_tags": [
+          "hyperscalers",
+          "ai"
+        ]
+      },
+      "expect_fields": [
+        "IG_OAS",
+        "HY_OAS",
+        "VIX",
+        "UST_10Y",
+        "UST_30Y"
+      ],
+      "directions": {
+        "IG_OAS": "up",
+        "HY_OAS": "up"
+      }
+    }
+  }
+}

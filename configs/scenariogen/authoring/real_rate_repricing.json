@@ -1,0 +1,12 @@
+{
+  "description": "Real-rate repricing scenario (market-intelligence F6). A nominal-only factor model treats a rate move identically whether it comes from real rates or breakevens, but for this long-duration tech book they are not equivalent (FINDING 6): a real-rate-driven repricing lifts the discount rate on long-duration growth equity AND long bonds together -- correlated loss across both blocks, exactly the 2022 pattern that a nominal-only model cannot express. Driven by the 10Y TIPS real-yield factor real:DFII10 (with a supporting term-premium leg tp:ACMTP10), propagated to equity/rates/credit through the covariance matrix; no macro/ARag services needed.",
+  "scenarios": {
+    "real_rate_repricing": {
+      "narrative": "Real-rate repricing: the 10Y TIPS real yield jumps ~75bp on a hawkish real-rate shock (higher-for-longer, term-premium rebuild) with inflation compensation roughly unchanged. The higher discount rate hits long-duration tech and long-dated bonds simultaneously -- the 2022 co-move -- rather than the partial equity/bond hedge a breakeven-driven move would give.",
+      "trigger": "Real-rate-driven repricing (higher real yields + term-premium rebuild, breakevens ~flat)",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {"real:DFII10": {"move_bp": 75}, "tp:ACMTP10": {"move_bp": 40}}
+    }
+  }
+}

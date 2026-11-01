@@ -1,0 +1,13 @@
+# Faultline — dev/CI dependencies. Includes the service extras (P1b) so CI
+# exercises the FastAPI facade.
+-r requirements-service.txt
+
+# Test runner + HTTP test client (FastAPI TestClient uses httpx)
+pytest==9.0.1
+httpx==0.28.1
+# Property tests in the test-first spec suite (tests/spec, run by tdd-spec CI)
+hypothesis==6.168.5
+
+# Lint + static types (CI gate)
+ruff==0.14.2
+mypy==1.18.2

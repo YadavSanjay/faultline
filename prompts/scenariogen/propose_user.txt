@@ -1,0 +1,9 @@
+{intent}
+
+Portfolio summary:
+{portfolio_summary}
+
+Evidence (company + macro risk factors, with citations):
+{evidence}
+
+Propose the portfolio-level stress scenario(s) these risk factors imply.

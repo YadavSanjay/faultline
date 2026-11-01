@@ -1,0 +1,28 @@
+{
+  "enabled": true,
+  "margined_trade_types": [
+    "ois_swap", "cap", "european_swaption", "bermudan_swaption",
+    "cds", "fx_forward", "xccy_swap"
+  ],
+  "margined_overrides": {
+    "TRADE_6": true
+  },
+  "im": {
+    "bps_of_notional": {
+      "ois_swap": 15,
+      "cap": 10,
+      "european_swaption": 20,
+      "bermudan_swaption": 25,
+      "cds": 50,
+      "fx_forward": 8,
+      "xccy_swap": 60,
+      "stock": 15
+    },
+    "vol_stress_floor": 0.25,
+    "vol_stress_cap": 3.0,
+    "eqvol_base": 0.20
+  },
+  "funding": {
+    "collateral_haircut_bps": 25
+  }
+}

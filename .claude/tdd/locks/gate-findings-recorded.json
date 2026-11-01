@@ -1,0 +1,79 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-18",
+  "criteria": {
+    "C1": [
+      "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_mixed_findings_fails_then_flags_then_others",
+      "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_no_findings_gives_empty_list",
+      "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_status_is_copied_not_derived",
+      "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_input_not_mutated",
+      "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_property_permutation_and_fails_first"
+    ],
+    "C2": [
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_more_than_limit_has_more_suffix",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_one_keeps_only_first",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_exactly_limit_has_no_suffix",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_fewer_than_limit_has_no_suffix",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_single_flag_finding_counts_zero_fails",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_below_one_raises[0]",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_below_one_raises[-1]",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_below_one_raises[-5]",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_entry_not_mutated",
+      "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_property_prefix_and_part_count"
+    ]
+  },
+  "files": {
+    "tests/spec/gate-findings-recorded/conftest.py": "4976245d01b02821f3b918f0d2ec2ceedb7f08fa47f9c22c3bce8e3da0e49368",
+    "tests/spec/gate-findings-recorded/test_held_out_entry.py": "c2cf35d483029521768e94ee570ad053368bb9fd2651836329e6ec89fde26ce0",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py": "50b8a04d14dcb3d583cad0c82055c1edc1f15f8d8ddd1bf983d2ccdf3957584f"
+  },
+  "id": "gate-findings-recorded",
+  "interface": [
+    {
+      "file": "src/scenariogen/report.py",
+      "module": "src.scenariogen.report",
+      "qualname": "held_out_entry",
+      "signature": "def held_out_entry(scenario: str, severity: str, version: str, result: PlausibilityResult) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/report.py",
+      "module": "src.scenariogen.report",
+      "qualname": "held_out_summary",
+      "signature": "def held_out_summary(entry: Mapping[str, Any], limit: int=5) -> str"
+    }
+  ],
+  "nodes": [
+    "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_input_not_mutated",
+    "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_mixed_findings_fails_then_flags_then_others",
+    "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_no_findings_gives_empty_list",
+    "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_point_status_is_copied_not_derived",
+    "tests/spec/gate-findings-recorded/test_held_out_entry.py::test_c1_property_permutation_and_fails_first",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_entry_not_mutated",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_exactly_limit_has_no_suffix",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_fewer_than_limit_has_no_suffix",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_below_one_raises[-1]",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_below_one_raises[-5]",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_below_one_raises[0]",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_limit_one_keeps_only_first",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_more_than_limit_has_more_suffix",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_point_single_flag_finding_counts_zero_fails",
+    "tests/spec/gate-findings-recorded/test_held_out_summary.py::test_c2_property_prefix_and_part_count"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/gate-findings-recorded.md",
+    "sha256": "0fb1f0ebefa2b4b3576285fb1614f2460324aa7afd2f3605d8a011f1f12a7e88"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

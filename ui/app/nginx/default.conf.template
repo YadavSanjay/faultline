@@ -1,0 +1,26 @@
+# Serve the built SPA and reverse-proxy /api to the BFF.
+#
+# ${API_UPSTREAM} is substituted at container start by nginx's envsubst entrypoint
+# (20-envsubst-on-templates.sh), which only replaces variables that are set in the environment —
+# so the nginx runtime variables below ($host, $scheme, $proxy_add_x_forwarded_for, $uri) are left
+# intact. The BFF routes are all under /api/… and the app calls them with that prefix, so
+# proxy_pass without a trailing path PRESERVES the /api/ prefix (matching the Vite dev proxy).
+server {
+    listen 8080;
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://${API_UPSTREAM};
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
+
+    # SPA fallback: unknown paths return index.html so client-side routing works.
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

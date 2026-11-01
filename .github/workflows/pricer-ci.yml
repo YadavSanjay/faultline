@@ -1,0 +1,134 @@
+# Pricer CI (P0d): lint, type-check, and test the pricing module.
+# QuantLib has no PyPI-wheel guarantee across platforms, so the test job installs it via conda
+# (mirroring the local py312 env) and runs ruff + mypy --strict + pytest.
+#
+# Three jobs:
+# - `standards` runs on every push and PR: ruff, mypy and the coding-standards checks
+#   (tools/standards/check_standards.py). It needs no market data. ADVISORY for now
+#   (continue-on-error): findings go to the job summary and never fail the workflow.
+# - `lint-type-test` stays manual-only. Auto-run was DISABLED (2026-06-20): pytest needs
+#   data/marketdata, which is gitignored (too large for GitHub), so it fails on a fresh checkout.
+#   Trigger it from the Actions tab once market data is provisioned in the runner.
+# - `offline-tests` runs on every push and PR: pytest on a checkout with no market data, where the
+#   tests that read it skip (tests/market_data_marker.py).
+#
+# Actions are pinned to commit SHAs (version in the trailing comment); upgrade deliberately.
+name: pricer-ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pricer-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  standards:
+    runs-on: ubuntu-latest
+    continue-on-error: true   # advisory until the owner turns the gate hard
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0   # the checks compare against the merge-base with origin/main
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install pinned deps
+        run: pip install -r requirements-dev.txt
+
+      - name: Ruff
+        id: ruff
+        continue-on-error: true
+        run: ruff check . --output-format github
+
+      - name: Mypy
+        id: mypy
+        continue-on-error: true
+        run: mypy
+
+      - name: New code (Google docstrings on changed lines)
+        id: newcode
+        continue-on-error: true
+        shell: bash   # explicit bash adds pipefail, so the checker's exit code survives `tee`
+        run: python tools/standards/check_standards.py new-code | tee newcode.txt
+
+      - name: Ratchet (burn-down shrinks, config and pins only tighten)
+        id: ratchet
+        continue-on-error: true
+        shell: bash   # pipefail, as above
+        run: python tools/standards/check_standards.py ratchet | tee ratchet.txt
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Coding standards (advisory)"
+            echo "| Check | Result |"
+            echo "|---|---|"
+            echo "| ruff | ${{ steps.ruff.outcome }} |"
+            echo "| mypy | ${{ steps.mypy.outcome }} |"
+            echo "| new code | ${{ steps.newcode.outcome }} |"
+            echo "| ratchet | ${{ steps.ratchet.outcome }} |"
+            for f in newcode.txt ratchet.txt; do
+              if [ -s "$f" ]; then echo; echo "### $f"; echo '```'; head -100 "$f"; echo '```'; fi
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  lint-type-test:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}   # login shell so `conda activate` works
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Set up conda (py312 + QuantLib 1.42.1)
+        uses: conda-incubator/setup-miniconda@fc2d68f6413eb2d87b895e92f8584b5b94a10167 # v3.3.0
+        with:
+          python-version: "3.12"
+          channels: conda-forge
+          activate-environment: py312
+          auto-activate-base: false
+
+      - name: Install QuantLib (conda) + pinned deps (pip)
+        run: |
+          conda install -y -c conda-forge quantlib=1.42.1
+          pip install -r requirements-dev.txt
+
+      - name: Ruff (lint)
+        run: ruff check .
+
+      - name: Mypy (strict, src/common+pricer+scenariogen+marketdata+tools/standards)
+        run: mypy
+
+      - name: Pytest
+        env:
+          FAULTLINE_REQUIRE_DATA: "1" # a lost feed fails, it doesn't skip
+        run: |
+          pytest tests/pricer
+          pytest tests/marketdata
+          
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+       
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install pinned deps
+        run: pip install -r requirements.txt -r requirements-service.txt -r requirements-dev.txt
+
+      - name: Pytest (needs no market data)
+        run: pytest
+        

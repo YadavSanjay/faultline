@@ -1,0 +1,178 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-19",
+  "criteria": {
+    "C1": [
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_latest_with_and_without_require",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_by_run_id_present_and_absent",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_undated_reports_rank_below_dated_ones",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_missing_run_id_counts_as_empty_string_in_a_tie",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_nothing_qualifies_gives_none",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_duplicate_run_id_raises",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_invalid_generated_at_raises",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_input_not_mutated",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_property_shuffle_invariant_and_result_carries_require",
+      "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_property_pick_is_maximal_on_the_hand_rule"
+    ],
+    "C2": [
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_six_layer_record_with_cost_rows",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_six_layer_record_without_cost_rows",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_without_subsets_floor_hits_are_empty",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_order_without_state_and_facts_gives_partial_steps",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_empty_steps_follow_in_table_order_and_still_get_costs",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_reordered_news_first",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[empty_ladder]",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[ladder_not_authored]",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[ladder_off_order]",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[unknown_layer]",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[repeated_layer]",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[step_not_consecutive]",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_inputs_not_mutated",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_property_deltas_and_shapley_sum_to_final_minus_authored",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_property_swapping_layers_within_a_step_keeps_the_bars",
+      "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_property_ratio_none_exactly_when_denominator_missing_or_zero"
+    ],
+    "C3": [
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_two_scenarios_with_layer_cost_and_mixed_rules",
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_without_layer_cost_and_stopped",
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_layer_cost_none_counts_as_absent",
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_duplicate_scenario_severity_raises",
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_invalid_ladder_propagates_value_error",
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_report_not_mutated",
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_property_mixed_rules_exactly_when_two_or_more_rules",
+      "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_property_each_scenario_equals_its_waterfall"
+    ],
+    "C4": [
+      "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_report_with_signal_health",
+      "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_report_without_signal_health",
+      "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_signal_health_none_and_no_held_out_or_stopped",
+      "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_report_not_mutated",
+      "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_property_attention_counts",
+      "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_property_fail_plus_flag_within_findings",
+      "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_property_input_not_mutated"
+    ],
+    "C5": [
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_report_entry_of_a_replay",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_held_out_replay_with_stored_spec",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_authored_scenario_from_config_converts_each_unit",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_replay_with_nothing_resolved",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_empty_or_missing_provenance_drivers_fall_through",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_mapping_without_unit_key_raises",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_inputs_not_mutated",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_property_scaled_iff_report_and_unresolved_only_for_replays",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_property_adding_a_driven_entry_always_gives_report",
+      "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_property_unit_conversion_matches_hand_factor"
+    ]
+  },
+  "files": {
+    "tests/spec/ablation-waterfall-view/conftest.py": "4bb99c657dfce09ab697cf3cb1b48bf5db773634dc7c0660432c3b5e342ac12a",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py": "d9e1dca0baf452a0cf9fba54b8c05bf7b743237fddcb52f0f62ffb7c2cd61b4d",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py": "03ac245ff552954d3a0920c7fbbb907ee409e601d04d84c62c950a4f957c4b75",
+    "tests/spec/ablation-waterfall-view/test_select_report.py": "47e58ec2f75c46f8335bc87f181a61d9bd8eb4af50cac6f435f304dc4c9579b2",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py": "a5f86d579419292919e35122f7f890588f9e212e3c9e822d8b7d7e1b5088c982",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py": "2c69efa64b7a0911e13b338fe7a4d12a070c1e2cc8abfd6191319d6e59e39baa"
+  },
+  "id": "ablation-waterfall-view",
+  "interface": [
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "select_report",
+      "signature": "def select_report(reports: Sequence[Mapping[str, Any]], *, run_id: str | None=None, require: str | None=None) -> Mapping[str, Any] | None"
+    },
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "waterfall",
+      "signature": "def waterfall(record: Mapping[str, Any], cost_rows: Sequence[Mapping[str, Any]] | None=None) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "ablation_view",
+      "signature": "def ablation_view(report: Mapping[str, Any]) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "signal_health_view",
+      "signature": "def signal_health_view(report: Mapping[str, Any]) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "definition_view",
+      "signature": "def definition_view(raw_spec: Mapping[str, Any], *, entry: Mapping[str, Any] | None=None, stored_spec: Mapping[str, Any] | None=None) -> dict[str, Any]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_duplicate_scenario_severity_raises",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_invalid_ladder_propagates_value_error",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_layer_cost_none_counts_as_absent",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_report_not_mutated",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_two_scenarios_with_layer_cost_and_mixed_rules",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_point_without_layer_cost_and_stopped",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_property_each_scenario_equals_its_waterfall",
+    "tests/spec/ablation-waterfall-view/test_ablation_view.py::test_c3_property_mixed_rules_exactly_when_two_or_more_rules",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_authored_scenario_from_config_converts_each_unit",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_empty_or_missing_provenance_drivers_fall_through",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_held_out_replay_with_stored_spec",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_inputs_not_mutated",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_mapping_without_unit_key_raises",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_replay_with_nothing_resolved",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_point_report_entry_of_a_replay",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_property_adding_a_driven_entry_always_gives_report",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_property_scaled_iff_report_and_unresolved_only_for_replays",
+    "tests/spec/ablation-waterfall-view/test_definition_view.py::test_c5_property_unit_conversion_matches_hand_factor",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_by_run_id_present_and_absent",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_duplicate_run_id_raises",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_input_not_mutated",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_invalid_generated_at_raises",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_latest_with_and_without_require",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_missing_run_id_counts_as_empty_string_in_a_tie",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_nothing_qualifies_gives_none",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_point_undated_reports_rank_below_dated_ones",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_property_pick_is_maximal_on_the_hand_rule",
+    "tests/spec/ablation-waterfall-view/test_select_report.py::test_c1_property_shuffle_invariant_and_result_carries_require",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_report_not_mutated",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_report_with_signal_health",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_report_without_signal_health",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_point_signal_health_none_and_no_held_out_or_stopped",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_property_attention_counts",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_property_fail_plus_flag_within_findings",
+    "tests/spec/ablation-waterfall-view/test_signal_health_view.py::test_c4_property_input_not_mutated",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_empty_steps_follow_in_table_order_and_still_get_costs",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_inputs_not_mutated",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[empty_ladder]",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[ladder_not_authored]",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[ladder_off_order]",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[repeated_layer]",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[step_not_consecutive]",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_invalid_record_raises[unknown_layer]",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_order_without_state_and_facts_gives_partial_steps",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_reordered_news_first",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_six_layer_record_with_cost_rows",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_six_layer_record_without_cost_rows",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_point_without_subsets_floor_hits_are_empty",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_property_deltas_and_shapley_sum_to_final_minus_authored",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_property_ratio_none_exactly_when_denominator_missing_or_zero",
+    "tests/spec/ablation-waterfall-view/test_waterfall.py::test_c2_property_swapping_layers_within_a_step_keeps_the_bars"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/ablation-waterfall-view.md",
+    "sha256": "74d078e1f63774bf65ff44b493b381f97ecac537f0ecaeab13d33cb9302398c3"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

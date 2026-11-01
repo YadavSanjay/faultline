@@ -1,0 +1,106 @@
+{
+  "description": "Model inventory (P4, SR 11-7 spirit). One governed entry per pricer/trade-type: the model + QuantLib engine, key assumptions, known limitations, approved use, and the independent control(s) that verify it. The governance coverage check fails if a portfolio trade-type has no entry.",
+  "models": {
+    "stock": {
+      "name": "Cash equity / ETF mark-to-market",
+      "asset_class": "equity",
+      "model": "Linear mark-to-market", "engine": "value = quantity x spot",
+      "assumptions": ["spot = latest daily close on/before valuation date", "trailing-12m dividend yield (diagnostic only)"],
+      "limitations": ["no borrow/repo or hard-to-borrow cost", "no corporate-action handling beyond split-adjusted closes"],
+      "approved_use": "delta-bearing cash positions and option/CDS underliers",
+      "ipv_controls": ["pv == quantity x spot"]
+    },
+    "ois_swap": {
+      "name": "SOFR overnight-indexed swap",
+      "asset_class": "rates",
+      "model": "Single-curve OIS discounting", "engine": "ql.MakeOIS on a SOFR curve bootstrapped from Pensford forward-derived par-OIS quotes",
+      "assumptions": ["par-OIS rates derived from the Pensford monthly forward-SOFR grid", "Act/360, annual fixed", "discount = forecast = one SOFR curve (multi-curve-ready interface)"],
+      "limitations": ["no Term-SOFR/Fed-funds basis", "curve bootstrapped to 30Y (12Y/15Y/20Y are real Pensford nodes; 30Y is constant-forward extrapolated past the ~20Y data horizon)", "no realized-SOFR fixings wired (C4) — latent: every trade spot-starts so no in-accrual period exists; a seasoned OIS would need nyfed_sofr fixings via IndexManager.addFixing"],
+      "approved_use": "vanilla SOFR OIS",
+      "ipv_controls": ["pv == dv01 x (fair-fixed)/1bp (par-swap identity)", "par-swap reprices to ~0"]
+    },
+    "european_swaption": {
+      "name": "European swaption",
+      "asset_class": "rates",
+      "model": "Bachelier (normal) on the forward swap rate", "engine": "ql BlackSwaptionEngine with normal vol",
+      "assumptions": ["normal (Bachelier) vol at the option expiry from a MOVE-anchored term structure (C1)", "single SOFR curve"],
+      "limitations": ["expiry-dependent vol comes from a STYLIZED MOVE-anchored shape (config multiplier), not a market surface", "flat across strike (no smile); a real cube needs licensed data — the free DTCC SDR IR-options feed is not calibratable"],
+      "approved_use": "single-look European swaptions",
+      "ipv_controls": ["vega > 0 (long optionality)"]
+    },
+    "bermudan_swaption": {
+      "name": "Bermudan swaption",
+      "asset_class": "rates",
+      "model": "Hull-White 1F, co-terminal calibration", "engine": "TreeSwaptionEngine, cross-checked vs FdHullWhiteSwaptionEngine",
+      "assumptions": ["Hull-White calibrated to co-terminal European swaptions", "each co-terminal target uses the normal vol at ITS expiry from the MOVE-anchored term structure (C1), so the vol slope identifies the mean reversion"],
+      "limitations": ["1-factor (no curve-shape optionality)", "the vol term structure is a stylized MOVE-anchored shape, not a market surface; flat across strike (no smile)"],
+      "approved_use": "Bermudan swaptions on SOFR",
+      "ipv_controls": ["tree engine vs FD engine cross-check (rel diff < 2%)", "calibration RMSE reported"]
+    },
+    "cap": {
+      "name": "Interest-rate cap",
+      "asset_class": "rates",
+      "model": "Bachelier (normal) per caplet", "engine": "ql BachelierCapFloorEngine",
+      "assumptions": ["normal vol at the cap's expiry from a MOVE-anchored term structure (C1)", "single SOFR curve"],
+      "limitations": ["expiry-dependent vol from a stylized MOVE-anchored shape, not a market surface; flat across strike; no caplet stripping"],
+      "approved_use": "SOFR caps",
+      "ipv_controls": ["vega > 0 (long optionality)"]
+    },
+    "corp_bond": {
+      "name": "Corporate fixed-rate bullet",
+      "asset_class": "bonds",
+      "model": "Z-spread discounting (term structure where the CDS feed supports it)", "engine": "ql FixedRateBond on SpreadedLinearZeroInterpolatedTermStructure(SOFR, issuer Z-spread curve) when the issuer CDS feed gives >=2 tenors; else ZeroSpreadedTermStructure(SOFR, flat Z-spread)",
+      "assumptions": ["issuer Z-spread(s) = per-tenor DTCC single-name CDS par spread + maturity-interpolated SOFR-Treasury basis (A3); config fallback bp for issuers with no clean CDS (AAPL/MSFT/AMZN)", "5Y headline pins the curve's 5Y node"],
+      "limitations": ["term structure only where the CDS feed supports it (ORCL ~2-3 tenors); thin names (META) and fallback issuers stay flat", "Z-spread flat-extrapolated past the last CDS tenor (bonds run to 2053/2054, CDS quotes reach ~5Y)", "CDS->bond basis held at zero", "SOFR base curve reaches 30Y (A1)"],
+      "approved_use": "senior unsecured corporate BULLETS only — all book bonds are non-callable; a callable/make-whole would need CallableFixedRateBond + a tree engine and report OAS not Z-spread (C6, not built until a callable enters the book)",
+      "ipv_controls": ["dirty == clean + accrued (accrual identity)"]
+    },
+    "ust_bond": {
+      "name": "US Treasury (on-the-run)",
+      "asset_class": "bonds",
+      "model": "Treasury par-curve discounting", "engine": "ql FixedRateBond on a par-bond-bootstrapped UST curve",
+      "assumptions": ["par yields from Treasury.gov", "ActualActual(Bond), semiannual"],
+      "limitations": ["on-the-run only; no repo/specialness"],
+      "approved_use": "on-the-run UST notes/bonds",
+      "ipv_controls": ["dirty == clean + accrued", "pv == dirty/100 x notional (exact)"]
+    },
+    "equity_option": {
+      "name": "Listed equity option (single-name / index)",
+      "asset_class": "options",
+      "model": "Black-Scholes-Merton", "engine": "AnalyticEuropeanEngine (European) / FdBlackScholesVanillaEngine (American); one BSM process per leg with its strike's IV",
+      "assumptions": ["spot + continuous dividend yield recovered from the option chain via put-call parity", "per-(expiry,strike) IV from the chain (skew-aware)", "risk-free = SOFR curve", "American legs on dividend payers price with a projected discrete ex-dividend schedule (B1), scaled to preserve the chain-implied forward so only early-exercise timing changes; other legs use the continuous yield"],
+      "limitations": ["single 2026-06-17 chain snapshot", "discrete dividends projected from the historical feed (latest amount held, cadence rolled forward); non-payers (TSLA)/index (SPX) and European legs stay on the continuous yield", "full BlackVarianceSurface built & shown (B2) but NOT fed to the FD engine as local vol — Dupire local vol from the sparse free chain is unstable/over-prices short options; each leg prices at its own exact (strike,expiry) IV instead", "no stochastic vol"],
+      "approved_use": "listed vanilla single-stock (American) and index (European) options and their combinations; the VIX term complex / SKEW / single-name vol indices are risk-vega factors only, not pricing inputs (C3) — each chain carries the authoritative skew+term surface",
+      "ipv_controls": ["finite-difference delta vs analytic delta_shares (rel diff < 3%)"]
+    },
+    "cds": {
+      "name": "Credit default swap (single-name / index)",
+      "asset_class": "credit",
+      "model": "ISDA standard; piecewise-flat hazard curve (flat fallback)", "engine": "ql IsdaCdsEngine on a hazard curve: single names with >=2 clean tenors bootstrap a piecewise-flat HazardRateCurve (sequential secant, each tenor's par CDS reprices to 0); thin names / index use one flat hazard (QL 1.42 has no IsdaCdsHelper)",
+      "assumptions": ["par-spread term structure from DTCC (single-name SEC path / index CFTC UPI); 5Y headline on a tight window, non-5Y tenors on a wider window; config fallback per name", "flat-forward SOFR discount (IsdaCdsEngine requirement)", "40% recovery"],
+      "limitations": ["free DTCC feed trades mostly the on-the-run 5Y, so the term structure is sparse (ORCL ~2-3 tenors; META/CDX stay flat)", "hazard extrapolated flat past the last quoted tenor", "index (B4) priced at the untranched index level (flat hazard from the quoted index spread, standard fixed coupon + upfront, on traded x index_factor); index_factor=1.0 for the current on-the-run (no free defaulted-name data); no constituent-curve aggregation or tranche granularity", "requires discount-curve reference date == valuation date"],
+      "approved_use": "single-name and CDX.NA.IG index CDS; single names price on a bootstrapped hazard term structure where the feed supports it; the index at the untranched index level",
+      "ipv_controls": ["fair_spread == par_spread (calibration round-trip)"],
+      "risk_measures": ["cs01 (+1bp spread, re-calibrated)", "rec01 (+1pt recovery, spread held constant — B5)"],
+      "notes": "B5: if the tight 5Y bucket is thin the headline widens to the longer window, then to the nearest standard tenor as a proxy, before the config fallback."
+    },
+    "fx_forward": {
+      "name": "FX forward / NDF",
+      "asset_class": "fx",
+      "model": "Covered-interest-parity discount-factor valuation", "engine": "DF_usd (SOFR) and DF_foreign (flat foreign rate); foreign leg at current spot",
+      "assumptions": ["spot foreign-per-USD: USD/JPY from the ECB cross, USD/TWD from the CBC NDF fixing (B3 — the reference the non-deliverable book settles against, and fresher than Fed H.10)", "foreign rate flat (BOJ TONAR overnight / CBC policy constant)"],
+      "limitations": ["flat foreign curve; xccy basis via a config hook (xccy_basis_bp, default 0 — no free daily USD/TWD or USD/JPY basis feed) added to the foreign discount rate (C2)", "no free JPY-OIS strip (TONAR is overnight-only) or TWD forward points to bootstrap a foreign term structure", "TWD rate held as a config constant"],
+      "approved_use": "deliverable FX forwards / NDFs on JPY, TWD",
+      "ipv_controls": ["finite-difference fx-delta vs analytic fx_delta_1pct (rel diff < 3%)"]
+    },
+    "xccy_swap": {
+      "name": "Cross-currency swap",
+      "asset_class": "fx",
+      "model": "Fixed-for-fixed CCS by discount factors", "engine": "USD leg on SOFR, foreign leg on a flat foreign curve converted at the CBC NDF-fixing spot",
+      "assumptions": ["fixed-for-fixed simplification of the design-doc MtM-resetting NDS", "USD/TWD spot from the CBC NDF fixing (B3)", "xccy basis via a config hook, default 0 (no free TAIBOR/basis feed) — C2"],
+      "limitations": ["no MtM resets", "flat TWD curve (no free forward points); basis = 0 by default (hook ready for a licensed basis); spot is the dominant risk"],
+      "approved_use": "USD/foreign CCS where spot is the dominant risk",
+      "ipv_controls": ["finite-difference fx-delta vs analytic fx_delta_1pct (rel diff < 3%)"]
+    }
+  }
+}

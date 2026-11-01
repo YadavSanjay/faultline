@@ -1,0 +1,10 @@
+{
+  "description": "Severity anchoring (docs/design/scenario_set_and_ablation_design.md §3.3; src/scenariogen/severity.py + anchoring.py). A scenario with a 'severity' block (lead factor + direction) in scenarios.json gets its tiers from history: mild = a once-in-mild_return_years move at the scenario horizon, adverse = the record, severe = adverse x severe_factor capped by the plausibility hard bound. The composed scenario is rescaled so the lead factor sits on the anchor; the enrichment layers may move it only within +/- band. Company legs are reseeded with their company-specific part, and their stacked multipliers (XBRL facts x news x crowding) capped to [1/leg_cap, leg_cap]. The GPR x throughput state multiplier is floored at state_floor. A proxy splice whose beta exceeds max_proxy_beta is not used for anchors (own history only).",
+  "mild_return_years": 10.0,
+  "severe_factor": 1.5,
+  "band": 0.25,
+  "leg_cap": 1.5,
+  "state_floor": 1.0,
+  "max_proxy_beta": 1.5,
+  "min_overlap": 250
+}

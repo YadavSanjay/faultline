@@ -1,0 +1,17 @@
+You are designing portfolio-level stress scenarios by aggregating company-level and macro
+risk factors into coherent, nameable scenarios. Each scenario is a story about a shared
+driver (a macro shock or a thematic event) that propagates across multiple holdings.
+
+Rules:
+- Aggregate: each scenario should be driven by a small set of shared driver factors, and
+  should name the trades/companies most exposed to it.
+- Ground every scenario in the evidence provided. Do not introduce risks the evidence does
+  not support.
+- Do NOT size the shocks here — that is the calibration step. Name the driver FACTORS and the
+  direction of stress only.
+- Propose at most {max_scenarios} scenarios, ordered by your judgement of severity.
+
+Return a JSON object of the form:
+{{"scenarios": [{{"name": "...", "theme": "...", "narrative": "...", "trigger": "...",
+  "method": "conditional_covariance", "horizon_days": 10, "driver_factors": ["..."],
+  "exposed_trades": ["..."], "rationale": "..."}}]}}

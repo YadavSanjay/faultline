@@ -1,0 +1,222 @@
+{
+  "description": "Pricing-module configuration. Market-data file names are relative to data/marketdata/<asset_class>/.",
+  "max_data_staleness_days": 7,
+  "observability": {
+    "description": "Observability (P3). json_logs can also be toggled with env PRICER_JSON_LOGS=1. The batch run writes a Prometheus textfile (for the node_exporter textfile collector / pushgateway); the service exposes GET /metrics. PV-drift alerts fire when a trade's PV moves more than BOTH abs_tol and rel_tol vs its last stored mark.",
+    "json_logs": false,
+    "metrics_textfile": "logs/metrics/pricer.prom",
+    "pv_drift": {"abs_tol": 1000.0, "rel_tol": 0.02}
+  },
+  "data_quality": {
+    "description": "Governed data-quality gate (P0c). default_action applies to any kind without an override; per-kind 'action' is warn|block|substitute and 'max_staleness_days' overrides the top-level baseline. WARN records a warning and prices; BLOCK refuses (raises, trade marked BLOCKED) so a stale/missing hard input fails fast instead of erroring deep in QuantLib; SUBSTITUTE does not block (the adapter falls back to a configured proxy).",
+    "default_action": "warn",
+    "kinds": {
+      "ois_curve": {"action": "warn", "max_staleness_days": 7},
+      "treasury_curve": {"action": "warn"},
+      "equity_spot": {"action": "warn"},
+      "equity_chain": {"action": "warn"},
+      "fx_spot": {"action": "warn"},
+      "fx_rate": {"action": "warn"}
+    },
+    "notes": "Defaults are WARN to preserve existing workflows — notably the options book values at its 2026-06-17 chain snapshot while the Pensford SOFR curve is ~19d stale. For strict EOD, set ois_curve.action='block' (and a tight max_staleness_days) to refuse pricing on a stale SOFR curve; that is the binding hard input behind rates/bonds/credit. Credit CDS additionally requires the discount-curve reference date to equal the valuation date (IsdaCdsEngine), so a blocked or stale SOFR curve is the right place to stop a non-EOD credit run."
+  },
+  "risk": {
+    "description": "Risk-engine settings (P2). Bump sizes for sensitivities, named stress scenarios, and historical-VaR factor mapping.",
+    "ir_bump_bp": 1.0,
+    "credit_bump_bp": 1.0,
+    "rates_vol_bump_bp": 1.0,
+    "equity_vol_bump": 0.01,
+    "equity_vol_term_bump": 0.01,
+    "equity_vol_skew_bump": 0.01,
+    "spot_bump_pct": 1.0,
+    "fx_bump_pct": 1.0,
+    "panel_max_gap_days": 3,
+    "panel_min_coverage": 0.75,
+    "scenarios": {
+      "rates_selloff_100bp": {"description": "Parallel +100bp rates sell-off", "ir_bp": 100},
+      "credit_blowout": {"description": "Risk-off: credit +150bp, equities -15% & vol +10, rates -25bp flight-to-quality", "credit_bp": 150, "equity_pct": -15, "equity_vol": 0.10, "ir_bp": -25},
+      "taiwan_geopolitical": {"description": "Taiwan crisis: equities -25% & vol +20, USD/TWD +8%, credit +100bp, rates -40bp", "equity_pct": -25, "equity_vol": 0.20, "fx_pct": 8, "credit_bp": 100, "ir_bp": -40, "rates_vol_bp": 30},
+      "ai_capex_bust": {"description": "AI capex bust: AI names -35% & vol +25, credit +120bp, rates -50bp", "equity_pct": -35, "equity_vol": 0.25, "credit_bp": 120, "ir_bp": -50},
+      "ai_capex_boom": {"description": "AI capex boom: equities +20% & vol -5, rates +30bp", "equity_pct": 20, "equity_vol": -0.05, "ir_bp": 30}
+    },
+    "var": {
+      "confidence_levels": [0.95, 0.975, 0.99],
+      "horizon_days": 1,
+      "lookback_days": 750,
+      "fhs": {"enabled": true, "lambda": 0.94, "notes": "Filtered Historical Simulation (Tier 2.4): each factor's moves are devolatized by a RiskMetrics EWMA vol (decay lambda=0.94, daily) and re-inflated to the latest EWMA vol, so VaR responds to the current volatility regime instead of weighting a calm 2023 day the same as today. Reported alongside the equal-weighted HS VaR, not replacing it."},
+      "stressed": {"enabled": true, "stress_window": 250, "notes": "Stressed VaR/ES (Basel 2.5, Tier 2.5): the worst contiguous stress_window-day block in the available aligned history (chosen by ES at the top confidence level), reported with its window dates. Our post-2022 window has no full crisis, so this is the most-stressful sub-period we can see today; it deepens automatically once the credit backfill + longer factor histories extend coverage through 2020/2022."},
+      "factors": {
+        "IR_1M": {"file": "rates/fred_rates.csv", "column": "DGS1MO", "unit": "pct", "maps_to": "IR_KR:1M", "move_unit_bp": true},
+        "IR_3M": {"file": "rates/fred_rates.csv", "column": "DGS3MO", "unit": "pct", "maps_to": "IR_KR:3M", "move_unit_bp": true},
+        "IR_6M": {"file": "rates/fred_rates.csv", "column": "DGS6MO", "unit": "pct", "maps_to": "IR_KR:6M", "move_unit_bp": true},
+        "IR_9M": {"file": "rates/fred_rates.csv", "column": "DGS1", "unit": "pct", "maps_to": "IR_KR:9M", "move_unit_bp": true, "proxy": "DGS1 (no DGS9MO; nearest standard tenor)"},
+        "IR_1Y": {"file": "rates/fred_rates.csv", "column": "DGS1", "unit": "pct", "maps_to": "IR_KR:1Y", "move_unit_bp": true},
+        "IR_2Y": {"file": "rates/fred_rates.csv", "column": "DGS2", "unit": "pct", "maps_to": "IR_KR:2Y", "move_unit_bp": true},
+        "IR_3Y": {"file": "rates/fred_rates.csv", "column": "DGS3", "unit": "pct", "maps_to": "IR_KR:3Y", "move_unit_bp": true},
+        "IR_5Y": {"file": "rates/fred_rates.csv", "column": "DGS5", "unit": "pct", "maps_to": "IR_KR:5Y", "move_unit_bp": true},
+        "IR_7Y": {"file": "rates/fred_rates.csv", "column": "DGS7", "unit": "pct", "maps_to": "IR_KR:7Y", "move_unit_bp": true},
+        "IR_10Y": {"file": "rates/fred_rates.csv", "column": "DGS10", "unit": "pct", "maps_to": "IR_KR:10Y", "move_unit_bp": true},
+        "IR_20Y": {"file": "rates/fred_rates.csv", "column": "DGS20", "unit": "pct", "maps_to": "IR_KR:20Y", "move_unit_bp": true},
+        "IR_30Y": {"file": "rates/fred_rates.csv", "column": "DGS30", "unit": "pct", "maps_to": "IR_KR:30Y", "move_unit_bp": true},
+        "CREDIT_IG": {"file": "stress/fred_stress_macro.csv", "column": "BAMLC0A0CM", "unit": "pct", "maps_to": "CS01:IG", "move_unit_bp": true, "backfill_file": "stress/fred_stress_macro.csv", "backfill_column": "BAA10Y", "backfill_note": "Tier 1.1: FRED serves the ICE-licensed IG OAS only ~3y back (starts 2023-06), which throttled the whole aligned VaR window at the credit factor; earlier dates are backfilled with vol-matched moves of the free long-history Moody's Baa-10Y spread (BAA10Y, daily since 1986). No-op until the stress pull fetches BAA10Y."},
+        "CREDIT_HY": {"file": "stress/fred_stress_macro.csv", "column": "BAMLH0A0HYM2", "unit": "pct", "maps_to": "CS01:HY", "move_unit_bp": true, "backfill_column": "BAA10Y", "backfill_file": "stress/fred_stress_macro.csv", "note": "Tier 3.9 full IG/HY credit split: high-yield CS01 (issuers tagged HY in risk.jtd.buckets) maps to ICE BofA HY OAS daily change (BAMLH0A0HYM2), which is ~3x the IG-OAS volatility. Zero book exposure while the book is all-IG (factor is skipped), but the split is live if an HY name is added."},
+        "RATES_VOL": {"file": "stress/move_index.csv", "column": "close", "unit": "level", "maps_to": "VEGA_RATES", "proxy_bp_per_move_pt": 1.0},
+        "EQVOL_AAPL": {"file": "options/vol_indices/VXAPL_History.csv", "column": "close", "unit": "level", "maps_to": "VEGA_EQUITY:AAPL", "proxy_bp_per_move_pt": 1.0, "note": "AAPL has its own published CBOE index (VXAPL) -- a genuinely distinct vol series."},
+        "EQVOL_QQQ": {"file": "options/vol_indices/VXN_History.csv", "column": "close", "unit": "level", "maps_to": "VEGA_EQUITY:QQQ", "proxy_bp_per_move_pt": 1.0, "note": "P0 de-alias (FINDING 10): QQQ tracks the Nasdaq-100, so its correct vol index is VXN, not VIX. Was proxied to VIX; VXN ingested in B0. Now a distinct series, not a VIX alias."},
+        "EQVOL_VIX": {"file": "options/vol_indices/VIX_History.csv", "column": "close", "unit": "level", "maps_to": ["VEGA_EQUITY:NVDA", "VEGA_EQUITY:MSFT", "VEGA_EQUITY:META", "VEGA_EQUITY:TSLA", "VEGA_EQUITY:SPX"], "proxy_bp_per_move_pt": 1.0, "note": "P0 de-alias (FINDING 10): SPX vega is literally VIX; NVDA/MSFT/META/TSLA have no published per-name CBOE index and proxy to VIX. Previously 5 separate EQVOL_* factors all reading VIX_History.csv -> 5 perfectly collinear Sigma columns. Collapsed into ONE VIX factor whose summed vega multiplies the single VIX move (arithmetically identical daily P&L; see var.py _factor_pnl_columns). Buys back ~4 factors of Sigma dimensionality the mode-(i) work (F3/F4/F6/F7) is about to spend. Add a name here only if it genuinely has no distinct vol index."},
+        "EQVOL_TERM": {"file": "options/vol_indices/VIX3M_History.csv", "column": "close", "minus_file": "options/vol_indices/VIX_History.csv", "minus_column": "close", "unit": "level", "maps_to": "VEGA_EQ_TERM", "proxy_bp_per_move_pt": 1.0, "note": "term slope = VIX3M - VIX; daily change in vol points (GAP 4)"},
+        "EQVOL_SKEW": {"file": "options/vol_indices/SKEW_History.csv", "column": "close", "unit": "level", "maps_to": "VEGA_EQ_SKEW", "proxy_bp_per_move_pt": 0.1, "note": "CBOE SKEW daily change x skew_scale=0.1 -> put-skew tilt units (GAP 4; parametric coefficient)"},
+        "EQ_NVDA": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "NVDA", "maps_to": "EQUITY_DELTA:NVDA", "return_pct": true},
+        "EQ_TSM": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "TSM", "maps_to": "EQUITY_DELTA:TSM", "return_pct": true},
+        "EQ_AVGO": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "AVGO", "maps_to": "EQUITY_DELTA:AVGO", "return_pct": true},
+        "EQ_MU": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "MU", "maps_to": "EQUITY_DELTA:MU", "return_pct": true},
+        "EQ_SMH": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "SMH", "maps_to": "EQUITY_DELTA:SMH", "return_pct": true},
+        "EQ_XLK": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "XLK", "maps_to": "EQUITY_DELTA:XLK", "return_pct": true},
+        "EQ_AAPL": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "AAPL", "maps_to": "EQUITY_DELTA:AAPL", "return_pct": true},
+        "EQ_MSFT": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "MSFT", "maps_to": "EQUITY_DELTA:MSFT", "return_pct": true},
+        "EQ_META": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "META", "maps_to": "EQUITY_DELTA:META", "return_pct": true},
+        "EQ_TSLA": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "TSLA", "maps_to": "EQUITY_DELTA:TSLA", "return_pct": true},
+        "EQ_QQQ": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "QQQ", "maps_to": "EQUITY_DELTA:QQQ", "return_pct": true},
+        "EQ_SPX": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "SPX", "maps_to": "EQUITY_DELTA:SPX", "return_pct": true},
+        "EQ_GLD": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "GLD", "maps_to": "EQUITY_DELTA:GLD", "return_pct": true, "note": "Part 2: gold ballast own factor (diversifier; low/neg correlation to tech)"},
+        "EQ_CEG": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "CEG", "maps_to": "EQUITY_DELTA:CEG", "return_pct": true, "note": "Part 2 refinement: CEG own factor (AI-power/nuclear; ~4.5y history from the Feb-2022 spin-off). Replaced the shared XLK proxy so the risk model credits its real, lower correlation to semis."},
+        "EQ_VST": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "VST", "maps_to": "EQUITY_DELTA:VST", "return_pct": true, "note": "Part 2 refinement: VST own factor (AI-power/IPP)."},
+        "EQ_GOOGL": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "GOOGL", "maps_to": "EQUITY_DELTA:GOOGL", "return_pct": true, "note": "Part 2 refinement: GOOGL own factor (hyperscaler)."},
+        "EQ_INTC": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "INTC", "maps_to": "EQUITY_DELTA:INTC", "return_pct": true, "note": "Part 2 N5: INTC own factor (semis dispersion, laggard leg). Own factor so the long/short pair's dispersion risk registers instead of netting to zero."},
+        "EQ_AMD": {"file": "equity/prices_daily.csv", "column": "close", "ticker_col": "ticker", "ticker": "AMD", "maps_to": "EQUITY_DELTA:AMD", "return_pct": true, "note": "Part 2 N5: AMD own factor (semis dispersion, leader leg / short)."},
+        "FX_JPY": {"file": "fx/ecb_fx_rates.csv", "column": "usdjpy", "unit": "level", "maps_to": "FX_DELTA:JPY", "return_pct": true},
+        "FX_TWD": {"file": "fx/fed_h10_fx_rates.csv", "column": "usdtwd", "unit": "level", "maps_to": "FX_DELTA:TWD", "return_pct": true},
+        "FXRATE_JPY": {"file": "fx/boj_tonar.csv", "column": "tonar_rate", "unit": "pct", "maps_to": "FX_RATE:JPY", "move_unit_bp": true}
+      },
+      "notes": "Sensitivity-based historical simulation, multi-factor (GAP 7). Book sensitivities are keyed by exposure (EQUITY_DELTA:<ticker>, FX_DELTA:<ccy>, IR_KR:<tenor>) so each factor maps to a specific sub-sensitivity: IR is key-rate across DGS1MO..DGS30 (GAP 3; 9M proxied to DGS1, no DGS9MO); CS01 per 1bp BofA IG OAS (BAMLC0A0CM, GAP 1); VEGA_RATES per 1bp via MOVE level change; VEGA_EQUITY:<name> per 1 vol point via per-name vol level change (AAPL uses its own VXAPL index; other underliers proxy to VIX as CBOE publishes no per-name index for them -- GAP 4); EQUITY_DELTA:<name> per 1% per-name return; FX_DELTA:JPY/TWD per 1% per-pair return. ES at 97.5% is the FRTB measure. All equity names (cash book + option underliers AAPL/MSFT/META/TSLA/QQQ/SPX) now use their own spot history (GAP 2 closed). IR is key-rate across the DGS grid (GAP 3 closed). FX_RATE:JPY is the foreign-rate rho factor from BoJ TONAR (GAP 5 partial; TWD foreign-rate held constant and USD XCCY basis remain gaps with no free daily source). Residual credit gaps are per-issuer + pre-2023 OAS. Tier 1.1 (2026-07-12): lookback_days raised 250->750 so the full aligned sample is used (was ~250/1y; ~513/2y today, ~1100/4.4y once the credit backfill lands), and the CREDIT factor is backfilled before the OAS start with the free long-history Moody's Baa-10Y spread (BAA10Y) so the credit factor no longer throttles the aligned window."
+    },
+    "hist_var": {
+      "confidence_levels": [0.95, 0.975, 0.99],
+      "horizon_days": 1,
+      "lookback_days": 750,
+      "credit_file": "stress/fred_stress_macro.csv",
+      "credit_column": "BAMLC0A0CM",
+      "credit_backfill_column": "BAA10Y",
+      "credit_max_abs_bp": 25.0,
+      "issuer_credit": {
+        "_comment": "Per-issuer credit factors credit:<ISSUER> (issuer-credit-factors, scenario design step 11a): daily 5Y-bucket spread from the DTCC single-name prints (NEWT/TRAD, name filters = credit.references), dropping a day outside [ref/outlier_ratio, ref*outlier_ratio] of the median of the last outlier_lookback kept days; moves on the credit factor's calendar with a forward fill of at most max_gap_days (later empty days and days after the last print = 0 move); before the DTCC history, the credit moves x issuer/IG-OAS level ratio at the splice. An issuer key overrides credit for that issuer's bond and CDS curves. AAPL/MSFT/AMZN/CDX have no single-name prints and stay on credit.",
+        "issuers": ["ORCL", "META"],
+        "min_tenor_years": 4.0,
+        "max_tenor_years": 6.0,
+        "outlier_ratio": 2.0,
+        "outlier_lookback": 10,
+        "max_gap_days": 60,
+        "_max_gap_days": "60 business days bridges every gap in the free DTCC feed (ORCL has a 62-calendar-day gap in Jul-Aug 2025 and nine more over a week); a smaller limit drops the move after a long gap (at 5 days ORCL kept 140 of its 212bp 2025-26 widening). The move lands on the next print day."
+      },
+      "skew_vol_per_point": 0.001,
+      "notes": "FULL-REVALUATION historical simulation (the heavy, opt-in measure: n_days x n_trades repricings). Six aligned factors built in factor_history.py: IR curve (FRED DGS2/5/10/30 daily change, interpolated to the OIS/UST node grid), equity (per-name returns for the cash book + option underliers NVDA/TSM/AVGO/MU/SMH/XLK/AAPL/MSFT/META/TSLA/QQQ/SPX -- GAP 2 closed; XLK remains the systematic-proxy default for any unmapped name), equity vol (VIX daily change as additive IV shift), rates vol (MOVE daily return, relative normal-vol shift), FX (usdjpy + usdtwd per-pair returns), credit (FRED ICE-BofA IG OAS daily change via credit_file/credit_column -- GAP 1 closed; DTCC CDX median is the capped fallback, credit_max_abs_bp). Factors are date-aligned (inner join) so co-movements/diversification are empirical. Captures full non-linearity (gamma/vega convexity); compare against the sensitivity-based VaR above for a PLA-style first-order-coverage check."
+    },
+    "limits": {
+      "_comment": "PLACEHOLDER book risk limits — set to the desk's mandate at go-live. A breach increments risk_limit_breach_total{limit} and is logged (it does not fail the run). var: max VaR loss per confidence level; sensitivities: abs-value ceiling per aggregated book factor.",
+      "var": {"0.99": 1000000000.0},
+      "sensitivities": {"CS01": 100000000.0, "IR_PARALLEL": 100000000.0}
+    },
+    "jtd": {
+      "recovery_bond": 0.40,
+      "index_size": 125,
+      "buckets": {"ORCL": "IG", "META": "IG", "AAPL": "IG", "MSFT": "IG", "AMZN": "IG", "CDX.NA.IG": "index"},
+      "notes": "Jump-to-default / incremental default risk (Tier 3.9). LGD = 1 - recovery; a long corporate bond loses LGD*face on issuer default, a bought-protection CDS gains LGD*notional, a sold-protection CDS loses it. Netting is within an issuer only; IDR = sum of per-issuer net losses (no cross-name netting, simplified FRTB-DRC). recovery_bond is the bond LGD assumption (CDS use each trade's own recovery). buckets tags each issuer IG/HY so the add-on also serves as the issuer/rating credit split; index CDS default risk is diversified and reported separately (excluded from the single-name IDR)."
+    },
+    "backtest": {
+      "level": 0.99,
+      "window": 250,
+      "test_days": 250,
+      "notes": "Rolling historical-simulation VaR backtest: estimate VaR from the prior `window` days and count the days in the last `test_days` where the realized loss exceeds it. Basel traffic-light zone is derived from the binomial CDF of the exception count (generalizes beyond the 250-day/99% reference); the Kupiec POF likelihood ratio (~chi2_1) tests whether the exception rate matches 1-level."
+    }
+  },
+  "rates": {
+    "pensford_file": "pensford_sofr_forward.csv",
+    "par_tenors": ["1M", "3M", "6M", "9M", "1Y", "2Y", "3Y", "5Y", "7Y", "10Y", "12Y", "15Y", "20Y", "30Y"],
+    "par_tenors_note": "A1 (2026-07-12): extended past 10Y. 12Y/15Y/20Y are real nodes off the Pensford forward path (each snapshot reaches ~2046 ~20Y); 30Y is synthesised by constant-instantaneous-forward extrapolation of the last monthly segment (rates_adapter._df_at) to bracket the ORCL 2053 (#17) / META 2054 (#18) long bonds and the 5Yx10Y swaption underlying (#23), which were previously flat-extrapolated off the 10Y node.",
+    "normal_vol": {
+      "flat_level": 0.0090,
+      "move_scale": 1.0,
+      "move_col": "close",
+      "min_bp": 10,
+      "max_bp": 500,
+      "anchor": "MOVE-derived flat normal vol",
+      "move_file": "move_index.csv",
+      "term_structure": {"1M": 1.0, "1Y": 0.99, "2Y": 0.985, "5Y": 0.97, "10Y": 0.95},
+      "notes": "Bachelier normal vol for swaptions/cap (trades #23-25). The LEVEL is derived live from the ICE BofA MOVE index (move_file), point-in-time as-of the valuation date: MOVE is quoted in annualized basis points of Treasury-yield implied vol, which IS a normal (Bachelier) vol level, so normal_vol = MOVE_bp/1e4 x move_scale (clamped to [min_bp,max_bp]). flat_level is the fallback when MOVE is unavailable. C1 (2026-07-12): term_structure shapes that single MOVE level into an EXPIRY-DEPENDENT normal-vol curve = level x multiplier per expiry tenor (linear-interpolated in years, flat-extrapolated). This is a STYLIZED, MOVE-anchored shape (a gentle decline of normal vol with option expiry) — a documented modeling assumption, NOT a market-implied term structure — used so the Bermudan (#24) co-terminal calibration sees a real vol slope (which identifies the Hull-White mean reversion) and each option gets its expiry's vol, instead of one flat number. Set term_structure to {} to revert to flat. Still FLAT across strike: the smile/cube needs licensed data. The free DTCC SDR IR-options feed (rates/dtcc_sdr_ir_options.csv) is NOT usable to calibrate a SABR surface — only ~20 of 540 rows over 2y carry a clean premium+notional+strike, and no option type. See docs/design/AITrade_quantlib_portfolio_marketdata.md §5."
+    }
+  },
+  "bonds": {
+    "treasury_file": "treasury_par_yields.csv",
+    "treasury_tenors": ["6M", "1Y", "2Y", "3Y", "5Y", "7Y", "10Y", "20Y", "30Y"],
+    "credit_spread": {
+      "min_bp": 5,
+      "max_bp": 500,
+      "min_observations": 3,
+      "recovery": 0.40,
+      "single_name_cds_file": "dtcc_single_name_cds.csv",
+      "single_name_lookback_days": 120,
+      "single_name_tenor_years": 5,
+      "single_name_tenor_tolerance_days": 120,
+      "curve_tenors_years": [1, 2, 3, 5, 7, 10],
+      "curve_lookback_days": 365,
+      "curve_min_observations": 2,
+      "basis_tenor": "10Y",
+      "basis_min_bp": 0,
+      "basis_max_bp": 100,
+      "sofr_treasury_swap_spread_bp": 45,
+      "issuer_cds_names": {
+        "AAPL": ["APPLE INC"],
+        "MSFT": ["MICROSOFT CORPORATION", "MICROSOFT CORP"],
+        "ORCL": ["ORACLE CORPORATION", "ORACLE CORP"],
+        "META": ["META PLATFORMS"],
+        "AMZN": ["AMAZON.COM"]
+      },
+      "issuer_fallback_bp": {
+        "AAPL": 60,
+        "MSFT": 60,
+        "ORCL": 130,
+        "META": 95,
+        "AMZN": 75
+      },
+      "notes": "Credit-spread sourcing (2026-07-11 reconciliation): the bond book first derives an issuer 5Y par CDS spread from the well-populated CREDIT-desk feed (credit/dtcc_single_name_cds.csv, SEC path — same file the CDS trades #28-30 use), converts it to a Z-spread over SOFR by adding the SOFR-vs-Treasury basis, and only falls back to issuer_fallback_bp when that feed has too few clean 5Y quotes. The basis is DERIVED FROM FREE DATA (2026-07-11): Treasury par (Treasury.gov) minus SOFR OIS par (Pensford) at basis_tenor (default 10Y, the long end of the free grid — appropriate since the two issuers on this path, ORCL 2053 / META 2054, are long-dated), clamped to [basis_min_bp, basis_max_bp]; ~+42bp at 10Y on 2026-05-29. sofr_treasury_swap_spread_bp is now only the FALLBACK used if a curve/tenor is unavailable. With the current pull ORCL (#17) and META (#18) derive real spreads (177 / 73.5 bp CDS + ~42bp basis -> ~219 / ~115 bp Z over SOFR); AAPL/MSFT/AMZN have no clean single-name quotes and still use issuer_fallback_bp. The bonds corp-CDS feed (dtcc_corp_cds_spreads.csv) is retired (credit-sdr-dedup, 2026-10-08): it held no new trades. The single-name feed now keeps every record; only price-forming prints (NEWT with Event type TRAD, windowed by execution date) enter the medians. Fallback values are issuer Z-spreads over the SOFR curve (bp) applied via ZeroSpreadedTermStructure; they INCLUDE the ~+42bp Treasury-SOFR basis, so net spread-to-Treasury stays positive (realistic IG). Residual: the CDS->bond basis is held at zero and the basis uses one representative tenor (not maturity-interpolated); refine for production. Replace fallbacks with Markit/licensed CDS or TRACE-implied Z-spreads for the names without a clean free quote."
+    }
+  },
+  "options": {
+    "dividends_file": "dividends.csv",
+    "dividend_projection_horizon_years": 2.0,
+    "forward_recovery_rate": 0.04,
+    "recovery_min_t": 0.02,
+    "recovery_max_t": 1.5,
+    "min_strike_pairs": 5,
+    "min_iv": 0.03,
+    "max_iv": 2.5,
+    "notes": "Equity-option underliers (#7-14) have no spot/dividend file, so spot AND the continuous dividend yield are recovered from each option chain by put-call parity (ln-forward regression across expiries; validated to ~0.07% on NVDA). forward_recovery_rate is the flat rate used only inside the C-P forward recovery (result is insensitive to it; actual discounting uses the SOFR curve). Implied vol is read per-(expiry,strike) from the chain (skew-aware). Equity book values at the chain snapshot date (2026-06-17), not the 2026-05-29 rates/bonds default. B1 (2026-07-12): American legs on dividend payers price with a projected discrete ex-dividend schedule (dividends_file, rolled forward at the observed cadence over dividend_projection_horizon_years, latest amount held), scaled to preserve the chain-implied forward so only early-exercise timing changes; non-payers/index and European legs keep the continuous chain-implied yield."
+  },
+  "credit": {
+    "single_name_file": "dtcc_single_name_cds.csv",
+    "index_file": "dtcc_index_cds.csv",
+    "lookback_days": 120,
+    "min_observations": 3,
+    "min_bp": 5,
+    "max_bp": 3000,
+    "recovery": 0.40,
+    "tenor_years": 5,
+    "tenor_tolerance_days": 120,
+    "curve_tenors_years": [1, 2, 3, 5, 7, 10],
+    "curve_lookback_days": 365,
+    "curve_min_observations": 2,
+    "references": {
+      "ORCL": {"kind": "single_name", "names": ["ORACLE"], "exclude": ["BIDCO", "HOLDCO", "AVIATION", "AMENTUM"], "fallback_bp": 175},
+      "META": {"kind": "single_name", "names": ["META PLATFORM"], "exclude": ["BIDCO", "HOLDCO"], "fallback_bp": 74},
+      "CDX.NA.IG": {"kind": "index", "names": ["CDX.NA.IG"], "exclude": [], "fallback_bp": 55, "index_factor": 1.0, "n_constituents": 125}
+    },
+    "notes": "5Y par CDS spreads from DTCC dissemination (single-name = SEC path, index = CFTC UPI Underlier Name), filtered to the ~5Y expiry bucket (valuation + 5Y, standard roll). This feed IS well populated for ORCL/META/CDX (unlike the bonds corp-CDS file), so DTCC is primary; fallback_bp covers thin windows. Recovery 40% senior unsecured (ISDA). A2 (2026-07-12): single names also build a term structure of par spreads across curve_tenors_years, from which the CDS pricer bootstraps a piecewise-flat hazard curve consistent with IsdaCdsEngine (sequential secant, one hazard step per tenor). Because the free DTCC feed trades mostly the on-the-run 5Y, the non-5Y buckets use a wider curve_lookback_days (365d) and a lower curve_min_observations (2) than the tight 5Y headline (lookback_days/min_observations); the 5Y curve node is pinned to the headline spread so the fair-spread==par-spread IPV round-trip holds. With <2 qualifying tenors (META, CDX, thin windows) the pricer stays on the single flat hazard. QL 1.42 has no IsdaCdsHelper, hence the hand-rolled bootstrap. B4 (2026-07-12): the index (CDX.NA.IG) is priced at the INDEX LEVEL — a flat hazard from the quoted index spread with the standard fixed coupon + upfront — on the OUTSTANDING notional = traded x index_factor. index_factor is 1.0 for the current on-the-run series (the free feed carries no defaulted-name data); it is a hook that drops below 1 as constituents default. n_constituents (125) is reported. Untranched: no constituent-curve aggregation or tranche granularity."
+  },
+  "fx": {
+    "currencies": {
+      "JPY": {"spot_file": "ecb_fx_rates.csv", "spot_col": "usdjpy", "rate_file": "boj_tonar.csv", "rate_col": "tonar_rate", "rate_in_percent": true, "xccy_basis_bp": 0.0},
+      "TWD": {"spot_file": "cbc_twd_ndf_fix.csv", "spot_col": "usdtwd_cbc", "rate_constant": 0.020, "xccy_basis_bp": 0.0}
+    },
+    "notes": "USD/JPY spot from ECB cross + JPY rate from BOJ TONAR; USD/TWD spot from the CBC NDF fixing + TWD rate held as the CBC policy-rate constant (2.00%). Forwards/CCS legs are valued by discount factors (USD = SOFR curve, foreign = flat foreign rate). B3 (2026-07-12): USD/TWD spot now reads the CBC NDF fixing (cbc_twd_ndf_fix.usdtwd_cbc) — the reference the non-deliverable TWD book actually settles against, and fresher than Fed H.10 (which stops ~2026-05-29, so it was stale at the live 2026-07-10 book date). Foreign discount curves stay FLAT: the free feeds give only an overnight JPY rate (BOJ TONAR) and a TWD spot fixing — no JPY-OIS strip or TWD forward points to bootstrap a term structure. The USD/TWD CCS (#26) is a fixed-for-fixed simplification of the design-doc MtM-resetting NDS: spot is the dominant risk and no free TAIBOR / xccy-basis curve exists, so the basis is held at zero (see docs/design §1.5). C2 (2026-07-12): xccy_basis_bp is a per-currency HOOK for the cross-currency basis, added to the foreign discount rate (effective_foreign_rate = foreign_rate + xccy_basis_bp/1e4). It defaults to 0 because no free daily USD/TWD or USD/JPY xccy-basis feed exists; a licensed basis (real USD/TWD basis runs tens of bp) drops in via config with no code change and would flow to the #26 CCS and #27 forward marks + their fair forwards."
+  }
+}

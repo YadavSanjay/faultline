@@ -1,0 +1,29 @@
+{
+  "asset_class": "factors",
+  "description": "Equity style factors from the Ken French Data Library (market-intelligence F4). FF5 (Mkt-RF, SMB, HML, RMW, CMA) + Momentum (MOM), daily, free, no key, back to 1926. Used to (1) give scenariogen a 'style:MOM' driver so 'momentum crash' -- a positioning-unwind co-move a name-level covariance model structurally cannot see -- becomes a first-class authorable scenario, and (2) regress the book's factor returns onto real style exposures. See docs/design/AITrade_market_intelligence_design.md FINDING 4.",
+
+  "sources": {
+    "ken_french": {
+      "enabled": true,
+      "name": "Ken French Data Library — daily style factors",
+      "description": "Two ZIP archives, each a single CSV with a multi-line text header/footer and YYYYMMDD daily rows in PERCENT. Parsed in memory (ZIP -> BytesIO -> zipfile), never extracted to disk (dual-mode trap 1). Merged on date into one factors CSV, values kept in the source's percent unit; factor_history converts to decimal.",
+      "base_url": "https://mba.tuck.dartmouth.edu",
+      "auth": { "type": "none" },
+      "timeout_s": 60,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 20.0 },
+      "archives": {
+        "ff5": {
+          "endpoint": "/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_daily_CSV.zip",
+          "columns": ["mkt_rf", "smb", "hml", "rmw", "cma", "rf"]
+        },
+        "momentum": {
+          "endpoint": "/pages/faculty/ken.french/ftp/F-F_Momentum_Factor_daily_CSV.zip",
+          "columns": ["mom"]
+        }
+      },
+      "output_dir": "",
+      "output_file": "ff_factors.csv"
+    }
+  }
+}

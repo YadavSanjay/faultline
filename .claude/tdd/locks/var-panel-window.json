@@ -1,0 +1,76 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/var-panel-window/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-22",
+  "criteria": {
+    "C1": [
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c1_point_hand_case_max_gap_2",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c1_point_hand_case_max_gap_0_and_3",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c1_point_column_order_from_cols",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c1_metamorphic_outside_window_values_are_ignored"
+    ],
+    "C2": [
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c2_property_rows_values_and_no_missing",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c2_property_fully_observed_is_unchanged",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c2_metamorphic_permuting_cols_permutes_columns",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c2_metamorphic_raising_max_gap_never_removes_rows",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c2_point_fully_observed_and_permuted_hand_case",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c2_point_raising_max_gap_keeps_rows_hand_case"
+    ],
+    "C3": [
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_rejects_negative_max_gap",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_rejects_non_increasing_window[repeated]",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_rejects_non_increasing_window[decreasing]",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_empty_cols_returns_empty_frame",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c3_property_refusals",
+      "tests/spec/var-panel-window/test_align_to_window.py::test_c3_property_empty_cols_returns_empty_frame"
+    ]
+  },
+  "files": {
+    "tests/spec/var-panel-window/test_align_to_window.py": "730ed1a272ed1b5e7dfe8bd3bf79c3bf79dd85f429064f84b048a01eac069c4d"
+  },
+  "id": "var-panel-window",
+  "interface": [
+    {
+      "file": "src/pricer/risk/var.py",
+      "module": "src.pricer.risk.var",
+      "qualname": "align_to_window",
+      "signature": "def align_to_window(cols: Mapping[str, pd.Series], window: pd.DatetimeIndex, *, max_gap: int) -> pd.DataFrame"
+    }
+  ],
+  "nodes": [
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c1_metamorphic_outside_window_values_are_ignored",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c1_point_column_order_from_cols",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c1_point_hand_case_max_gap_0_and_3",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c1_point_hand_case_max_gap_2",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c2_metamorphic_permuting_cols_permutes_columns",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c2_metamorphic_raising_max_gap_never_removes_rows",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c2_point_fully_observed_and_permuted_hand_case",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c2_point_raising_max_gap_keeps_rows_hand_case",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c2_property_fully_observed_is_unchanged",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c2_property_rows_values_and_no_missing",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_empty_cols_returns_empty_frame",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_rejects_negative_max_gap",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_rejects_non_increasing_window[decreasing]",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c3_point_rejects_non_increasing_window[repeated]",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c3_property_empty_cols_returns_empty_frame",
+    "tests/spec/var-panel-window/test_align_to_window.py::test_c3_property_refusals"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/var-panel-window.md",
+    "sha256": "ef82a3b4d9178d0aef98786c18f792fb7634b71c05d156a89ec633145f697823"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

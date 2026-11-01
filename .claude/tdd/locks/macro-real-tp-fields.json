@@ -1,0 +1,82 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-21",
+  "criteria": {
+    "C1": [
+      "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_hard_code_set_equals_macrorag_fixture",
+      "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_card_value_mismatch_field_is_dropped_and_yields_no_driver[codes0]",
+      "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_card_value_mismatch_field_is_dropped_and_yields_no_driver[codes1]",
+      "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_property_any_hard_code_drops_soft_only_keeps"
+    ],
+    "C2": [
+      "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c2_tp_and_real_yield_map_in_decimal_with_provenance",
+      "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c2_property_move_is_bp_times_1e4_and_linear",
+      "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c2_adding_the_new_fields_leaves_other_drivers_unchanged"
+    ],
+    "C3": [
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_tp_only_adds_to_the_authored_curve_without_superseding",
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_ust10_plus_tp_supersedes_unsupplied_tenors",
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_tp_citing_undated_or_missing_chunk_fails_the_gate[undated]",
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_tp_citing_undated_or_missing_chunk_fails_the_gate[missing]",
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_property_real_and_tp_legs_never_supersede"
+    ],
+    "C4": [
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_unmapped_fields_listed_sorted",
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_unused_hy_and_hard_dropped_fields_are_not_unmapped",
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_recorded_on_fallback_and_empty_without_response",
+      "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_property_unmapped_is_sorted_set_difference"
+    ],
+    "C5": [
+      "tests/spec/macro-real-tp-fields/test_config.py::test_c5_committed_config_requests_the_new_fields",
+      "tests/spec/macro-real-tp-fields/test_config.py::test_c5_other_scenarios_unchanged",
+      "tests/spec/macro-real-tp-fields/test_config.py::test_c5_request_sent_on_committed_config_asks_the_fields"
+    ]
+  },
+  "files": {
+    "tests/spec/macro-real-tp-fields/conftest.py": "538cc2a0d11e3b55f1aee1034e8bc5672e68e2e894bf18208b3d08779f0ce9a8",
+    "tests/spec/macro-real-tp-fields/fixtures/macrorag_hard_codes.json": "8d8bfbdcbf8e3b4727a95b026899b06a1e06d4c67ee688e9e23b6a5ce8507330",
+    "tests/spec/macro-real-tp-fields/test_config.py": "cfc931ff09050e938babbedb9b56d6bb7298f4c43af7e27bf81954c52dae364b",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py": "2a4923d66d944b077427b7ea76461dd3d152104c3285ac1f9fb1df9a5ebf316d",
+    "tests/spec/macro-real-tp-fields/test_resolution.py": "84b8faec113cacd6b2ded04c72aa62e239c7355add83e57de02fc9e95c32285e"
+  },
+  "id": "macro-real-tp-fields",
+  "interface": [],
+  "nodes": [
+    "tests/spec/macro-real-tp-fields/test_config.py::test_c5_committed_config_requests_the_new_fields",
+    "tests/spec/macro-real-tp-fields/test_config.py::test_c5_other_scenarios_unchanged",
+    "tests/spec/macro-real-tp-fields/test_config.py::test_c5_request_sent_on_committed_config_asks_the_fields",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_card_value_mismatch_field_is_dropped_and_yields_no_driver[codes0]",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_card_value_mismatch_field_is_dropped_and_yields_no_driver[codes1]",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_hard_code_set_equals_macrorag_fixture",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c1_property_any_hard_code_drops_soft_only_keeps",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c2_adding_the_new_fields_leaves_other_drivers_unchanged",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c2_property_move_is_bp_times_1e4_and_linear",
+    "tests/spec/macro-real-tp-fields/test_hard_codes_and_mapping.py::test_c2_tp_and_real_yield_map_in_decimal_with_provenance",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_property_real_and_tp_legs_never_supersede",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_tp_citing_undated_or_missing_chunk_fails_the_gate[missing]",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_tp_citing_undated_or_missing_chunk_fails_the_gate[undated]",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_tp_only_adds_to_the_authored_curve_without_superseding",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c3_ust10_plus_tp_supersedes_unsupplied_tenors",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_property_unmapped_is_sorted_set_difference",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_recorded_on_fallback_and_empty_without_response",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_unmapped_fields_listed_sorted",
+    "tests/spec/macro-real-tp-fields/test_resolution.py::test_c4_unused_hy_and_hard_dropped_fields_are_not_unmapped"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/macro-real-tp-fields.md",
+    "sha256": "288d455b571c073c9f8c69d27f55cb70aad73bcdb5536a5e8e6ad372dc951ba9"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

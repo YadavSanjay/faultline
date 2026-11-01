@@ -1,0 +1,5 @@
+{
+  "status": "ok",
+  "audit_db": true,
+  "pipelines": {"xbrl": true, "sec10k": true}
+}

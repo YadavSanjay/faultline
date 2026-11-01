@@ -1,0 +1,99 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/scenario-historical-replay/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-15",
+  "criteria": {
+    "C1": [
+      "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_point_compounds_or_sums_over_half_open_window",
+      "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_point_window_edges_are_calendar_dates",
+      "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_point_factors_restricts_the_keys",
+      "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_refusals",
+      "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_property_window_additivity"
+    ],
+    "C2": [
+      "tests/spec/scenario-historical-replay/test_trading_days.py::test_c2_point_counts_rows_after_start_through_end",
+      "tests/spec/scenario-historical-replay/test_trading_days.py::test_c2_refusals",
+      "tests/spec/scenario-historical-replay/test_trading_days.py::test_c2_property_adjacent_windows_add_up"
+    ],
+    "C3": [
+      "tests/spec/scenario-historical-replay/test_replay_drivers.py::test_c3_point_labelled_company_move_is_excluded",
+      "tests/spec/scenario-historical-replay/test_replay_drivers.py::test_c3_point_any_iterable_of_labels",
+      "tests/spec/scenario-historical-replay/test_replay_drivers.py::test_c3_property_partition_keeps_values"
+    ],
+    "C4": [
+      "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_point_proportional_target_gives_beta_two",
+      "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_point_ddof_one_ratio",
+      "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_refusals_and_default_min_overlap",
+      "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_property_scaled_deviation_matches_target",
+      "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_metamorphic_target_scaling_scales_beta"
+    ]
+  },
+  "files": {
+    "tests/spec/scenario-historical-replay/test_episode_moves.py": "14e1318749218b3e4cbe045177b15f0a509b22be8f3e26c9c91899bb51b6f9a4",
+    "tests/spec/scenario-historical-replay/test_replay_drivers.py": "ee7ee635087bcc5ff46bd02d5d77171114e3b119291d0ff92fb934ba3acfb0b2",
+    "tests/spec/scenario-historical-replay/test_trading_days.py": "eb9b9c1a9488d6ec94b471ba6c27e3365f4f08949d4caa9937b09d0c81c3a7d2",
+    "tests/spec/scenario-historical-replay/test_vol_matched.py": "994356d9ae1210d66efc8c771ed5fd0b8bb929cebb10aa258b94a57a210b462e"
+  },
+  "id": "scenario-historical-replay",
+  "interface": [
+    {
+      "file": "src/scenariogen/replay.py",
+      "module": "src.scenariogen.replay",
+      "qualname": "episode_moves",
+      "signature": "def episode_moves(series: Mapping[str, pd.Series], start: date, end: date, factors: Sequence[str] | None=None) -> dict[str, float]"
+    },
+    {
+      "file": "src/scenariogen/replay.py",
+      "module": "src.scenariogen.replay",
+      "qualname": "trading_days",
+      "signature": "def trading_days(series: pd.Series, start: date, end: date) -> int"
+    },
+    {
+      "file": "src/scenariogen/replay.py",
+      "module": "src.scenariogen.replay",
+      "qualname": "replay_drivers",
+      "signature": "def replay_drivers(moves: Mapping[str, float], idiosyncratic: Iterable[str]) -> tuple[dict[str, float], dict[str, float]]"
+    },
+    {
+      "file": "src/scenariogen/replay.py",
+      "module": "src.scenariogen.replay",
+      "qualname": "vol_matched",
+      "signature": "def vol_matched(proxy: pd.Series, target: pd.Series, *, min_overlap: int=250) -> tuple[pd.Series, float]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_point_compounds_or_sums_over_half_open_window",
+    "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_point_factors_restricts_the_keys",
+    "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_point_window_edges_are_calendar_dates",
+    "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_property_window_additivity",
+    "tests/spec/scenario-historical-replay/test_episode_moves.py::test_c1_refusals",
+    "tests/spec/scenario-historical-replay/test_replay_drivers.py::test_c3_point_any_iterable_of_labels",
+    "tests/spec/scenario-historical-replay/test_replay_drivers.py::test_c3_point_labelled_company_move_is_excluded",
+    "tests/spec/scenario-historical-replay/test_replay_drivers.py::test_c3_property_partition_keeps_values",
+    "tests/spec/scenario-historical-replay/test_trading_days.py::test_c2_point_counts_rows_after_start_through_end",
+    "tests/spec/scenario-historical-replay/test_trading_days.py::test_c2_property_adjacent_windows_add_up",
+    "tests/spec/scenario-historical-replay/test_trading_days.py::test_c2_refusals",
+    "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_metamorphic_target_scaling_scales_beta",
+    "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_point_ddof_one_ratio",
+    "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_point_proportional_target_gives_beta_two",
+    "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_property_scaled_deviation_matches_target",
+    "tests/spec/scenario-historical-replay/test_vol_matched.py::test_c4_refusals_and_default_min_overlap"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/scenario-historical-replay.md",
+    "sha256": "a952c2ad63f6614586b9900d2c8d72cc73cf5b8cfebe0efd32a3a2048d618968"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

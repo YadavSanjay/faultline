@@ -1,0 +1,106 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-19",
+  "criteria": {
+    "C1": [
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_hand_built_report",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_absent_lists_and_nothing_uncovered",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_two_uncovered_directions",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_raises_for_missing_key[coverage]",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_raises_for_missing_key[directions]",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_raises_for_duplicate_index",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_report_not_mutated",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_property_uncovered_share_is_sum_over_uncovered",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_property_losses_sorted_permutation",
+      "tests/spec/measurement-views/test_coverage_view.py::test_c1_property_input_unchanged_and_order_invariant"
+    ],
+    "C2": [
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_point_hand_built_report",
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_point_no_stress_set_and_no_without",
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_point_no_stress_set_keeps_without",
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_point_raises_for_two_stress_sets",
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_point_report_not_mutated",
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_property_binding_changed_and_size_ratio",
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_property_book_order",
+      "tests/spec/measurement-views/test_decision_view.py::test_c2_property_input_unchanged_and_ablation_ignored"
+    ],
+    "C3": [
+      "tests/spec/measurement-views/test_replay_view.py::test_c3_point_hand_built_report",
+      "tests/spec/measurement-views/test_replay_view.py::test_c3_point_negative_gain_unscored_nearest_and_limitations",
+      "tests/spec/measurement-views/test_replay_view.py::test_c3_point_report_not_mutated",
+      "tests/spec/measurement-views/test_replay_view.py::test_c3_property_gain_is_difference_or_none",
+      "tests/spec/measurement-views/test_replay_view.py::test_c3_property_episode_order_and_dropped_names",
+      "tests/spec/measurement-views/test_replay_view.py::test_c3_property_input_unchanged_and_reversal"
+    ]
+  },
+  "files": {
+    "tests/spec/measurement-views/conftest.py": "f407ef1bcf0c215c01a209d48472327609de073c6801c2abbdc64387deda9ea9",
+    "tests/spec/measurement-views/test_coverage_view.py": "8e9d528559ce765e451f8df9145c83b0713849a1404ae74a63915477e3111809",
+    "tests/spec/measurement-views/test_decision_view.py": "fe4fea26f214a1094241ec11cdd640e7f38002a6aaf254ca3659f65a36e79227",
+    "tests/spec/measurement-views/test_replay_view.py": "51cb62460d729b9cfe8c8c471ee59483b2bf15a34184cf9f2909d9a6efedeeb8"
+  },
+  "id": "measurement-views",
+  "interface": [
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "coverage_view",
+      "signature": "def coverage_view(report: Mapping[str, Any]) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "decision_view",
+      "signature": "def decision_view(report: Mapping[str, Any]) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/report_views.py",
+      "module": "src.scenariogen.report_views",
+      "qualname": "replay_view",
+      "signature": "def replay_view(report: Mapping[str, Any]) -> dict[str, Any]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_absent_lists_and_nothing_uncovered",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_hand_built_report",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_raises_for_duplicate_index",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_raises_for_missing_key[coverage]",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_raises_for_missing_key[directions]",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_report_not_mutated",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_point_two_uncovered_directions",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_property_input_unchanged_and_order_invariant",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_property_losses_sorted_permutation",
+    "tests/spec/measurement-views/test_coverage_view.py::test_c1_property_uncovered_share_is_sum_over_uncovered",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_point_hand_built_report",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_point_no_stress_set_and_no_without",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_point_no_stress_set_keeps_without",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_point_raises_for_two_stress_sets",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_point_report_not_mutated",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_property_binding_changed_and_size_ratio",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_property_book_order",
+    "tests/spec/measurement-views/test_decision_view.py::test_c2_property_input_unchanged_and_ablation_ignored",
+    "tests/spec/measurement-views/test_replay_view.py::test_c3_point_hand_built_report",
+    "tests/spec/measurement-views/test_replay_view.py::test_c3_point_negative_gain_unscored_nearest_and_limitations",
+    "tests/spec/measurement-views/test_replay_view.py::test_c3_point_report_not_mutated",
+    "tests/spec/measurement-views/test_replay_view.py::test_c3_property_episode_order_and_dropped_names",
+    "tests/spec/measurement-views/test_replay_view.py::test_c3_property_gain_is_difference_or_none",
+    "tests/spec/measurement-views/test_replay_view.py::test_c3_property_input_unchanged_and_reversal"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/measurement-views.md",
+    "sha256": "db45a80bdcb0496e4429f982b717d8fe2616d3de98f93fadca7fdc03f2ff7a24"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

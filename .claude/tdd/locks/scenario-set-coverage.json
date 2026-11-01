@@ -1,0 +1,141 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/scenario-set-coverage/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-16",
+  "criteria": {
+    "C1": [
+      "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_point_recovers_constructed_components",
+      "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_point_k_follows_share_rule_and_cap",
+      "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_refusals",
+      "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_property_orthonormal_and_recovered",
+      "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_metamorphic_shift_and_scale"
+    ],
+    "C2": [
+      "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_point_single_row_is_squared_cosine",
+      "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_point_inside_orthogonal_and_partial",
+      "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_point_rank_cutoff_and_empty",
+      "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_refusals",
+      "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_property_in_unit_interval_and_matches_qr",
+      "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_metamorphic_scale_combination_and_added_row"
+    ],
+    "C3": [
+      "tests/spec/scenario-set-coverage/test_set_coverage.py::test_c3_point_weighted_mean_by_hand",
+      "tests/spec/scenario-set-coverage/test_set_coverage.py::test_c3_refusals",
+      "tests/spec/scenario-set-coverage/test_set_coverage.py::test_c3_property_bounded_and_scale_free"
+    ],
+    "C4": [
+      "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_point_hand_residuals",
+      "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_zero_direction_refused",
+      "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_property_residual_orthogonal",
+      "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_metamorphic_idempotent_and_scale_free"
+    ],
+    "C5": [
+      "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_point_orthogonal_and_parallel_rows",
+      "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_point_gains_and_zero_rows_left_out",
+      "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_refusals",
+      "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_property_bounded_by_kept_rows",
+      "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_metamorphic_row_scale_loss_scale_rotation"
+    ],
+    "C6": [
+      "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_point_default_threshold_and_order",
+      "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_point_exact_threshold_excluded_and_zero_row_in_no_pair",
+      "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_mismatch_refused",
+      "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_property_matches_hand_and_row_scale_free",
+      "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_metamorphic_negating_a_row_removes_its_pairs"
+    ]
+  },
+  "files": {
+    "tests/spec/scenario-set-coverage/test_merge_pairs.py": "37e51d027db68c89e83defad5d0b68fb682c54bf5e11f55fa6c782926604d195",
+    "tests/spec/scenario-set-coverage/test_participation_ratio.py": "a5ecf753ce7caf8ff4d1a217887d603ffcf6243e3e313026b4ec56d6732c8881",
+    "tests/spec/scenario-set-coverage/test_principal_directions.py": "209553792b6c6a49e1bd947999ef85415110995acca342d7a8193e69533c0e43",
+    "tests/spec/scenario-set-coverage/test_remove_direction.py": "41db716d31a00094f6a7a7fe651b25e188bf18e08c204b4d9ae2dace598b4f3a",
+    "tests/spec/scenario-set-coverage/test_set_coverage.py": "f99deadfa7eca7d563e618639410229c77a0950bff55c4342b7b82361340eb35",
+    "tests/spec/scenario-set-coverage/test_spanned_share.py": "fb92dfc89e95c089ef90ce91317d9911ecef389cd6f7186f968d732acca8b281"
+  },
+  "id": "scenario-set-coverage",
+  "interface": [
+    {
+      "file": "src/scenariogen/coverage.py",
+      "module": "src.scenariogen.coverage",
+      "qualname": "principal_directions",
+      "signature": "def principal_directions(history: np.ndarray, *, variance_share: float=0.9, max_components: int=10) -> tuple[np.ndarray, np.ndarray]"
+    },
+    {
+      "file": "src/scenariogen/coverage.py",
+      "module": "src.scenariogen.coverage",
+      "qualname": "spanned_share",
+      "signature": "def spanned_share(directions: np.ndarray, scenarios: np.ndarray) -> np.ndarray"
+    },
+    {
+      "file": "src/scenariogen/coverage.py",
+      "module": "src.scenariogen.coverage",
+      "qualname": "set_coverage",
+      "signature": "def set_coverage(variances: np.ndarray, shares: np.ndarray) -> float"
+    },
+    {
+      "file": "src/scenariogen/coverage.py",
+      "module": "src.scenariogen.coverage",
+      "qualname": "remove_direction",
+      "signature": "def remove_direction(rows: np.ndarray, direction: np.ndarray) -> np.ndarray"
+    },
+    {
+      "file": "src/scenariogen/coverage.py",
+      "module": "src.scenariogen.coverage",
+      "qualname": "participation_ratio",
+      "signature": "def participation_ratio(rows: np.ndarray, losses: np.ndarray) -> float"
+    },
+    {
+      "file": "src/scenariogen/coverage.py",
+      "module": "src.scenariogen.coverage",
+      "qualname": "merge_pairs",
+      "signature": "def merge_pairs(names: Sequence[str], rows: np.ndarray, *, threshold: float=0.85) -> list[tuple[str, str, float]]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_metamorphic_negating_a_row_removes_its_pairs",
+    "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_mismatch_refused",
+    "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_point_default_threshold_and_order",
+    "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_point_exact_threshold_excluded_and_zero_row_in_no_pair",
+    "tests/spec/scenario-set-coverage/test_merge_pairs.py::test_c6_property_matches_hand_and_row_scale_free",
+    "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_metamorphic_row_scale_loss_scale_rotation",
+    "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_point_gains_and_zero_rows_left_out",
+    "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_point_orthogonal_and_parallel_rows",
+    "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_property_bounded_by_kept_rows",
+    "tests/spec/scenario-set-coverage/test_participation_ratio.py::test_c5_refusals",
+    "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_metamorphic_shift_and_scale",
+    "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_point_k_follows_share_rule_and_cap",
+    "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_point_recovers_constructed_components",
+    "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_property_orthonormal_and_recovered",
+    "tests/spec/scenario-set-coverage/test_principal_directions.py::test_c1_refusals",
+    "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_metamorphic_idempotent_and_scale_free",
+    "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_point_hand_residuals",
+    "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_property_residual_orthogonal",
+    "tests/spec/scenario-set-coverage/test_remove_direction.py::test_c4_zero_direction_refused",
+    "tests/spec/scenario-set-coverage/test_set_coverage.py::test_c3_point_weighted_mean_by_hand",
+    "tests/spec/scenario-set-coverage/test_set_coverage.py::test_c3_property_bounded_and_scale_free",
+    "tests/spec/scenario-set-coverage/test_set_coverage.py::test_c3_refusals",
+    "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_metamorphic_scale_combination_and_added_row",
+    "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_point_inside_orthogonal_and_partial",
+    "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_point_rank_cutoff_and_empty",
+    "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_point_single_row_is_squared_cosine",
+    "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_property_in_unit_interval_and_matches_qr",
+    "tests/spec/scenario-set-coverage/test_spanned_share.py::test_c2_refusals"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/scenario-set-coverage.md",
+    "sha256": "93ecdd3428633c9cea4178f95617428368130758d0da917954167a32bba6638c"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

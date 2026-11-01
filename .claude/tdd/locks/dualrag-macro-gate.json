@@ -1,0 +1,129 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-14",
+  "criteria": {
+    "C1": [
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[http_error]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[timeout]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[connection]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[parse]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[empty]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[refused]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[gate_direct]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[gate_unmarked]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[gate_analog]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[hard_invalid]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[unmapped]",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_gate_failure_detail_carries_every_finding",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_not_configured_when_no_macro_provider_or_no_macro_entry",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_committed_arag_config_rate_capital_requires_macro",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_property_any_required_spelling_any_failure_any_tier_raises"
+    ],
+    "C2": [
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c2_dropping_macro_from_required_services_restores_static_fallback",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c2_no_arag_entry_falls_back_while_plain_macro_mode_never_raises",
+      "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c2_property_non_required_and_plain_mode_return_static"
+    ],
+    "C3": [
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_defect_case_fails_with_four_findings_unless_the_chunks_are_episode_cards",
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_episode_defect_case_applies_the_macro_legs",
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_stale_analog_paper_stops_a_required_scenario",
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_property_only_stale_non_episode_pairs_are_findings",
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_relabelling_chunks_as_episodes_clears_exactly_the_stale_findings"
+    ],
+    "C4": [
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_uncited_driver_still_fails_next_to_an_episode_citing_driver",
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_episode_citing_driver_with_absent_or_undated_chunk_fails",
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_episode_plus_stale_paper_is_one_finding_for_the_paper",
+      "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_property_finding_count_model"
+    ],
+    "C5": [
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c5_sources_carry_mode_horizon_and_validation",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c5_parallel_ust_provenance_reaches_every_tenor",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c5_property_every_macro_leg_carries_its_fields_provenance"
+    ],
+    "C6": [
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_hard_coded_fields_are_dropped_before_the_gate",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_dropped_ig_lets_hy_map_to_credit[implausible_magnitude]",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_dropped_ig_lets_hy_map_to_credit[unit_scale_mismatch]",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_dropped_ig_lets_hy_map_to_credit[horizon_mismatch]",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_property_exactly_the_hard_coded_fields_are_dropped"
+    ],
+    "C7": [
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[ai_bust]",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[keyman_nvda]",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[rate_capital]",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[taiwan_geopolitical]",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_missing_horizon_defaults_to_ten_and_failures_still_send_it",
+      "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_property_request_horizon_follows_scenarios_json"
+    ]
+  },
+  "files": {
+    "tests/spec/dualrag-macro-gate/conftest.py": "912260a45ccc71852ea7e5d11e63bd3d88802e9984bf631f6487ee7c096203af",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py": "d410da9691ad101ba35d0afe8009b9a09447785a464872e7d86fa7157bd2aa17",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py": "8d924b04756d564f940ff657bcf0229198f651733b877f0e033ca6794999edd3",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py": "c1eb4e2c74d46ed6531cbce85abfd04f4fbcf5cdd4564a126cac0e7d6ef3c1e6"
+  },
+  "id": "dualrag-macro-gate",
+  "interface": [],
+  "nodes": [
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_defect_case_fails_with_four_findings_unless_the_chunks_are_episode_cards",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_episode_defect_case_applies_the_macro_legs",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_property_only_stale_non_episode_pairs_are_findings",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_relabelling_chunks_as_episodes_clears_exactly_the_stale_findings",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c3_stale_analog_paper_stops_a_required_scenario",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_episode_citing_driver_with_absent_or_undated_chunk_fails",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_episode_plus_stale_paper_is_one_finding_for_the_paper",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_property_finding_count_model",
+    "tests/spec/dualrag-macro-gate/test_episode_freshness.py::test_c4_uncited_driver_still_fails_next_to_an_episode_citing_driver",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c5_parallel_ust_provenance_reaches_every_tenor",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c5_property_every_macro_leg_carries_its_fields_provenance",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c5_sources_carry_mode_horizon_and_validation",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_dropped_ig_lets_hy_map_to_credit[horizon_mismatch]",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_dropped_ig_lets_hy_map_to_credit[implausible_magnitude]",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_dropped_ig_lets_hy_map_to_credit[unit_scale_mismatch]",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_hard_coded_fields_are_dropped_before_the_gate",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c6_property_exactly_the_hard_coded_fields_are_dropped",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_missing_horizon_defaults_to_ten_and_failures_still_send_it",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_property_request_horizon_follows_scenarios_json",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[ai_bust]",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[keyman_nvda]",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[rate_capital]",
+    "tests/spec/dualrag-macro-gate/test_field_contract.py::test_c7_request_carries_the_committed_scenario_horizon[taiwan_geopolitical]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_committed_arag_config_rate_capital_requires_macro",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_gate_failure_detail_carries_every_finding",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_not_configured_when_no_macro_provider_or_no_macro_entry",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_property_any_required_spelling_any_failure_any_tier_raises",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[connection]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[empty]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[gate_analog]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[gate_direct]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[gate_unmarked]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[hard_invalid]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[http_error]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[parse]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[refused]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[timeout]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c1_required_macro_failure_stops_the_scenario_with_its_reason[unmapped]",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c2_dropping_macro_from_required_services_restores_static_fallback",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c2_no_arag_entry_falls_back_while_plain_macro_mode_never_raises",
+    "tests/spec/dualrag-macro-gate/test_required_macro.py::test_c2_property_non_required_and_plain_mode_return_static"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/dualrag-macro-gate.md",
+    "sha256": "c9ace25e58625b01d0ea47110ba60789454f8ad001c2fe1fb75dd45bdf1cdb02"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

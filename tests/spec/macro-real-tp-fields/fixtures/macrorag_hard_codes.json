@@ -1,0 +1,10 @@
+{
+  "source": "MacroRAG src/synthesis/validate.py:125 HARD_VALIDATION_CODES at ac29d30 (hand copy, docs/specs/macro-real-tp-fields.md Notes)",
+  "HARD_VALIDATION_CODES": [
+    "implausible_magnitude",
+    "unit_scale_mismatch",
+    "horizon_mismatch",
+    "direction_mismatch",
+    "card_value_mismatch"
+  ]
+}

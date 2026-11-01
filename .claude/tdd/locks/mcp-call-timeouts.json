@@ -1,0 +1,140 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-12",
+  "criteria": {
+    "C1": [
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_override_else_default_from_settings",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_missing_keys_take_defaults",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_constructor_lookup",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_property_lookup"
+    ],
+    "C2": [
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings0-keys0]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings1-keys1]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings2-keys2]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings3-keys3]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings4-keys4]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings5-keys5]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings6-keys6]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings7-keys7]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings8-keys8]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings9-keys9]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings10-keys10]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings11-keys11]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings12-keys12]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings13-keys13]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings14-keys14]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings15-keys15]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings16-keys16]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings17-keys17]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings18-keys18]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings19-keys19]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings20-keys20]",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_call_timeout_equal_to_overall_is_valid",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_property_non_positive_or_non_finite_timeout_raises",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_property_call_timeout_vs_overall_boundary",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_property_degrade_after_integer_threshold"
+    ],
+    "C3": [
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c3_degrades_on_nth_timeout_only_that_tool",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c3_default_degrade_after_is_one",
+      "tests/spec/mcp-call-timeouts/test_policy.py::test_c3_property_degraded_iff_count_reaches_n"
+    ],
+    "C4": [
+      "tests/spec/mcp-call-timeouts/test_client_degradation.py::test_c4_slow_timeout_degrades_slow_only",
+      "tests/spec/mcp-call-timeouts/test_client_degradation.py::test_c4_metamorphic_fast_unchanged_by_slow_timeout"
+    ]
+  },
+  "files": {
+    "tests/spec/mcp-call-timeouts/conftest.py": "44a49481aa7458bf248172bfb97912315984d85b8c093034b3c53b04daf906a0",
+    "tests/spec/mcp-call-timeouts/fixture_mcp_server.py": "f397d087933e0dfe644bc68c218dbe38bbe135ceae8b969dcc419c99a5b9c297",
+    "tests/spec/mcp-call-timeouts/test_client_degradation.py": "ef0e86b4a492e820a17fae2543e814acbfc0e5b328c92a410da4bafa02cf8f0d",
+    "tests/spec/mcp-call-timeouts/test_policy.py": "bbcda02bfe9294cf5008e8aa0a6f9b0bcdd7a5018f5d6f457c8585b66336f4f9"
+  },
+  "id": "mcp-call-timeouts",
+  "interface": [
+    {
+      "file": "src/scenariogen/llm/mcp/timeouts.py",
+      "module": "src.scenariogen.llm.mcp.timeouts",
+      "qualname": "CallTimeoutPolicy.__init__",
+      "signature": "def __init__(self, *, default_s: float, per_tool_s: dict[str, float], degrade_after: int) -> None"
+    },
+    {
+      "file": "src/scenariogen/llm/mcp/timeouts.py",
+      "module": "src.scenariogen.llm.mcp.timeouts",
+      "qualname": "CallTimeoutPolicy.from_settings",
+      "signature": "@classmethod def from_settings(cls, mcp_settings: dict[str, Any]) -> CallTimeoutPolicy"
+    },
+    {
+      "file": "src/scenariogen/llm/mcp/timeouts.py",
+      "module": "src.scenariogen.llm.mcp.timeouts",
+      "qualname": "CallTimeoutPolicy.timeout_for",
+      "signature": "def timeout_for(self, tool: str) -> float"
+    },
+    {
+      "file": "src/scenariogen/llm/mcp/timeouts.py",
+      "module": "src.scenariogen.llm.mcp.timeouts",
+      "qualname": "CallTimeoutPolicy.record_timeout",
+      "signature": "def record_timeout(self, tool: str) -> None"
+    },
+    {
+      "file": "src/scenariogen/llm/mcp/timeouts.py",
+      "module": "src.scenariogen.llm.mcp.timeouts",
+      "qualname": "CallTimeoutPolicy.is_degraded",
+      "signature": "def is_degraded(self, tool: str) -> bool"
+    }
+  ],
+  "nodes": [
+    "tests/spec/mcp-call-timeouts/test_client_degradation.py::test_c4_metamorphic_fast_unchanged_by_slow_timeout",
+    "tests/spec/mcp-call-timeouts/test_client_degradation.py::test_c4_slow_timeout_degrades_slow_only",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_constructor_lookup",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_missing_keys_take_defaults",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_override_else_default_from_settings",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c1_property_lookup",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_call_timeout_equal_to_overall_is_valid",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings0-keys0]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings1-keys1]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings10-keys10]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings11-keys11]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings12-keys12]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings13-keys13]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings14-keys14]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings15-keys15]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings16-keys16]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings17-keys17]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings18-keys18]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings19-keys19]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings2-keys2]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings20-keys20]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings3-keys3]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings4-keys4]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings5-keys5]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings6-keys6]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings7-keys7]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings8-keys8]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_invalid_settings_raise_naming_the_key[settings9-keys9]",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_property_call_timeout_vs_overall_boundary",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_property_degrade_after_integer_threshold",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c2_property_non_positive_or_non_finite_timeout_raises",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c3_default_degrade_after_is_one",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c3_degrades_on_nth_timeout_only_that_tool",
+    "tests/spec/mcp-call-timeouts/test_policy.py::test_c3_property_degraded_iff_count_reaches_n"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/mcp-call-timeouts.md",
+    "sha256": "32fcccd818a8d04074ad2be5b04b451965e0d6afb62a81240f087bf1cd0b13e1"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

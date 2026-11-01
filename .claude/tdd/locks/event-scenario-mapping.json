@@ -1,0 +1,210 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-18",
+  "criteria": {
+    "C1": [
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_parses_config",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_boundary_integers_accepted",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[crowding not a bool]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[crowding_max_staleness_days below 0]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[crowding_min_obs below 1]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[infinite weight]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[missing crowding_max_staleness_days]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[missing crowding_min_obs]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[missing item_weights]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[nan weight]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[negative weight]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[news item not in item_weights]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[theme for unknown scenario]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[tone not a bool]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[trigger item not in item_weights]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[unknown theme key]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[unknown top-level key]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[weight not a number]",
+      "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_property_underscore_keys_ignored"
+    ],
+    "C2": [
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_decayed_sum",
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_no_decay_when_halflife_not_positive[0.0]",
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_no_decay_when_halflife_not_positive[-5.0]",
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_window_zero_counts_only_same_day",
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_other_theme",
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_property_empty_news_items_scores_zero",
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_property_non_theme_event_changes_nothing",
+      "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_property_additive_over_disjoint_split"
+    ],
+    "C3": [
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_with_tone",
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_tone_switched_off",
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_clamp_top",
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_clamp_bottom",
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_applied_flag",
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_property_within_clamp_and_closed_form",
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_property_no_news_no_tone_is_exactly_one",
+      "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_property_tone_off_ignores_tone_z"
+    ],
+    "C4": [
+      "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_point_hits_window_30",
+      "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_point_window_zero",
+      "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_point_window_90_reaches_edge",
+      "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_property_input_order_irrelevant",
+      "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_property_future_or_old_events_change_nothing"
+    ],
+    "C5": [
+      "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_point_news_and_crowding",
+      "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_point_news_switch",
+      "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_point_no_lead",
+      "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_property_returned_factors_qualify"
+    ],
+    "C6": [
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_scaled_drivers",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_cap_one_is_identity",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[cap<1]",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[zero]",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[negative]",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[inf]",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[nan]",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_property_unit_multipliers_leave_drivers_unchanged",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_property_no_residual_no_change",
+      "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_property_residual_bounded_by_cap"
+    ],
+    "C7": [
+      "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_point_boundaries",
+      "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_point_future_dates_ignored",
+      "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_property_future_dates_change_nothing",
+      "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_property_monotone_in_observations"
+    ]
+  },
+  "files": {
+    "tests/spec/event-scenario-mapping/conftest.py": "469b5b8edba3a35345d13614862744b51632783200ed8930556d7d679184abf5",
+    "tests/spec/event-scenario-mapping/test_crowding_reliable.py": "4d9aac3331c6c970c8fcf4705e7ee3f6052facd837be3bf433a9298bc53df73f",
+    "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py": "db6e75f0069aa0fb310eb39debc58c9f1bd978c345c5c06a2359fd1aa7374068",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py": "bd041c2989e238053a2f838e6b4aa55b5c88b5c51245d429e26f52ba9c1a827d",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py": "6e1030a7bb742f893aaa40d6fb0e6e8f72604be85fb75a135d09f0e0183650f3",
+    "tests/spec/event-scenario-mapping/test_scenario_triggers.py": "c3cafd0db32cd0bbfc486dadc019e9d1ba7f3cc44137096f854b152b7b6717df",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py": "145a9c55e2d931c72217da923f1981e98ba84368623f866dab9d9b80827ebf2b",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py": "ebedbaab1eaafa6e1de014a16163f1b813eb3992300f64b6b6f7d006fce64a38"
+  },
+  "id": "event-scenario-mapping",
+  "interface": [
+    {
+      "file": "src/scenariogen/events.py",
+      "module": "src.scenariogen.events",
+      "qualname": "load_events_config",
+      "signature": "def load_events_config(raw: Mapping[str, Any], scenarios: Collection[str]) -> EventsConfig"
+    },
+    {
+      "file": "src/scenariogen/events.py",
+      "module": "src.scenariogen.events",
+      "qualname": "theme_event_score",
+      "signature": "def theme_event_score(events: Sequence[EventRow], theme: ScenarioTheme, item_weights: Mapping[str, float], as_of: date, cfg: NewsMapConfig) -> tuple[float, list[EventRow]]"
+    },
+    {
+      "file": "src/scenariogen/events.py",
+      "module": "src.scenariogen.events",
+      "qualname": "theme_news_multiplier",
+      "signature": "def theme_news_multiplier(ticker: str, events: Sequence[EventRow], tone_z: float | None, as_of: date, cfg: NewsMapConfig, theme: ScenarioTheme, item_weights: Mapping[str, float]) -> NewsLeg"
+    },
+    {
+      "file": "src/scenariogen/events.py",
+      "module": "src.scenariogen.events",
+      "qualname": "scenario_triggers",
+      "signature": "def scenario_triggers(events_by_ticker: Mapping[str, Sequence[EventRow]], as_of: date, window_days: int, themes: Mapping[str, ScenarioTheme]) -> dict[str, list[TriggerHit]]"
+    },
+    {
+      "file": "src/scenariogen/events.py",
+      "module": "src.scenariogen.events",
+      "qualname": "equity_leg_multipliers",
+      "signature": "def equity_leg_multipliers(drivers: Iterable[str], legs: Collection[str], news_mult: Mapping[str, float], crowding_mult: Mapping[str, float], theme: ScenarioTheme, excluded: Collection[str], lead: str | None) -> dict[str, float]"
+    },
+    {
+      "file": "src/scenariogen/events.py",
+      "module": "src.scenariogen.events",
+      "qualname": "scale_driver_residuals",
+      "signature": "def scale_driver_residuals(drivers: Mapping[str, float], systematic: Mapping[str, float], multipliers: Mapping[str, float], *, cap: float) -> dict[str, float]"
+    },
+    {
+      "file": "src/scenariogen/events.py",
+      "module": "src.scenariogen.events",
+      "qualname": "crowding_reliable",
+      "signature": "def crowding_reliable(settlement_dates: Sequence[str], as_of: date, *, min_obs: int, max_staleness_days: int) -> bool"
+    }
+  ],
+  "nodes": [
+    "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_point_boundaries",
+    "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_point_future_dates_ignored",
+    "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_property_future_dates_change_nothing",
+    "tests/spec/event-scenario-mapping/test_crowding_reliable.py::test_c7_property_monotone_in_observations",
+    "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_point_news_and_crowding",
+    "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_point_news_switch",
+    "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_point_no_lead",
+    "tests/spec/event-scenario-mapping/test_equity_leg_multipliers.py::test_c5_property_returned_factors_qualify",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_boundary_integers_accepted",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[crowding not a bool]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[crowding_max_staleness_days below 0]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[crowding_min_obs below 1]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[infinite weight]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[missing crowding_max_staleness_days]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[missing crowding_min_obs]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[missing item_weights]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[nan weight]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[negative weight]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[news item not in item_weights]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[theme for unknown scenario]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[tone not a bool]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[trigger item not in item_weights]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[unknown theme key]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[unknown top-level key]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_invalid_raises_config_error[weight not a number]",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_point_parses_config",
+    "tests/spec/event-scenario-mapping/test_load_events_config.py::test_c1_property_underscore_keys_ignored",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_cap_one_is_identity",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_scaled_drivers",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[cap<1]",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[inf]",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[nan]",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[negative]",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_point_value_errors[zero]",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_property_no_residual_no_change",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_property_residual_bounded_by_cap",
+    "tests/spec/event-scenario-mapping/test_scale_driver_residuals.py::test_c6_property_unit_multipliers_leave_drivers_unchanged",
+    "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_point_hits_window_30",
+    "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_point_window_90_reaches_edge",
+    "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_point_window_zero",
+    "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_property_future_or_old_events_change_nothing",
+    "tests/spec/event-scenario-mapping/test_scenario_triggers.py::test_c4_property_input_order_irrelevant",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_decayed_sum",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_no_decay_when_halflife_not_positive[-5.0]",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_no_decay_when_halflife_not_positive[0.0]",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_other_theme",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_point_window_zero_counts_only_same_day",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_property_additive_over_disjoint_split",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_property_empty_news_items_scores_zero",
+    "tests/spec/event-scenario-mapping/test_theme_event_score.py::test_c2_property_non_theme_event_changes_nothing",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_applied_flag",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_clamp_bottom",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_clamp_top",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_tone_switched_off",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_point_with_tone",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_property_no_news_no_tone_is_exactly_one",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_property_tone_off_ignores_tone_z",
+    "tests/spec/event-scenario-mapping/test_theme_news_multiplier.py::test_c3_property_within_clamp_and_closed_form"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/event-scenario-mapping.md",
+    "sha256": "b03aef8150c35a2662828ed6709c8dc25853e5bd0dd9455a381c68864d8595d9"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

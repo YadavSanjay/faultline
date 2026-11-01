@@ -1,0 +1,113 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/scenario-forward-log/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-15",
+  "criteria": {
+    "C1": [
+      "tests/spec/scenario-forward-log/test_realised.py::test_c1_point_window_excludes_as_of_row",
+      "tests/spec/scenario-forward-log/test_realised.py::test_c1_point_as_of_between_rows_and_exact_maturity",
+      "tests/spec/scenario-forward-log/test_realised.py::test_c1_not_matured_returns_none",
+      "tests/spec/scenario-forward-log/test_realised.py::test_c1_only_requested_factors_and_missing_left_out",
+      "tests/spec/scenario-forward-log/test_realised.py::test_c1_property_matches_requirement_formula",
+      "tests/spec/scenario-forward-log/test_realised.py::test_c1_metamorphic_rows_outside_window_do_not_matter"
+    ],
+    "C2": [
+      "tests/spec/scenario-forward-log/test_score.py::test_c2_point_hand_calculation",
+      "tests/spec/scenario-forward-log/test_score.py::test_c2_point_min_abs_z_threshold",
+      "tests/spec/scenario-forward-log/test_score.py::test_c2_point_rank_uses_only_equity_factors_and_negative_direction",
+      "tests/spec/scenario-forward-log/test_score.py::test_c2_none_cases",
+      "tests/spec/scenario-forward-log/test_score.py::test_c2_metamorphic_common_prediction_scaling",
+      "tests/spec/scenario-forward-log/test_score.py::test_c2_metamorphic_one_factor_unit_change",
+      "tests/spec/scenario-forward-log/test_score.py::test_c2_property_counts_and_bounds"
+    ],
+    "C3": [
+      "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_point_at_below_and_above_default_threshold",
+      "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_point_custom_factor_and_threshold",
+      "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_none_cases",
+      "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_property_threshold_rule",
+      "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_metamorphic_units_and_other_factors"
+    ],
+    "C4": [
+      "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_point_news_on_cosine",
+      "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_point_other_metric_and_layer",
+      "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_no_pairs",
+      "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_metamorphic_swap_negates",
+      "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_property_counts_match_hand_rule"
+    ]
+  },
+  "files": {
+    "tests/spec/scenario-forward-log/test_layer_value.py": "dbcf6e7615720608d4de07586ce0ec4e838fdc6e39fb2acc29884efb37ebd116",
+    "tests/spec/scenario-forward-log/test_realised.py": "599b2f4629864f00e1f1c261d1d426ebbae0626fcb623422f552eea51e46088e",
+    "tests/spec/scenario-forward-log/test_score.py": "8ba7d6b8a29c60bcea04d079e0ebbd4fc8b59d1cd540d8eeefb8f660b1cf46b3",
+    "tests/spec/scenario-forward-log/test_stress_window.py": "d09da6d7a46241711d413a637ff41ab6021352849bc9f93aa6595f4bc3bf5131"
+  },
+  "id": "scenario-forward-log",
+  "interface": [
+    {
+      "file": "src/scenariogen/forward_log.py",
+      "module": "src.scenariogen.forward_log",
+      "qualname": "realised_moves",
+      "signature": "def realised_moves(panel: pd.DataFrame, as_of: date, horizon_days: int, factors: Sequence[str]) -> dict[str, float] | None"
+    },
+    {
+      "file": "src/scenariogen/forward_log.py",
+      "module": "src.scenariogen.forward_log",
+      "qualname": "score_prediction",
+      "signature": "def score_prediction(predicted: Mapping[str, float], realised: Mapping[str, float], scale: Mapping[str, float], *, min_abs_z: float=1.0) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/forward_log.py",
+      "module": "src.scenariogen.forward_log",
+      "qualname": "stress_window",
+      "signature": "def stress_window(realised: Mapping[str, float], scale: Mapping[str, float], *, market_factor: str='eq:XLK', threshold_z: float=-2.0) -> bool | None"
+    },
+    {
+      "file": "src/scenariogen/forward_log.py",
+      "module": "src.scenariogen.forward_log",
+      "qualname": "layer_value",
+      "signature": "def layer_value(records: Sequence[Mapping[str, Any]], layer: str, metric: str) -> dict[str, Any]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_metamorphic_swap_negates",
+    "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_no_pairs",
+    "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_point_news_on_cosine",
+    "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_point_other_metric_and_layer",
+    "tests/spec/scenario-forward-log/test_layer_value.py::test_c4_property_counts_match_hand_rule",
+    "tests/spec/scenario-forward-log/test_realised.py::test_c1_metamorphic_rows_outside_window_do_not_matter",
+    "tests/spec/scenario-forward-log/test_realised.py::test_c1_not_matured_returns_none",
+    "tests/spec/scenario-forward-log/test_realised.py::test_c1_only_requested_factors_and_missing_left_out",
+    "tests/spec/scenario-forward-log/test_realised.py::test_c1_point_as_of_between_rows_and_exact_maturity",
+    "tests/spec/scenario-forward-log/test_realised.py::test_c1_point_window_excludes_as_of_row",
+    "tests/spec/scenario-forward-log/test_realised.py::test_c1_property_matches_requirement_formula",
+    "tests/spec/scenario-forward-log/test_score.py::test_c2_metamorphic_common_prediction_scaling",
+    "tests/spec/scenario-forward-log/test_score.py::test_c2_metamorphic_one_factor_unit_change",
+    "tests/spec/scenario-forward-log/test_score.py::test_c2_none_cases",
+    "tests/spec/scenario-forward-log/test_score.py::test_c2_point_hand_calculation",
+    "tests/spec/scenario-forward-log/test_score.py::test_c2_point_min_abs_z_threshold",
+    "tests/spec/scenario-forward-log/test_score.py::test_c2_point_rank_uses_only_equity_factors_and_negative_direction",
+    "tests/spec/scenario-forward-log/test_score.py::test_c2_property_counts_and_bounds",
+    "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_metamorphic_units_and_other_factors",
+    "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_none_cases",
+    "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_point_at_below_and_above_default_threshold",
+    "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_point_custom_factor_and_threshold",
+    "tests/spec/scenario-forward-log/test_stress_window.py::test_c3_property_threshold_rule"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/scenario-forward-log.md",
+    "sha256": "47ab40e92299a9b98a50afb44ee0d2b78c84094f72d4f8739157f8ea549ed559"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

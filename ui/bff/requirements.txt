@@ -1,0 +1,10 @@
+# BFF (Backend-for-Frontend) — read layer over the QuantLib platform stores.
+# Install into the same py312 env used for the platform:
+#   conda run -n py312 pip install -r ui/bff/requirements.txt
+# (fastapi/uvicorn/duckdb/pandas/pyarrow/httpx are already present in py312.)
+fastapi==0.120.0
+uvicorn==0.38.0
+httpx==0.28.1
+duckdb>=1.4
+pandas>=2.2
+pyarrow>=17

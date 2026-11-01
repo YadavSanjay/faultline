@@ -1,0 +1,59 @@
+# Faultline — runtime dependencies (Python 3.12 / conda py312)
+#
+# Versions are PINNED EXACTLY (P0d). QuantLib minor versions change numerical
+# results, so the pricing engine version is part of the model definition and is
+# also stamped into every result's provenance (src/pricer/provenance.py). Bump
+# deliberately and re-baseline the golden PV tests when you do.
+
+# Pricing engine
+QuantLib==1.42.1
+
+# HTTP + retry
+requests==2.32.5
+tenacity==9.1.2
+
+# Config / env + typed config validation (P5)
+python-dotenv==1.2.1
+pydantic==2.11.9
+pydantic-settings==2.11.0
+
+# Data handling
+pandas==2.3.2
+numpy==2.2.6
+
+# Results store (P1c): columnar Parquet + DuckDB SQL query layer
+pyarrow==22.0.0
+duckdb==1.4.1
+
+# Dual-mode storage layer (local FS | S3). fsspec is the filesystem abstraction; s3fs adds the
+# S3 backend (pulls botocore/aiobotocore). Both are import-lazy in the storage layer, so a pure
+# local run does not need them at runtime — they are pinned for the AWS deploy_mode. See
+# src/common/storage/ and docs/design/AITrade_aws_deployment_design.md.
+fsspec==2025.9.0
+s3fs==2025.9.0
+# boto3 is used only by the AWS JobRunner (src/common/jobs) to enqueue jobs to SQS; lazy-imported,
+# so a local run never needs it. Pinned for the AWS deploy_mode.
+boto3==1.40.59
+
+# Observability (P3): Prometheus metrics. OpenTelemetry tracing is optional
+# (src/pricer/obs/tracing.py no-ops without it) and intentionally not pinned here.
+prometheus-client==0.21.1
+
+# Excel parsing (Pensford forward curve export)
+openpyxl==3.1.5
+xlrd==2.0.2
+
+# HTML scraping (Pensford, Fed H.10)
+beautifulsoup4==4.13.5
+lxml==6.1.1
+
+# Logging
+colorlog==6.10.1
+
+# scenariogen LLM flow: provider SDKs (OpenAI, which also serves DeepSeek; Anthropic) + MCP client
+# (ARag / MacroRAG). Imported lazily (the flow no-ops without keys/servers), but pinned for
+# reproducible runs. anthropic stays on 0.109.1 (verified live; shares httpx with openai/mcp) until
+# it causes a problem — design D11. See docs/design/llm_multi_provider_design.md.
+openai==2.14.0
+anthropic==0.109.1
+mcp==1.12.4

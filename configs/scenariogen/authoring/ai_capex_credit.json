@@ -1,0 +1,175 @@
+{
+  "description": "Step 11b (docs/design/scenario_set_and_ablation_design.md §4.2 #8, §9 step 11): scenario #8 AI-capex credit repricing as a historical replay of Oracle's own 2025-26 CDS repricing (user decision 2026-10-18), on the credit:ORCL / credit:META issuer factors of issuer-credit-factors. Upsert: no other scenario changes. Severe tier on the production covariance (severity.severe_sigma, issuer-scenario-support): an ORCL event is an issuer event, and the 2022 crisis windows hold no ORCL history of its own.",
+  "scenarios": {
+    "ai_capex_credit": {
+      "narrative": "AI-capex credit repricing: the 1 Oct 2025 - 30 Jan 2026 replay, when Oracle's 5Y CDS went from about 54bp to about 157bp on debt-funded AI data-center capex while IG OAS stayed flat -- a single-driver credit replay (Oracle's own CDS move only, IG and META credit from the covariance; the window's AI equity rally and rates moves are excluded and filled from the covariance, with debt-funded capex names marked down by XbrlRag) of an issuer-level credit repricing that hits the long-dated ORCL 2053 / META 2054 bonds, nets against the ORCL / META CDS hedges and leaves the CDX protection sold on the common credit move.",
+      "trigger": "Debt issuance by an AI-capex issuer (8-K item 2.03 from ORCL, META, AMZN, MSFT or AAPL)",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "credit:ORCL",
+        "direction": "up",
+        "severe_sigma": "production"
+      },
+      "replay": {
+        "start": "2025-10-01",
+        "end": "2026-01-30",
+        "idiosyncratic": {
+          "ir:DGS1MO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS3MO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS6MO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS1": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS2": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS3": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS5": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS7": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS10": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS20": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS30": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:NVDA": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:TSM": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:AVGO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:MU": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:SMH": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:XLK": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:AAPL": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:MSFT": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:META": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:TSLA": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:QQQ": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:SPX": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:GLD": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:CEG": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:VST": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:GOOGL": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:INTC": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:AMD": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eqvol": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eqvol_term": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eqvol_skew": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ratesvol": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "fx:JPY": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "fx:TWD": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "fxrate:JPY": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "style:MOM": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "basis:SMH_SEMI": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "real:DFII10": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "be:T10YIE": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "tp:ACMTP10": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "credit": "single-driver credit replay: before the DTCC history the issuer factors are exact multiples of credit, so replaying credit and credit:META as well would condition on a degenerate combination; filled from the covariance given credit:ORCL",
+          "credit:META": "single-driver credit replay: before the DTCC history the issuer factors are exact multiples of credit, so replaying credit and credit:META as well would condition on a degenerate combination; filled from the covariance given credit:ORCL"
+        }
+      },
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "META",
+          "narrative_query": "debt-financed capital expenditures on AI and data-center infrastructure; risk that the investment does not earn expected returns and that indebtedness or credit ratings are affected",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          },
+          "seed_move": -0.1
+        },
+        {
+          "ticker": "MSFT",
+          "narrative_query": "significant capital expenditures on AI and cloud data-center capacity and the financing of that investment; risk that demand does not materialise",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          },
+          "seed_move": -0.08
+        },
+        {
+          "ticker": "GOOGL",
+          "narrative_query": "significant capital expenditures on AI and data-center technical infrastructure that may not generate expected returns",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          },
+          "seed_move": -0.08
+        },
+        {
+          "ticker": "AAPL",
+          "narrative_query": "indebtedness, access to capital markets and credit ratings; changes in the cost of debt financing",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "Theme concept is debt/FCF; XbrlRag Debt resolves AMBIGUOUS -> grounding-only.",
+          "seed_move": -0.03
+        }
+      ],
+      "macro": {
+        "synthesis_question": "If debt-funded AI data-center capex leads credit markets to reprice the issuers funding it -- as when Oracle's CDS widened by about 100bp between October 2025 and January 2026 while IG credit overall stayed calm -- quantify the shocks over the scenario horizon to IG and HY credit spreads, VIX and the UST 10/30 yields, with citations. (Issuer credit and equity legs are set separately.)",
+        "filters": {
+          "factor_tags": [
+            "credit_spread",
+            "ai_capex",
+            "equity_vol"
+          ],
+          "entity_tags": [
+            "hyperscalers",
+            "ai"
+          ]
+        },
+        "expect_fields": [
+          "IG_OAS",
+          "HY_OAS",
+          "VIX",
+          "UST_10Y",
+          "UST_30Y"
+        ],
+        "directions": {
+          "IG_OAS": "up",
+          "HY_OAS": "up"
+        }
+      },
+      "expect_tickers": [
+        "META",
+        "MSFT",
+        "GOOGL",
+        "AAPL"
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Scenario plausibility / GATE bounds (S3, design §9). 'bounds' are hard per-factor-class sanity caps and form the gate: a move beyond them is almost certainly an authoring error or runaway propagation -> FAIL -> held out of the run. 'envelope' is the n-sigma historical band (daily std from Σ scaled to the scenario horizon); stress moves are designed to exceed ordinary history, so a breach is by default a FLAG (recorded for review, still promotable). Per-tier 'severe_action'/'non_severe_action' (flag|fail|ignore) let a stricter desk make non-severe breaches gate.",
+  "bounds": {
+    "ir": {"max_abs_bp": 400},
+    "equity": {"max_abs_pct": 96},
+    "fx": {"max_abs_pct": 50},
+    "eqvol": {"max_abs_pts": 70},
+    "ratesvol": {"max_abs_rel": 3.0},
+    "credit": {"max_abs_bp": 700},
+    "style": {"max_abs_pct": 30},
+    "basis": {"max_abs_pct": 25},
+    "basis_bp": {"max_abs_bp": 150},
+    "rates_decomp": {"max_abs_bp": 300}
+  },
+  "envelope": {
+    "n_sigma": 6.0,
+    "severe_action": "flag",
+    "non_severe_action": "flag"
+  },
+  "market_implied": {
+    "_comment": "B4 forward-looking check: grade each equity move against the option market's risk-neutral tail probability (from the RND, signal 5). ADDITIVE and FLAG-ONLY -- it records how extreme a shock is versus what the market prices but never gates a scenario out. No-op unless the marketdata option signals exist on disk. min_prob: flag an equity move the market prices below this probability. The option data is point-in-time to the run's as_of (options_sizing.json).",
+    "enabled": true,
+    "min_prob": 0.01
+  }
+}

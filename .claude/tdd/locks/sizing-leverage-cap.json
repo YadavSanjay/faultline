@@ -1,0 +1,43 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-11",
+  "criteria": {
+    "C1": [
+      "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c1_spec_recipe_holds_leverage_cap_and_risk_share_cap",
+      "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c1_property_both_caps_hold_whenever_both_bind"
+    ],
+    "C2": [
+      "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c2_spec_recipe_reports_leverage_cap_and_var_below_budget",
+      "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c2_property_leverage_cap_reported_whenever_both_bind"
+    ]
+  },
+  "files": {
+    "tests/spec/sizing-leverage-cap/conftest.py": "12a7f9c841960fa5ad5a29f77b9e0a38042c4b5008628f01e4f8df4e41be1a12",
+    "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py": "57ea092b0dcb98b3d56e3b5eb840d6a749cddbf955e71466c562339e1a5a84b3"
+  },
+  "id": "sizing-leverage-cap",
+  "interface": [],
+  "nodes": [
+    "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c1_property_both_caps_hold_whenever_both_bind",
+    "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c1_spec_recipe_holds_leverage_cap_and_risk_share_cap",
+    "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c2_property_leverage_cap_reported_whenever_both_bind",
+    "tests/spec/sizing-leverage-cap/test_leverage_and_risk_share_caps.py::test_c2_spec_recipe_reports_leverage_cap_and_var_below_budget"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/sizing-leverage-cap.md",
+    "sha256": "fbdeea8371f0e47e2f277ffc5dcad99b30c00f8fc104b38fd924d25a5bc1e7c3"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

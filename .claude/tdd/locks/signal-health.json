@@ -1,0 +1,103 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-18",
+  "criteria": {
+    "C1": [
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_ok",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_degraded_by_staleness",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_degraded_by_coverage",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_degraded_by_holds_counts_in_first_appearance_order",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_down_when_nothing_covered",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_unused_when_nothing_expected",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_undated_source_is_never_stale",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_staleness_boundary_equal_is_not_stale",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_same_day_with_zero_limit_is_not_stale",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[covered_negative]",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[expected_negative]",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[covered_above_expected]",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[max_staleness_negative]",
+      "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[latest_after_as_of]",
+      "tests/spec/signal-health/test_source_status.py::test_c1_property_coverage_in_unit_interval_and_status_rule",
+      "tests/spec/signal-health/test_source_status.py::test_c1_property_adding_a_hold_never_improves_status",
+      "tests/spec/signal-health/test_source_status.py::test_c1_property_invalid_counts_and_future_dates_always_raise"
+    ],
+    "C2": [
+      "tests/spec/signal-health/test_signal_health.py::test_c2_point_mixed_rollup",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_point_worst_is_degraded_when_nothing_down",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_point_ok_and_unused_rolls_up_to_ok",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_point_all_unused",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_point_empty_list",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_point_duplicate_source_raises",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_point_input_not_mutated",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_property_counts_overall_and_order",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_metamorphic_shuffling_input_never_changes_output",
+      "tests/spec/signal-health/test_signal_health.py::test_c2_property_any_duplicate_source_raises"
+    ]
+  },
+  "files": {
+    "tests/spec/signal-health/conftest.py": "0e71d91e2f1abcf4ce7370033e37dbd1211c5b21514a033fb80d5e97b0064877",
+    "tests/spec/signal-health/test_signal_health.py": "75994ac7585b02ed4c0e1d89d5af1704c40c380f564bec17c17e54783c9289f9",
+    "tests/spec/signal-health/test_source_status.py": "40692f24f22d0816cc0ff03986e7199dd7acbcead10315286239dfbf51e6965a"
+  },
+  "id": "signal-health",
+  "interface": [
+    {
+      "file": "src/scenariogen/signal_health.py",
+      "module": "src.scenariogen.signal_health",
+      "qualname": "source_status",
+      "signature": "def source_status(source: str, *, as_of: date, latest: date | None, max_staleness_days: int, covered: int, expected: int, holds: Sequence[str]) -> dict[str, Any]"
+    },
+    {
+      "file": "src/scenariogen/signal_health.py",
+      "module": "src.scenariogen.signal_health",
+      "qualname": "signal_health",
+      "signature": "def signal_health(statuses: Sequence[Mapping[str, Any]]) -> dict[str, Any]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/signal-health/test_signal_health.py::test_c2_metamorphic_shuffling_input_never_changes_output",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_point_all_unused",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_point_duplicate_source_raises",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_point_empty_list",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_point_input_not_mutated",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_point_mixed_rollup",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_point_ok_and_unused_rolls_up_to_ok",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_point_worst_is_degraded_when_nothing_down",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_property_any_duplicate_source_raises",
+    "tests/spec/signal-health/test_signal_health.py::test_c2_property_counts_overall_and_order",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_degraded_by_coverage",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_degraded_by_holds_counts_in_first_appearance_order",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_degraded_by_staleness",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_down_when_nothing_covered",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[covered_above_expected]",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[covered_negative]",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[expected_negative]",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[latest_after_as_of]",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_invalid_inputs_raise[max_staleness_negative]",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_ok",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_same_day_with_zero_limit_is_not_stale",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_staleness_boundary_equal_is_not_stale",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_undated_source_is_never_stale",
+    "tests/spec/signal-health/test_source_status.py::test_c1_point_unused_when_nothing_expected",
+    "tests/spec/signal-health/test_source_status.py::test_c1_property_adding_a_hold_never_improves_status",
+    "tests/spec/signal-health/test_source_status.py::test_c1_property_coverage_in_unit_interval_and_status_rule",
+    "tests/spec/signal-health/test_source_status.py::test_c1_property_invalid_counts_and_future_dates_always_raise"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/signal-health.md",
+    "sha256": "a1f82f3bbd858b7fd23e8d90f702cad2637950619ed1499559f5c3b2f69d5adf"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

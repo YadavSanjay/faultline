@@ -1,0 +1,23 @@
+{
+  "company": {"ticker": "NVDA", "resolution": "exact_ticker"},
+  "concept": "Revenue",
+  "unresolved": false,
+  "series": [
+    {
+      "fiscal_year": 2024,
+      "status": "OK",
+      "value": 60922.0,
+      "unit": "USD",
+      "confidence": 0.99,
+      "citation": {"chunk_id": "nvda::2024::fin::03", "fact_id": "f-nvda-rev-2024"}
+    },
+    {
+      "fiscal_year": 2025,
+      "status": "OK",
+      "value": 130497.0,
+      "unit": "USD",
+      "confidence": 0.99,
+      "citation": {"chunk_id": "nvda::2025::fin::12", "fact_id": "f-nvda-rev-2025"}
+    }
+  ]
+}

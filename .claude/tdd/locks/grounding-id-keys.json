@@ -1,0 +1,49 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/grounding-id-keys/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-11",
+  "criteria": {
+    "C1": [
+      "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_arag_plan_step_ids_are_not_collected",
+      "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_id_next_to_chunk_id_at_every_depth",
+      "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_mixed_document_lists_and_id_only_document",
+      "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_property_id_values_never_collected"
+    ],
+    "C2": [
+      "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c2_leg_citing_a_plan_step_id_is_unseen",
+      "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c2_revenue_step_id_unseen_but_fact_id_seen",
+      "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c2_property_id_only_citation_is_unseen"
+    ]
+  },
+  "files": {
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py": "0b1addcf0f44e355f81ab71a76f35c8a4b5bb99cafd579a189ebd59fde544243"
+  },
+  "id": "grounding-id-keys",
+  "interface": [],
+  "nodes": [
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_arag_plan_step_ids_are_not_collected",
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_id_next_to_chunk_id_at_every_depth",
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_mixed_document_lists_and_id_only_document",
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c1_property_id_values_never_collected",
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c2_leg_citing_a_plan_step_id_is_unseen",
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c2_property_id_only_citation_is_unseen",
+    "tests/spec/grounding-id-keys/test_grounding_id_keys.py::test_c2_revenue_step_id_unseen_but_fact_id_seen"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/grounding-id-keys.md",
+    "sha256": "bbe98958b16fb971d439bd95b3ec5262348b495c19a6eeaf8ede3f4875a0e93e"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

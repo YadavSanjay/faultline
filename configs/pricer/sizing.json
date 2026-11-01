@@ -1,0 +1,93 @@
+{
+  "_comment": "Risk-appetite position sizing config (src/pricer/sizing). Replaces the flat ~$50mm placeholder sizes in portfolio.json with sizes derived from three risk-appetite mandates. All coefficients are ASSUMPTIONS — tune to the desk's actual capital, funding and house views. capital_base is the NAV/equity backing the book; VaR budgets are 1-day 99% as a fraction of it.",
+  "capital_base": 1000000000,
+  "lookback_days": 250,
+  "valuation_date": "2026-10-06",
+  "_default_profile_comment": "The book in src/pricer/portfolio/portfolio.json is sized to this profile (see its sizing_basis). Promoted from 'aggressive' to 'core' (the Aggressive-Balanced rebalance, docs/design/portfolio_rebalance_review.md) on 2026-07-26; golden PVs rebaselined to the core default. Sizing always sizes the base book, so re-running never compounds.",
+  "default_profile": "core",
+
+  "_stress_constraint_comment": "Stress-loss sizing constraint (docs/specs/scenario-decision-impact.md, decided 2026-10-17): a profile's worst scenario loss at `tier` may not exceed var_multiple x its daily VaR budget (balanced 6%, core 12%, aggressive 15%, risky 30% of capital_base). Used by src/scenariogen/decision_impact_runner (analysis only); sizing_runner and the published book variants do not apply it.",
+  "stress_constraint": {"tier": "adverse", "var_multiple": 6.0},
+
+  "expected_returns": {
+    "_comment": "Hybrid μ engine. Equities use β·ERP(+growth tilt); everything else uses carry/theta from trade economics. funding_rate ≈ short SOFR at the valuation date.",
+    "funding_rate": 0.043,
+    "equity_risk_premium": 0.055,
+    "default_beta": 1.0,
+    "betas": {
+      "NVDA": 1.90, "TSM": 1.40, "AVGO": 1.55, "MU": 1.75, "XLK": 1.10, "SMH": 1.35,
+      "CEG": 0.95, "VST": 1.05, "GOOGL": 1.05, "GLD": 0.10,
+      "INTC": 1.05, "AMD": 1.65
+    },
+    "growth_tilt": {
+      "NVDA": 0.04, "TSM": 0.02, "AVGO": 0.02, "MU": 0.02,
+      "CEG": 0.02, "VST": 0.02, "GOOGL": 0.03, "AMD": 0.02
+    },
+    "foreign_rates": {
+      "JPY": 0.006, "TWD": 0.018
+    }
+  },
+
+  "_hedge_comment": "Macro/issuer hedges sized at hedge_scale x current (absolute), thinned by appetite. SMH short (TRADE_6) is treated as directional — it is the short leg of the semis relative-value structure, not a macro hedge.",
+  "hedge_trades": [
+    "TRADE_8", "TRADE_12", "TRADE_13", "TRADE_14", "TRADE_35",
+    "TRADE_22", "TRADE_23", "TRADE_25", "TRADE_26", "TRADE_28", "TRADE_29"
+  ],
+
+  "_market_neutral_pairs_comment": "N5 dispersion pairs sized as a unit: the short leg's notional is pinned to short_ratio x the long leg's, overriding the return-tilt (which floors the negative-carry short leg). short_ratio = beta_long/beta_short gives a beta-neutral pair (net-zero market exposure).",
+  "market_neutral_pairs": [
+    {"long": "TRADE_37", "short": "TRADE_38", "short_ratio": 0.636, "note": "INTC (long, beta 1.05) / AMD (short, beta 1.65) semis dispersion; 1.05/1.65 = 0.636 -> beta-neutral"}
+  ],
+
+  "profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Diversified, risk parity across the directional book, full hedges. Low 1% daily VaR budget; ~1-1.5x gross.",
+      "var_budget_pct": 0.010,
+      "gross_leverage_cap": 3.0,
+      "concentration_cap": 0.15,
+      "notional_cap_pct": 0.10,
+      "hedge_scale": 1.0,
+      "method": "return_tilt",
+      "tilt_power": 0.5,
+      "sharpe_floor": 0.10
+    },
+    "core": {
+      "label": "Core (Aggressive-Balanced)",
+      "description": "Retuned aggressive (portfolio_rebalance_review.md): keeps the growth tilt but restores most of the downside/rate/issuer hedges, caps single-name concentration, and takes the negative-skew carry (CDX-sell, JPY) off the notional cap. Moderate 2% daily VaR budget; ~2.5-3x gross. risk_share_cap bounds the REALIZED net-book risk share of any single name (concentration_cap only bounds the intended directional budget, which left MU ~24% of net risk).",
+      "var_budget_pct": 0.020,
+      "gross_leverage_cap": 3.5,
+      "concentration_cap": 0.15,
+      "risk_share_cap": 0.18,
+      "notional_cap_pct": 0.12,
+      "hedge_scale": 0.85,
+      "method": "return_tilt",
+      "tilt_power": 0.7,
+      "sharpe_floor": 0.07
+    },
+    "aggressive": {
+      "label": "Aggressive Growth",
+      "description": "Return-tilted toward high risk-adjusted-return names, partial hedges. Elevated 2.5% daily VaR budget; ~3x gross.",
+      "var_budget_pct": 0.025,
+      "gross_leverage_cap": 5.0,
+      "concentration_cap": 0.25,
+      "notional_cap_pct": 0.20,
+      "hedge_scale": 0.5,
+      "method": "return_tilt",
+      "tilt_power": 1.0,
+      "sharpe_floor": 0.05
+    },
+    "risky": {
+      "label": "Highly Leveraged / Risky",
+      "description": "Risk concentrated in the top Sharpe names, minimal hedges. High 5% daily VaR budget; ~6x gross.",
+      "var_budget_pct": 0.050,
+      "gross_leverage_cap": 10.0,
+      "concentration_cap": 0.45,
+      "notional_cap_pct": 0.35,
+      "hedge_scale": 0.15,
+      "method": "return_tilt",
+      "tilt_power": 2.0,
+      "sharpe_floor": 0.02
+    }
+  }
+}

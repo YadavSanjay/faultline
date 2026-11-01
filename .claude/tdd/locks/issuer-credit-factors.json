@@ -1,0 +1,192 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-18",
+  "criteria": {
+    "C1": [
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_filters_and_medians",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_date_objects",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_outliers_both_sides_and_no_leak",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_lookback_window",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_band_edges_are_inside",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_no_qualifying_prints_is_empty",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs0-None]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs1-None]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs2-None]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs3-None]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs4-None]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs5-None]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs6-date]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs7-spread]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs8-tenor_years]",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_metamorphic_out_of_bucket_print_changes_nothing",
+      "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_property_dates_subset_ascending"
+    ],
+    "C2": [
+      "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_gaps_shorter_equal_longer",
+      "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_no_fill_when_limit_zero",
+      "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_limit_bridges_every_gap",
+      "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_negative_limit_raises[-1]",
+      "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_negative_limit_raises[-5]",
+      "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_property_no_gaps_sum_is_last_minus_first",
+      "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_metamorphic_bridged_gaps_sum_is_last_minus_first"
+    ],
+    "C3": [
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_splice",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_unsorted_inputs_give_sorted_result",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_empty_moves_is_scaled_proxy",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0-0.0086]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[-0.0036-0.0086]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[nan-0.0086]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[inf-0.0086]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036-0.0]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036--0.0086]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036-nan]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036-inf]",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_metamorphic_scaling_both_levels_changes_nothing",
+      "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_property_issuer_dates_never_altered"
+    ],
+    "C4": [
+      "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_per_issuer_and_default",
+      "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_unknown_names_take_default",
+      "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_empty_shifts_equals_shift_credit[0.0005]",
+      "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_empty_shifts_equals_shift_credit[-0.0012]",
+      "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_empty_shifts_equals_shift_credit[0.025]",
+      "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_metamorphic_composition_adds"
+    ],
+    "C5": [
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_key",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_is_issuer_credit",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[credit]",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[credit:]",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[eq:NVDA]",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[creditx:ORCL]",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[]",
+      "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_property_round_trip"
+    ]
+  },
+  "files": {
+    "tests/spec/issuer-credit-factors/conftest.py": "a504226ab0d1627fb1abcf879c0274d154d152c2b713ffce0e0ba62f793fdaf8",
+    "tests/spec/issuer-credit-factors/test_backfill.py": "74e4b8e845055e5722422781396d16509aa57a66e47f37e592ea81d2b9c70fcb",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py": "6db2923f2fac6afdbdae6978dff97172fc331f11a2a62930fb46714d74d284fe",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py": "09aefde8def6aa659b52c20543d1c3e9ec16d60f597e9422ba29a8e8f2052736",
+    "tests/spec/issuer-credit-factors/test_shift_issuers.py": "9c2ea4f89c3e93efb749770ab977200ff68ff793a641c65d60c4c28c547234c2",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py": "40c695323c15da24ac09c6c534cc876f53b9338513cd6a7f9312d9394fc96f58"
+  },
+  "id": "issuer-credit-factors",
+  "interface": [
+    {
+      "file": "src/pricer/risk/bumps.py",
+      "module": "src.pricer.risk.bumps",
+      "qualname": "shift_credit_issuers",
+      "signature": "def shift_credit_issuers(shifts: collections.abc.Mapping[str, float], default: float) -> Transform"
+    },
+    {
+      "file": "src/pricer/risk/issuer_credit.py",
+      "module": "src.pricer.risk.issuer_credit",
+      "qualname": "issuer_daily_spreads",
+      "signature": "def issuer_daily_spreads(prints: pd.DataFrame, *, min_tenor_years: float, max_tenor_years: float, outlier_ratio: float, outlier_lookback: int) -> pd.Series"
+    },
+    {
+      "file": "src/pricer/risk/issuer_credit.py",
+      "module": "src.pricer.risk.issuer_credit",
+      "qualname": "issuer_spread_moves",
+      "signature": "def issuer_spread_moves(daily: pd.Series, calendar: Sequence[pd.Timestamp], *, max_gap_days: int) -> pd.Series"
+    },
+    {
+      "file": "src/pricer/risk/issuer_credit.py",
+      "module": "src.pricer.risk.issuer_credit",
+      "qualname": "proportional_backfill",
+      "signature": "def proportional_backfill(moves: pd.Series, proxy_moves: pd.Series, *, issuer_level: float, proxy_level: float) -> pd.Series"
+    },
+    {
+      "file": "src/scenariogen/factor_keys.py",
+      "module": "src.scenariogen.factor_keys",
+      "qualname": "issuer_credit_key",
+      "signature": "def issuer_credit_key(issuer: str) -> str"
+    },
+    {
+      "file": "src/scenariogen/factor_keys.py",
+      "module": "src.scenariogen.factor_keys",
+      "qualname": "is_issuer_credit",
+      "signature": "def is_issuer_credit(key: str) -> bool"
+    },
+    {
+      "file": "src/scenariogen/factor_keys.py",
+      "module": "src.scenariogen.factor_keys",
+      "qualname": "issuer_credit_name",
+      "signature": "def issuer_credit_name(key: str) -> str"
+    }
+  ],
+  "nodes": [
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_metamorphic_scaling_both_levels_changes_nothing",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[-0.0036-0.0086]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0-0.0086]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036--0.0086]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036-0.0]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036-inf]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[0.0036-nan]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[inf-0.0086]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_bad_levels_raise[nan-0.0086]",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_empty_moves_is_scaled_proxy",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_splice",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_point_unsorted_inputs_give_sorted_result",
+    "tests/spec/issuer-credit-factors/test_backfill.py::test_c3_property_issuer_dates_never_altered",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_metamorphic_out_of_bucket_print_changes_nothing",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_band_edges_are_inside",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_date_objects",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_filters_and_medians",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs0-None]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs1-None]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs2-None]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs3-None]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs4-None]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs5-None]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs6-date]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs7-spread]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_invalid_raises[kwargs8-tenor_years]",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_lookback_window",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_no_qualifying_prints_is_empty",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_point_outliers_both_sides_and_no_leak",
+    "tests/spec/issuer-credit-factors/test_daily_spreads.py::test_c1_property_dates_subset_ascending",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_is_issuer_credit",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_key",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[]",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[credit:]",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[credit]",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[creditx:ORCL]",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_point_issuer_credit_name_rejects_non_issuer_keys[eq:NVDA]",
+    "tests/spec/issuer-credit-factors/test_factor_keys.py::test_c5_property_round_trip",
+    "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_metamorphic_composition_adds",
+    "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_empty_shifts_equals_shift_credit[-0.0012]",
+    "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_empty_shifts_equals_shift_credit[0.0005]",
+    "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_empty_shifts_equals_shift_credit[0.025]",
+    "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_per_issuer_and_default",
+    "tests/spec/issuer-credit-factors/test_shift_issuers.py::test_c4_point_unknown_names_take_default",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_metamorphic_bridged_gaps_sum_is_last_minus_first",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_gaps_shorter_equal_longer",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_limit_bridges_every_gap",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_negative_limit_raises[-1]",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_negative_limit_raises[-5]",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_point_no_fill_when_limit_zero",
+    "tests/spec/issuer-credit-factors/test_spread_moves.py::test_c2_property_no_gaps_sum_is_last_minus_first"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/issuer-credit-factors.md",
+    "sha256": "1fd72dd21a7ec1dd79e25dd8811d54880c659e9a85771a297cee94863413f911"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

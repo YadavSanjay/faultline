@@ -1,0 +1,11 @@
+{
+  "description": "Crowding calibration for scenariogen (market-intelligence F5/P7). Crowding is a positioning STATE, not a covariance, so Σ can't represent it. From FINRA days-to-cover per name it derives a CLAMPED multiplier on the ARag idiosyncratic leg: a crowded name unwinds harder. Mode-(ii), no Σ cost, composes with the news multiplier. The #6 SMH position is a SHORT, so a crowded SMH short is squeeze risk (an upside tail) -- surfaced as an asymmetry flag. PIT-pinned. None / held -> no-op. NOTE: CFTC COT is dropped (unreachable, §11.5 gate 2); this ships the verified FINRA short-interest subset.",
+  "enabled": true,
+  "beta": 0.3,
+  "baseline_percentile": 0.5,
+  "min_scale": 0.8,
+  "max_scale": 1.4,
+  "squeeze_percentile": 0.8,
+  "short_names": ["SMH"],
+  "_comment": "multiplier = clamp(1 + beta*(2*dtc_percentile - 1), min_scale, max_scale): a high days-to-cover percentile (crowded) amplifies that name's idiosyncratic shock. dtc percentile over each name's own history <= as_of (PIT). squeeze flag: a short-listed name (SMH #6) with dtc_percentile >= squeeze_percentile = a crowded short = squeeze/upside-tail risk."
+}

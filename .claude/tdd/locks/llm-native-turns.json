@@ -1,0 +1,120 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-20",
+  "criteria": {
+    "C1": [
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_all_arguments_given",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_none_key_and_url_are_left_out",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[0.0]",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[-1.0]",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[nan]",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[inf]",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[-inf]",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_kwargs_property",
+      "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_property"
+    ],
+    "C2": [
+      "tests/spec/llm-native-turns/test_tool_loop.py::test_reasoning_content_is_passed_back",
+      "tests/spec/llm-native-turns/test_tool_loop.py::test_reasoning_adds_exactly_one_key",
+      "tests/spec/llm-native-turns/test_tool_loop.py::test_assistant_turn_property"
+    ],
+    "C3": [
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_private_keys_are_removed",
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_private_keys_property"
+    ],
+    "C4": [
+      "tests/spec/llm-native-turns/test_tool_loop.py::test_tools_stay_on_last_turn_with_tool_choice_none",
+      "tests/spec/llm-native-turns/test_tool_loop.py::test_tool_offer_property"
+    ],
+    "C5": [
+      "tests/spec/llm-native-turns/test_finish_reasons.py::test_refusal_and_aborted_are_fatal_without_retry[refusal]",
+      "tests/spec/llm-native-turns/test_finish_reasons.py::test_refusal_and_aborted_are_fatal_without_retry[aborted]",
+      "tests/spec/llm-native-turns/test_finish_reasons.py::test_one_insufficient_resource_then_stop_retries_once",
+      "tests/spec/llm-native-turns/test_finish_reasons.py::test_insufficient_resource_every_attempt_is_transient",
+      "tests/spec/llm-native-turns/test_finish_reasons.py::test_insufficient_resource_retry_property",
+      "tests/spec/llm-native-turns/test_finish_reasons.py::test_fatal_reasons_property"
+    ],
+    "C6": [
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_prefix_sharing_model_is_fatal_after_one_call",
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_dated_snapshot_is_accepted_and_priced_as_requested",
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_served_model_property"
+    ],
+    "C7": [
+      "tests/spec/llm-native-turns/test_retry_after.py::test_retry_after_is_honoured",
+      "tests/spec/llm-native-turns/test_retry_after.py::test_retry_after_is_capped_at_max_wait",
+      "tests/spec/llm-native-turns/test_retry_after.py::test_unusable_header_falls_back_to_backoff"
+    ],
+    "C8": [
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_cached_tokens_reported",
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_cached_tokens_default_to_zero",
+      "tests/spec/llm-native-turns/test_openai_backend.py::test_cached_tokens_property"
+    ]
+  },
+  "files": {
+    "tests/spec/llm-native-turns/conftest.py": "f76e36071f85f21c8af83136645a7de8a9dd0b2192bba7bf28f4d8ac24530ae2",
+    "tests/spec/llm-native-turns/test_client_kwargs.py": "d1b3e5d3fbb43b0f38656fbe5a3f1a1cfb881127e23f803a53eee037c010cef6",
+    "tests/spec/llm-native-turns/test_finish_reasons.py": "09f0df596e4acd0d9541c4829717bcbd0b35e0604bcb6c831f8afab35650966e",
+    "tests/spec/llm-native-turns/test_openai_backend.py": "7720189572b79af192fa10a2e8973fffa05b816a781b7c5c95c8c5addf70a49a",
+    "tests/spec/llm-native-turns/test_retry_after.py": "1c700797330c6afc67bc11d0ff0a9d4834688c28ed846d0cd5b2404e1b91f5fe",
+    "tests/spec/llm-native-turns/test_tool_loop.py": "a0e58ef06fae14e970bd8132d18ff75a4f92cbcba2920ee323418fc5fa8e63da"
+  },
+  "id": "llm-native-turns",
+  "interface": [
+    {
+      "file": "src/scenariogen/llm/gateway.py",
+      "module": "src.scenariogen.llm.gateway",
+      "qualname": "openai_client_kwargs",
+      "signature": "def openai_client_kwargs(*, api_key: str | None, base_url: str | None, timeout_s: float) -> dict[str, Any]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_all_arguments_given",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_property",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[-1.0]",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[-inf]",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[0.0]",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[inf]",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_invalid_timeout_raises[nan]",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_kwargs_property",
+    "tests/spec/llm-native-turns/test_client_kwargs.py::test_none_key_and_url_are_left_out",
+    "tests/spec/llm-native-turns/test_finish_reasons.py::test_fatal_reasons_property",
+    "tests/spec/llm-native-turns/test_finish_reasons.py::test_insufficient_resource_every_attempt_is_transient",
+    "tests/spec/llm-native-turns/test_finish_reasons.py::test_insufficient_resource_retry_property",
+    "tests/spec/llm-native-turns/test_finish_reasons.py::test_one_insufficient_resource_then_stop_retries_once",
+    "tests/spec/llm-native-turns/test_finish_reasons.py::test_refusal_and_aborted_are_fatal_without_retry[aborted]",
+    "tests/spec/llm-native-turns/test_finish_reasons.py::test_refusal_and_aborted_are_fatal_without_retry[refusal]",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_cached_tokens_default_to_zero",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_cached_tokens_property",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_cached_tokens_reported",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_dated_snapshot_is_accepted_and_priced_as_requested",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_prefix_sharing_model_is_fatal_after_one_call",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_private_keys_are_removed",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_private_keys_property",
+    "tests/spec/llm-native-turns/test_openai_backend.py::test_served_model_property",
+    "tests/spec/llm-native-turns/test_retry_after.py::test_retry_after_is_capped_at_max_wait",
+    "tests/spec/llm-native-turns/test_retry_after.py::test_retry_after_is_honoured",
+    "tests/spec/llm-native-turns/test_retry_after.py::test_unusable_header_falls_back_to_backoff",
+    "tests/spec/llm-native-turns/test_tool_loop.py::test_assistant_turn_property",
+    "tests/spec/llm-native-turns/test_tool_loop.py::test_reasoning_adds_exactly_one_key",
+    "tests/spec/llm-native-turns/test_tool_loop.py::test_reasoning_content_is_passed_back",
+    "tests/spec/llm-native-turns/test_tool_loop.py::test_tool_offer_property",
+    "tests/spec/llm-native-turns/test_tool_loop.py::test_tools_stay_on_last_turn_with_tool_choice_none"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/llm-native-turns.md",
+    "sha256": "024ea8b91f72fea4ea3ae472a5a7bc1433e1ba1407c74356a507d8f02f8ef16a"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

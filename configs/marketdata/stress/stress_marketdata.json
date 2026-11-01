@@ -1,0 +1,166 @@
+{
+  "asset_class": "stress",
+  "description": "Stress-scenario calibration data (§2.8, §4.9). This pipeline pulls only the stress-SPECIFIC inputs that are not already a per-asset-class market input: broad credit-spread indices (FRED IG/HY OAS), the equity- and rates-vol level series (FRED VIXCLS, Yahoo ^MOVE) and datacenter power demand (EIA). Hyperscaler capex (EDGAR XBRL) lives in the reference pipeline; single-name CDS in credit; equity prices + CBOE VIX/skew archives in equity/options; UST curve in bonds. Scope of THIS stage: Methodology B (AI capex boom/bust). Methodology A (historical replay) and its BIS FX/funding history + episode-window scenario generation are a later stage (see notes). See docs/design/AITrade_quantlib_portfolio_marketdata.md §2.8, §4.9.",
+
+  "scenario_scope": {
+    "active_methodology": "B",
+    "methodology_B": "AI capex boom/bust (thematic, forward-looking) — §4.9. Built bottom-up: (1) capex run-rate + YoY from EDGAR XBRL [reference pipeline], (2) corroborated by EIA datacenter power demand YoY [eia_power below], (3) bust legs sized as ΔOAS [fred_macro BAMLC0A0CM/HY], ΔVIX [fred_macro VIXCLS + CBOE archive], ΔMOVE [move_yahoo], equity drawdown [equity prices], CDS widening [credit pipeline], UST flight-to-quality [bonds].",
+    "methodology_A_deferred": "Historical replay (GFC/Euro/China-deval/COVID/2022) is NOT built in this stage. Its extra source pulls — BIS WS_XRU / WS_EER / WS_GLI / WS_OTC_DERIV2 bulk files (FX devaluation paths + USD funding squeeze) — and the peak-to-trough episode-window shock-vector generation are deferred. The Taiwan joint-tail (Methodology B step 4) also depends on BIS WS_XRU and is deferred with it."
+  },
+
+  "factor_map": {
+    "fred_BAMLC0A0CM":  "IG corp OAS — credit-spread widening for bonds #15-19, CDS #28-30 (primary B credit leg)",
+    "fred_BAMLH0A0HYM2": "HY corp OAS — risk-appetite tail (Methodology A scale; carried here for the bust HY overlay)",
+    "fred_BAA10Y":      "Baa-10Y spread — free long-history credit proxy backfilling the IG-OAS VaR factor before its ~3y FRED start (risk Tier 1.1)",
+    "fred_AAA10Y":      "Aaa-10Y spread — free long-history high-grade credit proxy (alternate backfill source)",
+    "fred_VIXCLS":      "Equity implied-vol spike — vega shock for options #7-14, delta for equity #1-6 (daily close; CBOE VIX_History.csv in options/ is the intraday-high archive)",
+    "yahoo_MOVE":       "Rates implied-vol spike — swaption vega #23-24, cap #25",
+    "eia_demand":       "Datacenter power-load growth — independent AI-capex corroboration (semis #1/#3/#4, hyperscaler bonds #16-19)"
+  },
+
+  "time_window": {
+    "start_date": "2018-01-01",
+    "end_date": "today",
+    "granularity": "daily",
+    "stress_cadence": "weekly",
+    "notes": [
+      "Scenario DEFINITIONS refresh quarterly (after EDGAR capex + EIA demand update); the weekly run only re-applies stored shock vectors to the latest curves (§4.9 cadence note).",
+      "8-year lookback from 2018 aligns with the equity/reference windows and spans the pre-AI-capex baseline, COVID, the 2022 rate shock and the GPU-capex boom — enough to size the bust shocks.",
+      "FRED OAS/VIX and ^MOVE are daily; EIA demand is resampled to daily (see eia_power.frequency). EIA region-data starts 2019 (eia_power.start_date_override)."
+    ]
+  },
+
+  "sources": {
+
+    "fred_macro": {
+      "enabled": true,
+      "name": "FRED — credit-spread (OAS) + equity-vol stress indices",
+      "description": "ICE BofA IG/HY option-adjusted spreads and VIX close via the fredgraph.csv endpoint (no API key, avoids the /fred/series 504). BAMLC0A0CM is the ΔOAS scalar for the bust credit leg; BAMLH0A0HYM2 the HY risk-appetite tail; VIXCLS the daily equity-vol level (CBOE VIX_History.csv in options/vol_indices is the authoritative intraday-high archive — VIXCLS is the close aligned to the OAS series for joint scaling). OAS units are PERCENT (0.75 = 75 bps).",
+      "data_limitation": "FRED now serves only a ROLLING ~3-YEAR window for the proprietary ICE BofA OAS series (BAMLC0A0CM/BAMLH0A0HYM2 start ~3y back, e.g. 2023-06; confirmed on both fredgraph.csv AND the keyed /fred/series/observations API — it is an ICE licensing restriction, not an endpoint issue). This trailing window covers the AI-capex boom and current spread levels/vol — sufficient to size Methodology B bust shocks relative to today. Full COVID/2022/GFC OAS history (needed for Methodology A historical-replay ΔOAS anchors) is NOT free from FRED and is deferred to the Methodology A stage (candidate alternatives: NBER/St Louis archived snapshots, or a licensed ICE/Markit feed). VIXCLS is NOT ICE-licensed and returns full history (1990-present).",
+      "base_url": "https://fred.stlouisfed.org",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/graph/fredgraph.csv?id={series_id}",
+      "series": {
+        "BAMLC0A0CM":   "ICE BofA US IG corporate OAS (percent; 0.75 = 75 bps); primary credit-spread shock for bonds #15-19 and CDS #28-30 [~3y rolling window — see data_limitation]",
+        "BAMLH0A0HYM2": "ICE BofA US HY OAS (percent); risk-appetite tail overlay [~3y rolling window]",
+        "VIXCLS":       "CBOE VIX close; equity implied-vol spike for options #7-14 vega [full history]",
+        "BAA10Y":       "Moody's Baa corporate yield minus 10Y Treasury (percent); FREE LONG-HISTORY credit-spread proxy, daily since 1986, NOT ICE-licensed. Used by the risk engine (Tier 1.1) to backfill the IG-OAS credit factor before its ~3y FRED start so the credit factor stops throttling the aligned VaR window [full history]",
+        "AAA10Y":       "Moody's Aaa corporate yield minus 10Y Treasury (percent); free long-history high-grade credit-spread proxy, daily since 1983 [full history; carried as an alternate/AAA backfill source]"
+      },
+      "output_file": "fred_stress_macro.csv"
+    },
+
+    "move_yahoo": {
+      "enabled": true,
+      "name": "Yahoo Finance — ICE BofAML MOVE index (rates implied vol)",
+      "description": "^MOVE daily history — the rates-vol level for the swaption/cap vega shock (#23-25). MOVE is not free on FRED; Yahoo's chart endpoint requires a real browser User-Agent (bare requests get HTTP 401). Same parser shape as the equity Yahoo downloader.",
+      "base_url": "https://query1.finance.yahoo.com",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/v8/finance/chart/{symbol}?interval=1d&range=10y",
+      "symbol": "%5EMOVE",
+      "output_file": "move_index.csv"
+    },
+
+    "eia_power": {
+      "enabled": true,
+      "name": "EIA v2 — datacenter-grid electricity demand (AI-capex corroboration)",
+      "description": "Daily electricity demand (type=D) for the datacenter-heavy balancing authorities — PJM (N. Virginia 'Data Center Alley'), ERCO (Texas), MISO, CISO. YoY growth in regional baseload independently corroborates/contradicts hyperscaler capex guidance (§4.9 Methodology B step 2): rising load that leads capex confirms the buildout; flattening load is an early bust signal, and grid interconnection limits are the binding physical constraint. Requires a FREE EIA API key (instant signup at eia.gov/opendata) supplied IN the query string via EIA_API_KEY; if unset the source logs a warning and is skipped (no crash). Default route is the daily-region-data series (YoY-baseload appropriate, ~365 rows/yr/region); the design's hourly region-data route is available by swapping endpoint_path + frequency.",
+      "base_url": "https://api.eia.gov",
+      "auth": {
+        "type": "api_key_param",
+        "key_env": "EIA_API_KEY",
+        "param_name": "api_key"
+      },
+      "timeout_s": 60,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 30.0 },
+      "endpoint_path": "/v2/electricity/rto/daily-region-data/data/",
+      "frequency": "daily",
+      "demand_type": "D",
+      "respondent_timezones": {
+        "PJM":  "Eastern",
+        "ERCO": "Central",
+        "MISO": "Central",
+        "CISO": "Pacific"
+      },
+      "timezone_note": "daily-region-data buckets the hourly series into calendar days per timezone, returning 5 near-identical rows (~0.1% apart) per (date,respondent) — one per tz boundary (Pacific/Central/Mountain/Eastern/Arizona; no UTC). We request each respondent in ITS LOCAL timezone so the value is the true local-calendar-day demand and there is exactly one row per (date,respondent).",
+      "page_length": 5000,
+      "start_date_override": "2019-01-01",
+      "output_file": "eia_power_demand.csv"
+    },
+
+    "gpr": {
+      "enabled": true,
+      "name": "Geopolitical Risk index (Caldara-Iacoviello) — F8",
+      "description": "Daily GLOBAL GPR (GPRD/acts/threats) + MONTHLY country sub-indices (GPRC_TWN/GPRC_CHN). Gives taiwan_geopolitical a quantitative trigger + severity calibration (FINDING 8). Country sub-indices are monthly (the daily file is global only), so both files are ingested. Binary .xls parsed via BytesIO (trap 2).",
+      "base_url": "https://www.matteoiacoviello.com",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {},
+      "timeout_s": 60,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "daily_endpoint": "/gpr_files/data_gpr_daily_recent.xls",
+      "country_endpoint": "/gpr_files/data_gpr_export.xls",
+      "country_columns": ["GPRC_TWN", "GPRC_CHN", "GPRHC_TWN", "GPRHC_CHN"],
+      "min_expected_rows": 100,
+      "output_files": { "daily": "gpr_daily.csv", "country": "gpr_country.csv" }
+    },
+
+    "fred_throughput": {
+      "enabled": true,
+      "name": "FRED semiconductor industrial production — F9",
+      "description": "IPG3344S (semiconductor & related-device manufacturing industrial production) — a PHYSICAL corroboration of the AI-capex thesis. scenariogen reads it (with EIA datacenter power demand) as a throughput severity multiplier on ai_bust: decelerating throughput amplifies the bust. Separate file from fred_stress_macro.csv (stays out of the credit factor's file). Same fredgraph.csv path, no key.",
+      "base_url": "https://fred.stlouisfed.org",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/graph/fredgraph.csv?id={series_id}",
+      "series": {
+        "IPG3344S": "Semiconductor & related-device manufacturing — industrial production (monthly)"
+      },
+      "output_file": "fred_throughput.csv"
+    },
+
+    "epu": {
+      "enabled": true,
+      "name": "Economic Policy Uncertainty — daily US (F8)",
+      "description": "Baker-Bloom-Davis daily US policy-uncertainty index (graceful context alongside GPR). Plain CSV, no key.",
+      "base_url": "https://www.policyuncertainty.com",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {},
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint": "/media/All_Daily_Policy_Data.csv",
+      "output_file": "epu_daily.csv"
+    },
+
+    "fred_long": {
+      "enabled": true,
+      "name": "FRED — long rates / VIX / credit / FX history (severity anchors)",
+      "description": "Full-history fredgraph.csv series from 1990 for the scenario severity anchors (docs/design/scenario_set_and_ablation_design.md §3.3): Treasury yields (percent), VIXCLS (index points), Moody's BAA10Y (percent; the FREE long credit proxy — ICE BofA OAS is only served ~3y back, see fred_macro.data_limitation) and FX (DEXJPUS JPY per USD, DEXTAUS TWD per USD). Writes its OWN wide file; fred_stress_macro.csv and fred_rates.csv (VaR / pricing inputs) are untouched.",
+      "base_url": "https://fred.stlouisfed.org",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/graph/fredgraph.csv?id={series_id}",
+      "start_date": "1990-01-01",
+      "min_rows": 250,
+      "required": ["DGS2", "DGS10", "BAA10Y", "VIXCLS"],
+      "series": ["DGS1", "DGS2", "DGS5", "DGS10", "DGS30", "VIXCLS", "BAA10Y", "DEXJPUS", "DEXTAUS"],
+      "output_file": "fred_long_history.csv"
+    }
+
+  }
+}

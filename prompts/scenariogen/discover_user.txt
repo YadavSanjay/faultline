@@ -1,0 +1,16 @@
+Portfolio summary:
+{portfolio_summary}
+
+Tickers in scope: {tickers}
+Asset classes: {asset_classes}
+
+Identify the ranked set of risk-factor themes this portfolio is most exposed to. For each
+theme, note the macro factor tags and the companies/tickers that drive it, and cite the
+supporting tool evidence (chunk ids). Cover only the most material themes.
+
+Return a single JSON object of the form (and nothing else):
+{{"summary": "A ranked prose summary of the material risk-factor themes.",
+ "macro_factors": [{{"factor_tag": "...", "relevance": "high", "rationale": "...",
+  "citations": [{{"chunk_id": "...", "source": "macro"}}]}}],
+ "company_factors": [{{"ticker": "NVDA", "factor": "...", "description": "...",
+  "citations": [{{"chunk_id": "...", "source": "arag"}}]}}]}}

@@ -1,0 +1,46 @@
+{
+  "signoff": {
+    "standard": "Basel/FRTB regulatory liquidity horizons",
+    "approved_by": "desk",
+    "approved_on": "2026-07-25",
+    "note": "Per-risk-factor-class liquidity horizons (design market-intelligence FINDING 1 / §8 item 5). The √(LH/base) scaler turns each scenario's mid-market P&L into an exit-value estimate; a longer horizon lets the market move further against an unwound position. Governance decision, not a data one - revisit if the book's liquidity profile changes."
+  },
+  "enabled": true,
+  "base_horizon_days": 10,
+  "horizon_days": {
+    "by_trade_type": {
+      "stock": 10,
+      "equity_option": 40,
+      "corp_bond": 20,
+      "ust_bond": 10,
+      "ois_swap": 10,
+      "cap": 20,
+      "european_swaption": 20,
+      "bermudan_swaption": 20,
+      "cds": 40,
+      "fx_forward": 10,
+      "xccy_swap": 20
+    },
+    "cds_index_horizon_days": 20,
+    "by_foreign_ccy": {
+      "TWD": 60
+    }
+  },
+  "bid_ask": {
+    "use_chain_spreads": true,
+    "max_relative_half_spread": 0.25,
+    "half_spread_bps": {
+      "stock": 3,
+      "equity_option": 50,
+      "corp_bond": 30,
+      "ust_bond": 2,
+      "ois_swap": 5,
+      "cap": 15,
+      "european_swaption": 15,
+      "bermudan_swaption": 20,
+      "cds": 25,
+      "fx_forward": 2,
+      "xccy_swap": 40
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/scenario-severity-anchor/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-15",
+  "criteria": {
+    "C1": [
+      "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_point_compounding_for_eq_and_fx",
+      "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_point_summing_for_other_factors",
+      "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_point_window_as_long_as_the_series",
+      "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_refusals",
+      "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_property_length_one_returns_the_moves",
+      "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_property_matches_window_formula"
+    ],
+    "C2": [
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_k_above_one",
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_k_clamped_to_one",
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_compounded_windows",
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_bound_caps_severe_keeping_sign",
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_refusals",
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_property_matches_order_statistic",
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_property_ordering_on_the_adverse_side",
+      "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_metamorphic_mirroring_swaps_directions"
+    ],
+    "C3": [
+      "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_point_cap_two",
+      "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_point_default_cap",
+      "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_refusals",
+      "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_property_compound_in_band_shares_and_keys",
+      "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_property_matches_power_formula"
+    ],
+    "C4": [
+      "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_point_reseeds_authored_legs",
+      "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_point_final_move_is_the_authored_move",
+      "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_refusals",
+      "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_property_identity_and_fact_ratio"
+    ],
+    "C5": [
+      "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_point_inside_above_below_and_negative",
+      "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_point_zero_authored_up_direction_and_band",
+      "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_refusals",
+      "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_property_inside_band_lands_on_anchor_times_r",
+      "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_property_clamped_identity"
+    ]
+  },
+  "files": {
+    "tests/spec/scenario-severity-anchor/test_anchor_scale.py": "dea3eb9b7a66207bb981272b075f14ea8840248e9de7201541ae76eceadce8a9",
+    "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py": "ac89f2b94234927d78ffa807251f235efe07c535dd4476b8897ce6dec7fcc0c5",
+    "tests/spec/scenario-severity-anchor/test_horizon_moves.py": "681fcf041b4a900214c79115732d6108061656ccdcbcebab01d1eba7789c52b8",
+    "tests/spec/scenario-severity-anchor/test_residual_seeds.py": "03295065775156454083b94bb4117a569e937e283d25e464217c01d5c8b0cdc3",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py": "b2b73c89c712342d0ec655827b35ce0299cdd1e49a1255094a58412c0ddbd781"
+  },
+  "id": "scenario-severity-anchor",
+  "interface": [
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "horizon_moves",
+      "signature": "def horizon_moves(moves: pd.Series, factor: str, horizon_days: int) -> pd.Series"
+    },
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "tier_anchors",
+      "signature": "def tier_anchors(moves: pd.Series, factor: str, horizon_days: int, direction: str, *, mild_return_years: float=10.0, severe_factor: float=1.5, bound: float | None=None) -> dict[str, float]"
+    },
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "cap_leg_inputs",
+      "signature": "def cap_leg_inputs(seed_legs: dict[str, float], calibrated_legs: dict[str, float], news_mult: dict[str, float], crowding_mult: dict[str, float], *, cap: float=1.5) -> tuple[dict[str, float], dict[str, float], dict[str, float]]"
+    },
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "residual_seeds",
+      "signature": "def residual_seeds(seed_legs: dict[str, float], calibrated_legs: dict[str, float], authored_drivers: Mapping[str, float], systematic: Mapping[str, float]) -> tuple[dict[str, float], dict[str, float]]"
+    },
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "anchor_scale",
+      "signature": "def anchor_scale(lead_composed: float, lead_authored: float, anchor: float, *, band: float=0.25) -> float"
+    }
+  ],
+  "nodes": [
+    "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_point_inside_above_below_and_negative",
+    "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_point_zero_authored_up_direction_and_band",
+    "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_property_clamped_identity",
+    "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_property_inside_band_lands_on_anchor_times_r",
+    "tests/spec/scenario-severity-anchor/test_anchor_scale.py::test_c5_refusals",
+    "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_point_cap_two",
+    "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_point_default_cap",
+    "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_property_compound_in_band_shares_and_keys",
+    "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_property_matches_power_formula",
+    "tests/spec/scenario-severity-anchor/test_cap_leg_inputs.py::test_c3_refusals",
+    "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_point_compounding_for_eq_and_fx",
+    "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_point_summing_for_other_factors",
+    "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_point_window_as_long_as_the_series",
+    "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_property_length_one_returns_the_moves",
+    "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_property_matches_window_formula",
+    "tests/spec/scenario-severity-anchor/test_horizon_moves.py::test_c1_refusals",
+    "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_point_final_move_is_the_authored_move",
+    "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_point_reseeds_authored_legs",
+    "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_property_identity_and_fact_ratio",
+    "tests/spec/scenario-severity-anchor/test_residual_seeds.py::test_c4_refusals",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_metamorphic_mirroring_swaps_directions",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_bound_caps_severe_keeping_sign",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_compounded_windows",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_k_above_one",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_point_k_clamped_to_one",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_property_matches_order_statistic",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_property_ordering_on_the_adverse_side",
+    "tests/spec/scenario-severity-anchor/test_tier_anchors.py::test_c2_refusals"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/scenario-severity-anchor.md",
+    "sha256": "7389a19abd4a7cf7972b75dd6f4bcae1c81b76258ce9d87a81b8814f57d230bd"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

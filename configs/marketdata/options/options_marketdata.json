@@ -1,0 +1,173 @@
+{
+  "asset_class": "options",
+  "description": "Market data for Equity Derivatives trades #7-14 (AAPL/NVDA/MSFT/META/TSLA single-stock options + SPX index options + QQQ ETF options) + TSM (#39, promoted to the priced chain list for the DEFERRED N6 protective put; data-blocked at the 2026-07-10 valuation date, see portfolio_rebalance_review.md). See docs/design §1.2, §2.2, §3.2, §4.2.",
+
+  "portfolio": [
+    {
+      "trade": 7,  "display": "AAPL", "cboe": "AAPL", "yahoo": "AAPL",
+      "type": "single-stock", "exercise": "american",
+      "instrument": "AAPL Jan-27 LEAPS call",
+      "ql_engine": "BaroneAdesiWhaleyApproximationEngine or BinomialVanillaEngine"
+    },
+    {
+      "trade": 8,  "display": "NVDA", "cboe": "NVDA", "yahoo": "NVDA",
+      "type": "single-stock", "exercise": "american",
+      "instrument": "NVDA 6M ATM put (protective)",
+      "ql_engine": "FdBlackScholesVanillaEngine"
+    },
+    {
+      "trade": 9,  "display": "MSFT", "cboe": "MSFT", "yahoo": "MSFT",
+      "type": "single-stock", "exercise": "american",
+      "instrument": "MSFT 3M 25-delta call spread"
+    },
+    {
+      "trade": 10, "display": "META", "cboe": "META", "yahoo": "META",
+      "type": "single-stock", "exercise": "american",
+      "instrument": "META 6M put spread (skew play)"
+    },
+    {
+      "trade": 11, "display": "TSLA", "cboe": "TSLA", "yahoo": "TSLA",
+      "type": "single-stock", "exercise": "american",
+      "instrument": "TSLA 1M straddle (vol/event)"
+    },
+    {
+      "trade": 12, "display": "SPX", "cboe": "_SPX", "yahoo": null,
+      "type": "index", "exercise": "european",
+      "instrument": "SPX 3M ATM put (portfolio hedge)",
+      "ql_engine": "AnalyticEuropeanEngine",
+      "notes": "CBOE uses underscore prefix _SPX for index options. Yahoo v7 options does not reliably serve SPX chains — use CBOE only."
+    },
+    {
+      "trade": 13, "display": "SPX", "cboe": "_SPX", "yahoo": null,
+      "type": "index", "exercise": "european",
+      "instrument": "SPX 6M 90-80% put spread"
+    },
+    {
+      "trade": 14, "display": "QQQ", "cboe": "QQQ", "yahoo": "QQQ",
+      "type": "etf", "exercise": "american",
+      "instrument": "QQQ 3M collar overlay"
+    },
+    {
+      "trade": 39, "display": "TSM", "cboe": "TSM", "yahoo": "TSM",
+      "type": "single-stock", "exercise": "american",
+      "instrument": "TSM 6M ~90% protective put (Taiwan tail hedge, N6)",
+      "status": "deferred_data",
+      "notes": "N6: promoted from signal-only (extra_underlyings) to the PRICED chain list so weekly ingests now capture TSM into chains/. The put TRADE_39 is DEFERRED and NOT yet in portfolio.json: CBOE serves current chains only and TSM's chain history starts 2026-07-24, so it cannot price at the 2026-07-10 valuation date. Add TRADE_39 (a ~90% 6M protective put on the #2 TSM long) once the book's valuation date advances to a date with a TSM chain, then add chains/TSM_chains.csv to configs/marketdata/dq_gate.json. See docs/design/portfolio_rebalance_review.md."
+    }
+  ],
+
+  "time_window": {
+    "start_date": "2022-01-01",
+    "end_date": "today",
+    "granularity": "weekly_snapshot",
+    "notes": [
+      "Option chains: weekly snapshots only (CBOE delayed free tier does not provide historical chains). Each run appends a dated snapshot to the per-ticker CSV.",
+      "VIX and vol indices: full history available free from CBOE (VIX back to 1990). Time window applies for filtering after download."
+    ]
+  },
+
+  "signals": {
+    "enabled": true,
+    "description": "Point-in-time option-implied signals derived from the chain snapshots (market-intelligence B1). A DERIVATION, not a download: signals_runner reads every chain in chain_dirs, computes per-(underlying, snapshot_date) signals, and writes signals/option_signals.csv (+ provenance sidecar, gated in dq_gate.json). Consumed by scenariogen/options (B4) and the BFF (B6). Reads chains from BOTH chains/ (priced) and chains_signals/ (signal-only), so all 14 portfolio underliers with a chain are covered.",
+    "output_dir": "signals",
+    "output_file": "option_signals.csv",
+    "rnd_file": "rnd_curves.csv",
+    "credit_file": "credit_implied.csv",
+    "fundamentals_file": "options/issuer_fundamentals.json",
+    "chain_dirs": ["chains", "chains_signals"],
+    "prices_file": "equity/prices_daily.csv",
+    "min_iv": 0.03,
+    "max_iv": 2.5,
+    "min_oi": 0,
+    "target_dte": 30,
+    "back_dte": 90,
+    "realized_vol_short": 20,
+    "realized_vol_long": 60
+  },
+
+  "sources": {
+
+    "cboe_chains": {
+      "enabled": true,
+      "name": "CBOE Delayed Option Chains",
+      "description": "Primary option chain source. One JSON call per underlying returns the complete chain across all expiries (~15-min delayed). No auth. CBOE ticker for index options uses underscore prefix: _SPX, _NDX.",
+      "base_url": "https://cdn.cboe.com",
+      "auth": { "type": "none" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/api/global/delayed_quotes/options/{cboe_ticker}.json",
+      "output_dir": "chains",
+      "output_file_template": "{display}_chains.csv",
+
+      "signal_output_dir": "chains_signals",
+      "extra_underlyings_note": "Underliers with NO option trade in the book, downloaded for their option-implied signals rather than to price a position (market-intelligence P0/B0). ORCL and META matter most -- they are the CDS/bond issuers (#17/#18, #28/#29) where equity-option signals are a classic credit early-warning. Same schema as `portfolio`, but written to a SEPARATE directory (`signal_output_dir`) NOT `chains/`. Reason: the pricer's content-addressed market-data snapshot globs `options/chains/*.csv`, and a signal-only chain must not enter the PRICING fingerprint (it would churn the pricing snapshot_id -- and force golden re-baselines -- on every signal refresh, though the pricer never reads it). P1 signal code reads from `chains_signals/`; the pricer's `equity_adapter` reads `chains/` by underlier name and is unaffected.",
+      "extra_underlyings": [
+        {"display": "AVGO", "cboe": "AVGO", "reason": "cash equity #3"},
+        {"display": "MU",   "cboe": "MU",   "reason": "cash equity #4 -- highest-beta memory name"},
+        {"display": "ORCL", "cboe": "ORCL", "reason": "bond #17 + CDS #28 issuer -- option-implied credit cross-check"},
+        {"display": "AMZN", "cboe": "AMZN", "reason": "bond #19 issuer; VXAZN vol index already ingested"},
+        {"display": "XLK",  "cboe": "XLK",  "reason": "cash equity #5 -- systematic equity proxy in the factor model"},
+        {"display": "SMH",  "cboe": "SMH",  "reason": "cash equity #6 short -- the ETF leg of the ETF-vs-basket basis"},
+        {"display": "GOOGL", "cboe": "GOOGL", "reason": "cash equity #33 -- hyperscaler; VXGOG index only until now (scenario-set coverage step 7)"},
+        {"display": "CEG",  "cboe": "CEG",  "reason": "cash equity #31 -- AI-power sleeve (scenario-set coverage step 7)"},
+        {"display": "VST",  "cboe": "VST",  "reason": "cash equity #32 -- AI-power sleeve (scenario-set coverage step 7)"},
+        {"display": "INTC", "cboe": "INTC", "reason": "cash equity #37 -- semis-dispersion pair long leg (scenario-set coverage step 7)"},
+        {"display": "AMD",  "cboe": "AMD",  "reason": "cash equity #38 short -- semis-dispersion pair short leg (scenario-set coverage step 7)"}
+      ]
+    },
+
+    "cboe_vol_indices": {
+      "enabled": true,
+      "name": "CBOE Volatility Index History",
+      "description": "VIX, VVIX, and term-structure vol indices (VIX9D, VIX3M, VIX6M, SKEW). Full daily history downloaded as CSV. Used to anchor ATM vol level for swaption + cap calibration and equity stress scenarios.",
+      "base_url": "https://cdn.cboe.com",
+      "auth": { "type": "none" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/api/global/us_indices/daily_prices/{index_name}_History.csv",
+      "indices": {
+        "VIX":   "S&P 500 Volatility Index — primary market vol gauge",
+        "VVIX":  "Vol-of-vol (VIX of VIX) — tail risk indicator",
+        "VIX9D": "9-day VIX — very short-dated vol",
+        "VIX3M": "3-month VIX — medium-term vol",
+        "VIX6M": "6-month VIX — longer-dated vol",
+        "SKEW":  "CBOE SKEW Index — tail risk / put skew",
+        "VXAPL": "Apple implied vol index",
+        "VXAZN": "Amazon implied vol index",
+        "VXGOG": "Google implied vol index",
+
+        "VXN":   "Nasdaq-100 volatility index -- the correct vol factor for QQQ (#14), which was proxied to VIX",
+        "RVX":   "Russell 2000 volatility index -- small-cap vol, the non-mega-cap leg of a rotation",
+        "VXD":   "Dow Jones volatility index -- value/industrial vol, contrast to VXN in a style rotation",
+        "VXTLT": "20+yr Treasury ETF volatility index -- long-duration rates vol, cross-check on MOVE",
+        "VXEEM": "Emerging-markets ETF volatility index -- EM/Taiwan stress read for TSM (#2) and the TWD leg (#26)",
+        "_OIV":  "NOT INGESTED -- CBOE crude-oil ETF vol index. The endpoint still returns 200 but the series is DISCONTINUED: it stops at 2022-11-07 (214 rows). Verified 2026-07-23 during P0. Kept here as a record so it is not re-proposed; a 200 status is not evidence of a live series.",
+        "DSPX":  "S&P 500 Dispersion Index -- index vol vs constituent vol; the ETF-vs-basket basis (FINDING 3) and SMH/XLK hedge failure",
+        "COR1M": "1-month implied correlation -- forward-looking systemic-vs-idiosyncratic split (FINDING 7)",
+        "COR3M": "3-month implied correlation -- longer-horizon companion to COR1M"
+      },
+      "output_dir": "vol_indices"
+    },
+
+    "yahoo_options": {
+      "enabled": false,
+      "name": "Yahoo Finance Options — Fallback Chains (DISABLED)",
+      "description": "Yahoo Finance v7/finance/options now requires a session crumb (CSRF token) that must be obtained by warming up a full browser session. The crumb endpoint (query2.yahoo.com/v1/test/csrfToken) is not accessible programmatically without browser cookies. CBOE delayed JSON provides a complete, higher-quality chain (pre-computed greeks, all expiries, no auth) — Yahoo is redundant.",
+      "base_url": "https://query1.finance.yahoo.com",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_base": "/v7/finance/options/{yahoo_ticker}",
+      "endpoint_expiry": "/v7/finance/options/{yahoo_ticker}?date={expiry_epoch}",
+      "output_dir": "chains_yahoo",
+      "output_file_template": "{display}_yahoo_chains.csv"
+    }
+
+  }
+}

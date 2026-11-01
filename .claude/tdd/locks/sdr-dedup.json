@@ -1,0 +1,123 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-07",
+  "criteria": {
+    "C1": [
+      "tests/spec/sdr-dedup/test_merge.py::test_c1_all_same_day_records_survive_into_empty_set",
+      "tests/spec/sdr-dedup/test_merge.py::test_c1_same_day_records_added_to_unrelated_existing",
+      "tests/spec/sdr-dedup/test_merge.py::test_c1_property_row_count_is_existing_plus_new"
+    ],
+    "C2": [
+      "tests/spec/sdr-dedup/test_merge.py::test_c2_merge_is_idempotent_on_hand_fixture",
+      "tests/spec/sdr-dedup/test_merge.py::test_c2_property_idempotent_and_self_merge_identity"
+    ],
+    "C3": [
+      "tests/spec/sdr-dedup/test_merge.py::test_c3_new_record_wins_on_identical_identifier",
+      "tests/spec/sdr-dedup/test_merge.py::test_c3_property_new_wins_whatever_the_row_order"
+    ],
+    "C4": [
+      "tests/spec/sdr-dedup/test_merge.py::test_c4_chains_resolve_in_a_single_merge",
+      "tests/spec/sdr-dedup/test_merge.py::test_c4_amendments_arriving_after_their_roots",
+      "tests/spec/sdr-dedup/test_merge.py::test_c4_corrections_and_lifecycle_arriving_before_their_roots",
+      "tests/spec/sdr-dedup/test_merge.py::test_c4_metamorphic_split_and_order_of_arrival"
+    ],
+    "C5": [
+      "tests/spec/sdr-dedup/test_merge.py::test_c5_legacy_existing_is_discarded",
+      "tests/spec/sdr-dedup/test_merge.py::test_c5_property_legacy_equals_empty"
+    ],
+    "C6": [
+      "tests/spec/sdr-dedup/test_dates.py::test_c6_empty_existing_fetches_every_date_in_order",
+      "tests/spec/sdr-dedup/test_dates.py::test_c6_legacy_existing_fetches_every_date_even_if_present",
+      "tests/spec/sdr-dedup/test_dates.py::test_c6_keyed_existing_fetches_only_missing_dates",
+      "tests/spec/sdr-dedup/test_dates.py::test_c6_property_set_identity"
+    ],
+    "C7": [
+      "tests/spec/sdr-dedup/test_io.py::test_c7_literal_identifiers_round_trip",
+      "tests/spec/sdr-dedup/test_io.py::test_c7_property_any_19_digit_identifier_round_trips"
+    ],
+    "C8": [
+      "tests/spec/sdr-dedup/test_filter.py::test_c8_labelled_rows_and_output_schema",
+      "tests/spec/sdr-dedup/test_filter.py::test_c8_property_predicate_and_row_order"
+    ]
+  },
+  "files": {
+    "tests/spec/sdr-dedup/conftest.py": "9da48ddcafa3ad48ce8bba13143f36652711fc5bd28d3c3cd22347fbf6557054",
+    "tests/spec/sdr-dedup/test_dates.py": "5847a471ec0a5bf5330ff78214051f8340cfd22c66d8d005351ad00a9bab620c",
+    "tests/spec/sdr-dedup/test_filter.py": "cd13cda503d68d8943d89cc9a118eda160bd01253cee2db4b6188b9f6ffc2819",
+    "tests/spec/sdr-dedup/test_io.py": "36d702c724765a3295d19e9f66a7d02ee6e701756ac024f8b104017ca3b8d355",
+    "tests/spec/sdr-dedup/test_merge.py": "bc73a7ddde450e9c86212c480a62285db2ad40e2a8f3cb780fbeb4b38defb907"
+  },
+  "id": "sdr-dedup",
+  "interface": [
+    {
+      "file": "src/marketdata/rates/sdr_records.py",
+      "module": "src.marketdata.rates.sdr_records",
+      "qualname": "merge_sdr_records",
+      "signature": "def merge_sdr_records(existing: pd.DataFrame, new: pd.DataFrame) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/rates/sdr_records.py",
+      "module": "src.marketdata.rates.sdr_records",
+      "qualname": "sdr_dates_to_fetch",
+      "signature": "def sdr_dates_to_fetch(existing: pd.DataFrame, dates: list[str]) -> list[str]"
+    },
+    {
+      "file": "src/marketdata/rates/sdr_records.py",
+      "module": "src.marketdata.rates.sdr_records",
+      "qualname": "filter_sofr_swap_records",
+      "signature": "def filter_sofr_swap_records(raw: pd.DataFrame, day: str, underlier_keywords: list[str], currency: str) -> pd.DataFrame"
+    },
+    {
+      "file": "src/marketdata/rates/sdr_records.py",
+      "module": "src.marketdata.rates.sdr_records",
+      "qualname": "write_sdr_records",
+      "signature": "def write_sdr_records(df: pd.DataFrame, path: Path | str) -> None"
+    },
+    {
+      "file": "src/marketdata/rates/sdr_records.py",
+      "module": "src.marketdata.rates.sdr_records",
+      "qualname": "read_sdr_records",
+      "signature": "def read_sdr_records(path: Path | str) -> pd.DataFrame"
+    }
+  ],
+  "nodes": [
+    "tests/spec/sdr-dedup/test_dates.py::test_c6_empty_existing_fetches_every_date_in_order",
+    "tests/spec/sdr-dedup/test_dates.py::test_c6_keyed_existing_fetches_only_missing_dates",
+    "tests/spec/sdr-dedup/test_dates.py::test_c6_legacy_existing_fetches_every_date_even_if_present",
+    "tests/spec/sdr-dedup/test_dates.py::test_c6_property_set_identity",
+    "tests/spec/sdr-dedup/test_filter.py::test_c8_labelled_rows_and_output_schema",
+    "tests/spec/sdr-dedup/test_filter.py::test_c8_property_predicate_and_row_order",
+    "tests/spec/sdr-dedup/test_io.py::test_c7_literal_identifiers_round_trip",
+    "tests/spec/sdr-dedup/test_io.py::test_c7_property_any_19_digit_identifier_round_trips",
+    "tests/spec/sdr-dedup/test_merge.py::test_c1_all_same_day_records_survive_into_empty_set",
+    "tests/spec/sdr-dedup/test_merge.py::test_c1_property_row_count_is_existing_plus_new",
+    "tests/spec/sdr-dedup/test_merge.py::test_c1_same_day_records_added_to_unrelated_existing",
+    "tests/spec/sdr-dedup/test_merge.py::test_c2_merge_is_idempotent_on_hand_fixture",
+    "tests/spec/sdr-dedup/test_merge.py::test_c2_property_idempotent_and_self_merge_identity",
+    "tests/spec/sdr-dedup/test_merge.py::test_c3_new_record_wins_on_identical_identifier",
+    "tests/spec/sdr-dedup/test_merge.py::test_c3_property_new_wins_whatever_the_row_order",
+    "tests/spec/sdr-dedup/test_merge.py::test_c4_amendments_arriving_after_their_roots",
+    "tests/spec/sdr-dedup/test_merge.py::test_c4_chains_resolve_in_a_single_merge",
+    "tests/spec/sdr-dedup/test_merge.py::test_c4_corrections_and_lifecycle_arriving_before_their_roots",
+    "tests/spec/sdr-dedup/test_merge.py::test_c4_metamorphic_split_and_order_of_arrival",
+    "tests/spec/sdr-dedup/test_merge.py::test_c5_legacy_existing_is_discarded",
+    "tests/spec/sdr-dedup/test_merge.py::test_c5_property_legacy_equals_empty"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/sdr-dedup.md",
+    "sha256": "dd41e5a276b01de4da95b95a65f79b5bc767885feaf239417fa34c36dfc95969"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

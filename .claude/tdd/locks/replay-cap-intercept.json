@@ -1,0 +1,64 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/replay-cap-intercept/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-19",
+  "criteria": {
+    "C1": [
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_intercepts_positive_side_binds",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_intercepts_negative_side_binds",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_intercept_on_bound_pushing_outward_caps_at_zero",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_zero_intercept_equals_proportional_cap_with_margin",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_every_bounded_slope_zero_is_inf",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_refusals",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_inputs_not_mutated",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_strictly_inside_with_positive_margin",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_zero_margin_lands_on_a_bound",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_cap_never_increases_with_margin",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_zero_intercept_matches_bound_scale_cap",
+      "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_unbounded_factor_changes_nothing"
+    ]
+  },
+  "files": {
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py": "452a9e999fae5e6ce692c07988adac2aa1d1c9cba9f2ad086fdf61602f9ad71e"
+  },
+  "id": "replay-cap-intercept",
+  "interface": [
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "affine_scale_cap",
+      "signature": "def affine_scale_cap(at_zero: Mapping[str, float], at_one: Mapping[str, float], bounds: Mapping[str, float], *, margin: float=1e-09) -> float"
+    }
+  ],
+  "nodes": [
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_every_bounded_slope_zero_is_inf",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_inputs_not_mutated",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_intercept_on_bound_pushing_outward_caps_at_zero",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_intercepts_negative_side_binds",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_intercepts_positive_side_binds",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_refusals",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_point_zero_intercept_equals_proportional_cap_with_margin",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_cap_never_increases_with_margin",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_strictly_inside_with_positive_margin",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_unbounded_factor_changes_nothing",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_zero_intercept_matches_bound_scale_cap",
+    "tests/spec/replay-cap-intercept/test_affine_scale_cap.py::test_c1_property_zero_margin_lands_on_a_bound"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/replay-cap-intercept.md",
+    "sha256": "77a0df5419ce431dc3306fd894bca8aa6e608c461b0a3fcadb671c20a154902e"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

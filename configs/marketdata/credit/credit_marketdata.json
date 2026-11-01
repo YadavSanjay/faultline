@@ -1,0 +1,99 @@
+{
+  "asset_class": "credit",
+  "description": "Market data for Credit Derivatives trades #28-30 (5Y ORCL CDS buy-protection, 5Y META CDS buy-protection, 5Y CDX.NA.IG sell-protection). See docs/design/AITrade_quantlib_portfolio_marketdata.md §1.6, §2.6, §3.2 (Credit/CDS), §4.7.",
+
+  "portfolio": [
+    {
+      "trade": 28, "display": "ORCL", "kind": "single_name",
+      "reference_entity": "Oracle Corporation",
+      "instrument": "5Y ORCL CDS — buy protection (issuer hedge for bond #17)",
+      "ql_engine": "IsdaCdsEngine",
+      "standard_coupon_bp": 100, "recovery": 0.40
+    },
+    {
+      "trade": 29, "display": "META", "kind": "single_name",
+      "reference_entity": "Meta Platforms Inc.",
+      "instrument": "5Y META CDS — buy protection (issuer hedge for bond #18)",
+      "ql_engine": "IsdaCdsEngine",
+      "standard_coupon_bp": 100, "recovery": 0.40
+    },
+    {
+      "trade": 30, "display": "CDX.NA.IG", "kind": "index",
+      "reference_entity": "CDX.NA.IG on-the-run",
+      "instrument": "5Y CDX.NA.IG — sell protection (carry/diversifier)",
+      "ql_engine": "CreditDefaultSwap vs index-implied flat hazard curve",
+      "standard_coupon_bp": 100, "recovery": 0.40,
+      "notes": "QL does not natively price CDX tranches; the unfunded index is modeled as a single CreditDefaultSwap against an index-implied flat hazard curve bootstrapped from the DTCC index spread."
+    }
+  ],
+
+  "time_window": {
+    "start_date": "2022-01-01",
+    "end_date": "today",
+    "granularity": "daily",
+    "stress_cadence": "weekly",
+    "notes": [
+      "DTCC public price dissemination starts 2023-12-29; dtcc_start_date sets a clean 2024-01-01 start.",
+      "keep_from_date (per source) is the oldest record kept. It must be <= every pinned valuation date (golden_pvs.json valuation_date, the real-data tests' VDATE) minus the pricer's curve_lookback_days (365), else those dates price from fewer prints; tests/pricer/test_credit.py checks this and the adapters warn at runtime. Move it forward when the pinned dates move (e.g. at a book roll), then re-ingest.",
+      "Single-name and index CDS spreads are transaction-driven: aggregate the week's NEWT/MODI/CORR prints per reference entity + Expiration Date (tenor bucket) and take the notional-weighted median for the QL hazard-curve bootstrap."
+    ]
+  },
+
+  "dtcc_start_date": "2024-01-01",
+
+  "sources": {
+
+    "dtcc_single_name": {
+      "enabled": true,
+      "name": "DTCC/SEC SDR CREDITS — Single-Name CDS (ORCL, META)",
+      "description": "US single-name CDS are security-based swaps under SEC jurisdiction — use the sec/eod/ S3 path, NOT cftc/eod/ (the CFTC CREDITS path carries only index CDS with an empty Underlying Asset Name). 'Underlying Asset Name' is populated here. Running spread is in 'Spread-Leg 1' (decimal fraction, e.g. 0.01535 = 153.5 bp); 'Fixed rate-Leg 1' = 0.01 confirms the 100 bp IG standard coupon. Primary input to the QL PiecewiseDefaultCurve<HazardRate,BackwardFlat> hazard bootstrap + IsdaCdsEngine for trades #28-29.",
+      "base_url": "https://kgc0418-tdw-data-0.s3.amazonaws.com",
+      "auth": { "type": "none" },
+      "timeout_s": 120,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 30.0 },
+      "file_pattern": "/sec/eod/SEC_CUMULATIVE_CREDITS_{date}.zip",
+      "filter_column": "Underlying Asset Name",
+      "filter_keywords": ["ORACLE", "META PLATFORM"],
+      "exclude_keywords": ["BIDCO", "HOLDCO", "AVIATION", "AMENTUM"],
+      "keep_from_date": "2025-05-01",
+      "output_file": "dtcc_single_name_cds.csv"
+    },
+
+    "dtcc_index": {
+      "enabled": true,
+      "name": "DTCC/CFTC SDR CREDITS — Index CDS (CDX.NA.IG / CDX.NA.HY)",
+      "description": "CDX/iTraxx index CDS are swaps under CFTC jurisdiction — use the cftc/eod/ S3 path. 'Underlying Asset Name' is empty for index trades; filter on 'UPI Underlier Name' which holds the index name exactly (e.g. 'CDX.NA.IG'). Running spread in 'Spread-Leg 1' (decimal). The on-the-run 5Y point is the deepest Expiration Date bucket (e.g. 2031-06-20 for the June-2026 / Series-46 roll). Primary input for trade #30; CDX.NA.HY captured as a risk-appetite reference (§2.8 stress).",
+      "base_url": "https://kgc0418-tdw-data-0.s3.amazonaws.com",
+      "auth": { "type": "none" },
+      "timeout_s": 120,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 30.0 },
+      "file_pattern": "/cftc/eod/CFTC_CUMULATIVE_CREDITS_{date}.zip",
+      "filter_column": "UPI Underlier Name",
+      "filter_keywords": ["CDX.NA.IG", "CDX.NA.HY"],
+      "exclude_keywords": [],
+      "keep_from_date": "2025-05-01",
+      "output_file": "dtcc_index_cds.csv"
+    },
+
+    "cdx_annex": {
+      "enabled": false,
+      "name": "S&P DJI CDX.NA.IG Index Annex — Composition (DISABLED: CDN blocks automation)",
+      "description": "Semi-annual CDX.NA.IG constituent annex (125 names + RED codes + weightings). S&P Global's CDN (Akamai bot protection) returns HTTP 403 to automated requests even with a real browser User-Agent — manual browser download only. NOT required for QL pricing of trade #30 (priced off the index-implied flat hazard curve from dtcc_index above); used only for (1) verifying ORCL/META overlap with the index and (2) sub-index sector tilt for AI-capex stress decomposition. Cadence: semi-annual, refreshed at each roll (Mar 20 / Sep 20). Current on-the-run: Series 46 (effective 2026-03-20); Series 47 rolls 2026-09-20.",
+      "base_url": "https://www.spglobal.com",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 40,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 2, "wait_min_s": 2.0, "wait_max_s": 8.0 },
+      "current_series": 46,
+      "endpoint_template": "/spdji/en/documents/index-news-and-announcements/CDX.NA.IG.{series}-V1%20Index%20Annex.pdf",
+      "output_dir": "cdx_annex",
+      "output_file_template": "CDX.NA.IG.{series}_Index_Annex.pdf"
+    }
+
+  }
+}

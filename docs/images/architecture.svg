@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 890" width="1040" height="890" role="img" aria-labelledby="t d">
+<title id="t">Faultline architecture</title>
+<desc id="d">Free public data sources feed 11 market-data pipelines and a data-quality gate, producing a content-addressed market-data snapshot. The pricer (input, loader, QuantLib, PricingEngine, results store) prices the book, with risk, portfolio construction and governance built on it. Scenario generation (static, dual-RAG or agentic-LLM drivers, using the external MacroRAG, XbrlRag and LLM services) reprices shocked books through the pricing engine. All outputs go through a local-or-S3 storage facade to a FastAPI BFF and React UI. Every result carries run provenance and snapshot ids.</desc>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+<style>
+  svg { --bg:#ffffff; --sec:#eaeef2; --chip:#ffffff; --border:#afb8c1; --text:#1f2328; --muted:#57606a; --arrow:#57606a;
+        --md:#0f766e; --pr:#4338ca; --sg:#b45309; --ui:#7e22ce; --on-accent:#ffffff; }
+  @media (prefers-color-scheme: dark) {
+    svg { --bg:#0d1117; --sec:#1c2128; --chip:#0d1117; --border:#545d68; --text:#e6edf3; --muted:#9da7b3; --arrow:#9da7b3;
+          --md:#5eead4; --pr:#a5b4fc; --sg:#fcd34d; --ui:#d8b4fe; --on-accent:#0d1117; }
+  }
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; fill: var(--text); }
+  .card { fill: var(--bg); stroke: var(--border); stroke-width: 1.5; }
+  .sec  { fill: var(--sec); stroke: var(--border); stroke-width: 1.5; }
+  .chip { fill: var(--chip); stroke: var(--border); stroke-width: 1.5; }
+  .arrow { fill: none; stroke: var(--arrow); stroke-width: 1.8; }
+  .ah { fill: var(--arrow); }
+  .h { font-size: 15px; font-weight: 700; fill: var(--text); }
+  .sub { font-size: 12.5px; fill: var(--muted); font-style: italic; }
+  .label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; fill: var(--muted); }
+  .ct { font-size: 13px; font-weight: 600; fill: var(--text); }
+  .cb { font-size: 12px; fill: var(--muted); }
+  .b { font-weight: 600; fill: var(--text); }
+  .m { fill: var(--muted); }
+  .note { font-size: 11px; fill: var(--muted); font-style: italic; }
+  .pill-t { font-size: 13px; fill: var(--muted); }
+  .mono, .monoi, .monob { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+  .mono { font-size: 11px; fill: var(--muted); }
+  .monoi { font-size: 11.5px; fill: var(--text); }
+  .monob { font-size: 12px; font-weight: 700; fill: var(--text); }
+  .badge-md { fill: var(--md); } .badge-pr { fill: var(--pr); } .badge-sg { fill: var(--sg); } .badge-ui { fill: var(--ui); }
+  .badge-t { font-size: 11px; font-weight: 700; fill: var(--on-accent); }
+</style>
+<rect x="0.5" y="0.5" width="1039" height="889" rx="16" class="card" />
+<rect x="20" y="20" width="1000" height="100" rx="10" class="sec" />
+<text x="36" y="42" class="h" text-anchor="start">Free public data sources</text>
+<rect x="36" y="54" width="184" height="56" rx="7" class="chip" />
+<text x="46" y="71" class="ct" text-anchor="start">Rates &amp; curves</text>
+<text x="46" y="87" class="cb" text-anchor="start">NY Fed · FRED · Pensford</text>
+<text x="46" y="103" class="cb" text-anchor="start">US Treasury · DTCC SDR</text>
+<rect x="232" y="54" width="184" height="56" rx="7" class="chip" />
+<text x="242" y="71" class="ct" text-anchor="start">Credit &amp; bonds</text>
+<text x="242" y="87" class="cb" text-anchor="start">DTCC SDR · FINRA</text>
+<text x="242" y="103" class="cb" text-anchor="start">SEC EDGAR · OpenFIGI</text>
+<rect x="428" y="54" width="184" height="56" rx="7" class="chip" />
+<text x="438" y="71" class="ct" text-anchor="start">Equity &amp; options</text>
+<text x="438" y="87" class="cb" text-anchor="start">Yahoo Finance</text>
+<text x="438" y="103" class="cb" text-anchor="start">CBOE chains &amp; vol indices</text>
+<rect x="624" y="54" width="184" height="56" rx="7" class="chip" />
+<text x="634" y="71" class="ct" text-anchor="start">FX</text>
+<text x="634" y="87" class="cb" text-anchor="start">Fed H.10 · ECB · BoJ</text>
+<text x="634" y="103" class="cb" text-anchor="start">Taiwan CBC fixings</text>
+<rect x="820" y="54" width="184" height="56" rx="7" class="chip" />
+<text x="830" y="71" class="ct" text-anchor="start">Macro, news &amp; factors</text>
+<text x="830" y="87" class="cb" text-anchor="start">GPR · EPU · EIA · GDELT</text>
+<text x="830" y="103" class="cb" text-anchor="start">SEC 8-K · Ken French</text>
+<path d="M340,120 L340,144" class="arrow" marker-end="url(#ah)" />
+<rect x="20" y="146" width="640" height="116" rx="10" class="sec" />
+<circle cx="46" cy="165" r="10" class="badge-md"/>
+<text x="46" y="169" class="badge-t" text-anchor="middle">1</text>
+<text x="64" y="170" class="h" text-anchor="start">Market data</text>
+<text x="644" y="170" class="mono" text-anchor="end">src/marketdata/</text>
+<rect x="36" y="186" width="268" height="62" rx="7" class="chip" />
+<text x="46" y="204" class="ct" text-anchor="start">11 asset-class pipelines</text>
+<text x="46" y="221" class="cb" text-anchor="start">rates · bonds · credit · equity</text>
+<text x="46" y="238" class="cb" text-anchor="start">options · fx · stress · news · …</text>
+<path d="M304,217 L324,217" class="arrow" marker-end="url(#ah)" />
+<rect x="326" y="186" width="148" height="62" rx="7" class="chip" />
+<text x="336" y="204" class="ct" text-anchor="start">CSV + provenance</text>
+<text x="336" y="221" class="cb" text-anchor="start">sidecar per file</text>
+<text x="336" y="238" class="cb" text-anchor="start">idempotent upserts</text>
+<path d="M474,217 L494,217" class="arrow" marker-end="url(#ah)" />
+<rect x="496" y="186" width="148" height="62" rx="7" class="chip" />
+<text x="506" y="204" class="ct" text-anchor="start">Data-quality gate</text>
+<text x="506" y="221" class="cb" text-anchor="start">freshness · coverage</text>
+<text x="506" y="238" class="cb" text-anchor="start">PASS or FAIL</text>
+<rect x="704" y="146" width="316" height="116" rx="10" class="sec" />
+<text x="720" y="170" class="h" text-anchor="start">External services</text>
+<text x="1004" y="170" class="cb" text-anchor="end">outside this repo</text>
+<rect x="720" y="182" width="284" height="21" rx="6" class="chip" />
+<text x="730" y="197" class="cb" text-anchor="start"><tspan class="b">MacroRAG</tspan><tspan class="m">  macro factors, cited shocks</tspan></text>
+<rect x="720" y="207" width="284" height="21" rx="6" class="chip" />
+<text x="730" y="222" class="cb" text-anchor="start"><tspan class="b">XbrlRag</tspan><tspan class="m">  SEC 10-K/Q fundamentals</tspan></text>
+<rect x="720" y="232" width="284" height="21" rx="6" class="chip" />
+<text x="730" y="247" class="cb" text-anchor="start"><tspan class="b">LLM APIs</tspan><tspan class="m">  OpenAI · Anthropic · DeepSeek</tspan></text>
+<path d="M340,262 L340,280" class="arrow" marker-end="url(#ah)" />
+<rect x="140" y="282" width="400" height="34" rx="17" class="chip" />
+<text x="340" y="304" class="pill-t" text-anchor="middle"><tspan class="b">MarketDataSnapshot</tspan>  ·  content-addressed <tspan class="monoi">snapshot_id</tspan></text>
+<path d="M340,316 L340,334" class="arrow" marker-end="url(#ah)" />
+<path d="M540,299 L862,299 L862,334" class="arrow" marker-end="url(#ah)" />
+<text x="701" y="292" class="note" text-anchor="middle">scenarios pin it + a FactorHistory snapshot</text>
+<path d="M960,262 L960,334" class="arrow" marker-end="url(#ah)" />
+<text x="968" y="302" class="note" text-anchor="start">REST · MCP</text>
+<rect x="20" y="336" width="640" height="260" rx="10" class="sec" />
+<circle cx="46" cy="355" r="10" class="badge-pr"/>
+<text x="46" y="359" class="badge-t" text-anchor="middle">2</text>
+<text x="64" y="360" class="h" text-anchor="start">Pricer</text>
+<text x="120" y="360" class="sub" text-anchor="start">one engine, two drivers</text>
+<text x="644" y="360" class="mono" text-anchor="end">src/pricer/</text>
+<rect x="36" y="376" width="108" height="58" rx="7" class="chip" />
+<text x="90" y="394" class="ct" text-anchor="middle">input/</text>
+<text x="90" y="410" class="cb" text-anchor="middle">domain model</text>
+<text x="90" y="426" class="cb" text-anchor="middle">no QuantLib</text>
+<path d="M144,405 L158,405" class="arrow" marker-end="url(#ah)" />
+<rect x="160" y="376" width="108" height="58" rx="7" class="chip" />
+<text x="214" y="394" class="ct" text-anchor="middle">loader/</text>
+<text x="214" y="410" class="cb" text-anchor="middle">CSV → domain</text>
+<text x="214" y="426" class="cb" text-anchor="middle">curves · vols</text>
+<path d="M268,405 L282,405" class="arrow" marker-end="url(#ah)" />
+<rect x="284" y="376" width="108" height="58" rx="7" class="chip" />
+<text x="338" y="394" class="ct" text-anchor="middle">ql/</text>
+<text x="338" y="410" class="cb" text-anchor="middle">QuantLib engines</text>
+<text x="338" y="426" class="cb" text-anchor="middle">per trade type</text>
+<path d="M392,405 L406,405" class="arrow" marker-end="url(#ah)" />
+<rect x="408" y="376" width="108" height="58" rx="7" class="chip" />
+<text x="462" y="394" class="ct" text-anchor="middle">PricingEngine</text>
+<text x="462" y="410" class="cb" text-anchor="middle">batch runner</text>
+<text x="462" y="426" class="cb" text-anchor="middle">+ FastAPI service</text>
+<path d="M516,405 L530,405" class="arrow" marker-end="url(#ah)" />
+<rect x="532" y="376" width="108" height="58" rx="7" class="chip" />
+<text x="586" y="394" class="ct" text-anchor="middle">Results store</text>
+<text x="586" y="410" class="cb" text-anchor="middle">Parquet</text>
+<text x="586" y="426" class="cb" text-anchor="middle">+ DuckDB</text>
+<text x="36" y="456" class="label" text-anchor="start">BUILT ON THE ENGINE</text>
+<rect x="36" y="464" width="194" height="116" rx="8" class="chip" />
+<circle cx="54" cy="481" r="10" class="badge-pr"/>
+<text x="54" y="485" class="badge-t" text-anchor="middle">3</text>
+<text x="70" y="486" class="ct" text-anchor="start">Risk</text>
+<text x="48" y="503" class="mono" text-anchor="start">risk/</text>
+<text x="48" y="524" class="cb" text-anchor="start">sensitivities · key-rate DV01</text>
+<text x="48" y="541" class="cb" text-anchor="start">VaR / ES: HS, FHS, stressed</text>
+<text x="48" y="558" class="cb" text-anchor="start">backtest · limits · JTD / IDR</text>
+<rect x="242" y="464" width="194" height="116" rx="8" class="chip" />
+<text x="254" y="486" class="ct" text-anchor="start">Portfolio construction</text>
+<text x="254" y="503" class="mono" text-anchor="start">sizing/</text>
+<text x="254" y="524" class="cb" text-anchor="start">risk-appetite books sized</text>
+<text x="254" y="541" class="cb" text-anchor="start">to a VaR budget</text>
+<text x="254" y="558" class="cb" text-anchor="start">rebalance blotter</text>
+<rect x="448" y="464" width="194" height="116" rx="8" class="chip" />
+<text x="460" y="486" class="ct" text-anchor="start">Governance</text>
+<text x="460" y="503" class="mono" text-anchor="start">governance/</text>
+<text x="460" y="524" class="cb" text-anchor="start">golden-PV regression</text>
+<text x="460" y="541" class="cb" text-anchor="start">independent price checks</text>
+<text x="460" y="558" class="cb" text-anchor="start">model inventory · drift</text>
+<rect x="704" y="336" width="316" height="260" rx="10" class="sec" />
+<circle cx="730" cy="355" r="10" class="badge-sg"/>
+<text x="730" y="359" class="badge-t" text-anchor="middle">4</text>
+<text x="748" y="360" class="h" text-anchor="start">Scenarios</text>
+<text x="1004" y="360" class="mono" text-anchor="end">src/scenariogen/</text>
+<text x="720" y="388" class="label" text-anchor="start">SHOCK DRIVERS</text>
+<rect x="720" y="394" width="88" height="42" rx="7" class="chip" />
+<text x="764" y="411" class="ct" text-anchor="middle">Static</text>
+<text x="764" y="427" class="cb" text-anchor="middle">config</text>
+<rect x="816" y="394" width="88" height="42" rx="7" class="chip" />
+<text x="860" y="411" class="ct" text-anchor="middle">Dual-RAG</text>
+<text x="860" y="427" class="cb" text-anchor="middle">deterministic</text>
+<rect x="912" y="394" width="88" height="42" rx="7" class="chip" />
+<text x="956" y="411" class="ct" text-anchor="middle">Agentic LLM</text>
+<text x="956" y="427" class="cb" text-anchor="middle">tools via MCP</text>
+<path d="M862,436 L862,448" class="arrow" marker-end="url(#ah)" />
+<rect x="720" y="450" width="284" height="56" rx="7" class="chip" />
+<text x="730" y="468" class="ct" text-anchor="start">Σ covariance → correlated shocks</text>
+<text x="730" y="484" class="cb" text-anchor="start">named scenarios × severity tiers</text>
+<text x="730" y="500" class="cb" text-anchor="start">plausibility gate · versioning</text>
+<path d="M862,506 L862,518" class="arrow" marker-end="url(#ah)" />
+<rect x="720" y="520" width="284" height="48" rx="7" class="chip" />
+<text x="730" y="539" class="ct" text-anchor="start">Stressed P&amp;L via PricingEngine</text>
+<text x="730" y="557" class="cb" text-anchor="start">ES-under-shock capital · reverse stress</text>
+<path d="M704,544 L662,544" class="arrow" marker-end="url(#ah)" marker-start="url(#ah)"/>
+<path d="M340,596 L340,618" class="arrow" marker-end="url(#ah)" />
+<path d="M862,596 L862,618" class="arrow" marker-end="url(#ah)" />
+<rect x="20" y="620" width="1000" height="40" rx="10" class="sec" />
+<text x="520" y="645" class="cb" text-anchor="middle"><tspan class="monob">data/</tspan><tspan class="b">  storage façade</tspan>  ·  local filesystem or S3 (<tspan class="monoi">PRICER_DEPLOY_MODE</tspan>)  ·  CSV · Parquet · JSON reports</text>
+<path d="M520,660 L520,682" class="arrow" marker-end="url(#ah)" />
+<rect x="20" y="684" width="1000" height="106" rx="10" class="sec" />
+<circle cx="46" cy="703" r="10" class="badge-ui"/>
+<text x="46" y="707" class="badge-t" text-anchor="middle">5</text>
+<text x="64" y="708" class="h" text-anchor="start">User interface</text>
+<text x="1004" y="708" class="mono" text-anchor="end">ui/</text>
+<rect x="36" y="720" width="430" height="56" rx="7" class="chip" />
+<text x="46" y="738" class="ct" text-anchor="start">ui/bff  ·  FastAPI backend-for-frontend</text>
+<text x="46" y="754" class="cb" text-anchor="start">read layer over data/ · gated writes</text>
+<text x="46" y="770" class="cb" text-anchor="start">run jobs · live re-price</text>
+<path d="M466,748 L528,748" class="arrow" marker-end="url(#ah)" />
+<text x="497" y="741" class="note" text-anchor="middle">/api</text>
+<rect x="530" y="720" width="474" height="56" rx="7" class="chip" />
+<text x="540" y="738" class="ct" text-anchor="start">ui/app  ·  React + TypeScript</text>
+<text x="540" y="754" class="cb" text-anchor="start">Business and Technical lenses · stress-first overview</text>
+<text x="540" y="770" class="cb" text-anchor="start">calculation lineage · provenance on every number</text>
+<rect x="20" y="810" width="1000" height="60" rx="10" class="sec" />
+<text x="36" y="834" class="h" text-anchor="start">Reproducibility spine</text>
+<text x="36" y="856" class="cb" text-anchor="start"><tspan class="b">RunProvenance</tspan> (git SHA · config hash · QuantLib version · portfolio version)  +  <tspan class="monoi">snapshot_id</tspan>  +  <tspan class="monoi">FactorHistory</tspan> id, stamped on every result — same inputs, same number</text>
+</svg>

@@ -1,0 +1,81 @@
+# Local container parity for the Faultline stack (backend API + BFF + UI).
+#
+#   GIT_SHA=$(git rev-parse --short HEAD) docker compose up --build
+#   # UI:  http://localhost:8081   BFF: http://localhost:8088   pricer API: http://localhost:8080
+#
+# Run a batch job in the backend image (shares the same mounted data tree):
+#   docker compose run --rm backend python -m src.pricer.runner
+#   docker compose run --rm backend python -m src.pricer.risk_runner
+#
+# Env vars are documented in .env.example — `cp .env.example .env` and compose reads it for
+# ${VAR} substitution. This wires the three images against a shared ./data volume — the same
+# file-based flow as bare metal. AWS uses the same images via docker-compose.aws.yml with
+# PRICER_DEPLOY_MODE=aws + PRICER_DATA_URI=s3://… instead of the bind mount.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: infra/backend/Dockerfile
+      args:
+        GIT_SHA: "${GIT_SHA:-dev}"
+    image: qlp-backend
+    command: ["uvicorn", "src.pricer.service:app", "--host", "0.0.0.0", "--port", "8080"]
+    environment:
+      PRICER_DEPLOY_MODE: "${PRICER_DEPLOY_MODE:-local}"
+      PRICER_DATA_URI: "${PRICER_DATA_URI:-}"
+      PRICER_API_KEY: "${PRICER_API_KEY:-}"
+      PRICER_ENV: "${PRICER_ENV:-dev}"
+      PRICER_LOG_LEVEL: "${PRICER_LOG_LEVEL:-INFO}"
+      PRICER_JSON_LOGS: "${PRICER_JSON_LOGS:-false}"
+      PRICER_FRED_API_KEY: "${PRICER_FRED_API_KEY:-}"
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8080/health').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  bff:
+    build:
+      context: .
+      dockerfile: infra/bff/Dockerfile
+    image: qlp-bff
+    environment:
+      QLP_ROOT: "/app"
+      QLP_SERVICE_URL: "http://backend:8080"
+      QLP_CORS_ORIGINS: "${QLP_CORS_ORIGINS:-http://localhost:8081}"
+      QLP_WRITE_TOKEN: "${QLP_WRITE_TOKEN:-}"
+      PRICER_DEPLOY_MODE: "${PRICER_DEPLOY_MODE:-local}"
+      PRICER_DATA_URI: "${PRICER_DATA_URI:-}"
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8088:8088"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8088/api/health').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  ui:
+    build:
+      context: .
+      dockerfile: ui/app/Dockerfile
+    image: qlp-ui
+    environment:
+      # nginx reverse-proxy target for /api -> the BFF (substituted into the nginx config at start).
+      API_UPSTREAM: "${API_UPSTREAM:-bff:8088}"
+    ports:
+      - "8081:8080"          # non-root nginx listens on 8080 in-container
+    depends_on:
+      bff:
+        condition: service_healthy

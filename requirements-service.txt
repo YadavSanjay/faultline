@@ -1,0 +1,7 @@
+# Optional HTTP service extras (P1b) — install on top of requirements.txt to run the
+# FastAPI facade (src/pricer/service.py):  uvicorn src.pricer.service:app --port 8080
+-r requirements.txt
+
+fastapi==0.120.0
+uvicorn==0.38.0
+pydantic==2.11.9

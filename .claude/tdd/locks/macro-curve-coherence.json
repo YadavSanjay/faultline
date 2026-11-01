@@ -1,0 +1,70 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-15",
+  "criteria": {
+    "C1": [
+      "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c1_request_carries_fields_and_directions",
+      "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c1_empty_or_missing_fields_and_directions_are_omitted",
+      "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c1_property_request_mirrors_the_config"
+    ],
+    "C2": [
+      "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c2_direction_mismatch_is_dropped_and_hy_takes_credit[codes0]",
+      "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c2_direction_mismatch_is_dropped_and_hy_takes_credit[codes1]",
+      "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c2_removing_the_code_restores_the_field"
+    ],
+    "C3": [
+      "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_rate_capital_partial_curve_supersedes_the_unsupplied_tenor",
+      "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_no_macro_ir_leg_or_failed_gate_keeps_the_authored_curve",
+      "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_parallel_ust_supersedes_nothing_it_covers_every_node",
+      "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_property_drivers_follow_the_coherence_rule"
+    ],
+    "C4": [
+      "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c4_invalid_directions_raise_config_error_at_construction",
+      "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c4_property_any_other_value_is_rejected"
+    ],
+    "C5": [
+      "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c5_committed_macro_config_matches_the_direction_table",
+      "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c5_committed_config_constructs_and_is_sent_as_is"
+    ]
+  },
+  "files": {
+    "tests/spec/macro-curve-coherence/conftest.py": "2b369390634bc690b508866f80ac9583600339893812c6c6174d464f294ee1fd",
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py": "90dd3234e03ea99b3c63356fa960e126afe3d5e3bac87a94162e0295196f597b",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py": "65e97f60fd054496bda2d18fe895e07b06ededc4b8b18cea8fa7fc9b9b355ca8"
+  },
+  "id": "macro-curve-coherence",
+  "interface": [],
+  "nodes": [
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c2_direction_mismatch_is_dropped_and_hy_takes_credit[codes0]",
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c2_direction_mismatch_is_dropped_and_hy_takes_credit[codes1]",
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c2_removing_the_code_restores_the_field",
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_no_macro_ir_leg_or_failed_gate_keeps_the_authored_curve",
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_parallel_ust_supersedes_nothing_it_covers_every_node",
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_property_drivers_follow_the_coherence_rule",
+    "tests/spec/macro-curve-coherence/test_curve_and_drops.py::test_c3_rate_capital_partial_curve_supersedes_the_unsupplied_tenor",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c1_empty_or_missing_fields_and_directions_are_omitted",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c1_property_request_mirrors_the_config",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c1_request_carries_fields_and_directions",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c4_invalid_directions_raise_config_error_at_construction",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c4_property_any_other_value_is_rejected",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c5_committed_config_constructs_and_is_sent_as_is",
+    "tests/spec/macro-curve-coherence/test_request_and_config.py::test_c5_committed_macro_config_matches_the_direction_table"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/macro-curve-coherence.md",
+    "sha256": "defd3561390914a4d71c6daefd85c53f9fa8ec723cd7f53c2aa78e7f038c79b3"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

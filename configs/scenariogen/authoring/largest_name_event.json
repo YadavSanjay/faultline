@@ -1,0 +1,66 @@
+{
+  "description": "Step 10 options-shock-sizing (docs/specs/options-shock-sizing.md): keyman_nvda becomes the largest-name event sized by the option-implied distribution of its lead (severity source 'options'), over the one-month option horizon (21 trading days). Upsert: no other scenario changes.",
+  "scenarios": {
+    "keyman_nvda": {
+      "narrative": "Largest-name event: an earnings or guidance miss (or a key-person / restatement event) at the book's largest single-name long, NVDA, with partial peer spillover through the covariance. Sized by the option market: the tiers are the 5% / 1% quantiles of NVDA's point-in-time one-month risk-neutral distribution (severe = adverse x 1.5, capped at the hard bound), not its history record.",
+      "trigger": "8-K 5.02 (officer departure) or 4.02 (restatement) from NVDA; results (2.02) as the news amplifier",
+      "method": "conditional_covariance",
+      "horizon_days": 21,
+      "drivers": {
+        "eq:NVDA": {
+          "move_pct": -30
+        }
+      },
+      "overlays": {
+        "eqvol": {
+          "move_pts": 8
+        }
+      },
+      "severity": {
+        "lead": "eq:NVDA",
+        "direction": "down",
+        "source": "options"
+      },
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "dependence on key personnel and founder/CEO leadership; concentration of technical and strategic know-how in a small number of individuals; succession and key-man risk",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        }
+      ],
+      "expect_tickers": [
+        "NVDA"
+      ],
+      "macro": {
+        "synthesis_question": "For an idiosyncratic NVIDIA key-man shock, a risk-off spillover in which IG credit spreads widen and MOVE and VIX rise, quantify any systematic one-month (21 trading days) spillover to IG credit spreads, MOVE, and VIX, with citations. (The single-name equity move is set separately.)",
+        "filters": {
+          "factor_tags": [
+            "equity_vol",
+            "credit_spread"
+          ],
+          "entity_tags": [
+            "nvidia"
+          ]
+        },
+        "expect_fields": [
+          "VIX",
+          "IG_OAS",
+          "MOVE"
+        ],
+        "directions": {
+          "VIX": "up",
+          "IG_OAS": "up",
+          "MOVE": "up"
+        }
+      }
+    }
+  }
+}

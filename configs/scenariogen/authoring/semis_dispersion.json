@@ -1,0 +1,12 @@
+{
+  "description": "Semiconductor dispersion / ETF-hedge failure (market-intelligence F3, FINDING 3, the clearest case). Trade #6 shorts SMH against the single-name semi longs (#1-4: NVDA/TSM/AVGO/MU); its whole risk is the SPREAD between the two, but a name-level scenario moves them in lockstep and nets the hedge to ~flat. This scenario drives the basis:SMH_SEMI factor (SMH return minus the single-name basket), so the ETF and its constituents pull apart -- the single names underperform the ETF -- and both legs of the 'hedge' lose. Pure covariance propagation; no macro/ARag services.",
+  "scenarios": {
+    "semis_dispersion": {
+      "narrative": "Semiconductor dispersion: the single-name semis (NVDA/TSM/AVGO/MU) sell off hard while the SMH ETF holds up, so the short-SMH / long-single-name relative-value trade #6 loses on both legs at once -- the classic ETF-vs-basket hedge failure a name-level covariance model nets to flat.",
+      "trigger": "Single-name idiosyncratic shocks / index-vs-constituent flow divergence (not a broad tech selloff)",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {"basis:SMH_SEMI": {"move_pct": 8}}
+    }
+  }
+}

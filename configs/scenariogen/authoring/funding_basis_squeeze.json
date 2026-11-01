@@ -1,0 +1,13 @@
+{
+  "description": "Funding / basis squeeze (market-intelligence F3, FINDING 3). The design records four live basis risks carried as if the hedges were perfect; three are now stressable. This scenario dislocates the two spread bases directly: the swap spread (Treasury - SOFR OIS) and the CDS-bond basis (CDS par - bond Z-spread), on top of a modest broad credit widening. Because these two bases have no free daily history they are authored as OVERLAYS with direct repricing bumps (not covariance drivers): basis:SWAP_SPREAD moves the Treasury curve relative to the OIS/swap curve (repricing the USTs, not the SOFR swap), and basis:CDS_BOND moves the single-name CDS par spreads relative to the bond Z-spreads (repricing the CDS trades, not the bonds). The 'credit' driver is the only covariance leg and propagates the systematic move.",
+  "scenarios": {
+    "funding_basis_squeeze": {
+      "narrative": "Funding squeeze: dealer balance-sheet stress widens the SOFR-OIS swap spread and blows out the CDS-bond basis while broad IG credit gaps out. The book's rate hedge (SOFR swap vs USTs) and credit hedge (single-name CDS vs corporate bonds) both fail on the spread, not the level -- the basis risk carried at zero.",
+      "trigger": "Dealer balance-sheet / repo funding stress; quarter-end or a credit-event scramble",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {"credit": {"move_bp": 40}},
+      "overlays": {"basis:SWAP_SPREAD": {"move_bp": 30}, "basis:CDS_BOND": {"move_bp": 60}}
+    }
+  }
+}

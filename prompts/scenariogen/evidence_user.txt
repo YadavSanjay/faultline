@@ -1,0 +1,15 @@
+Gather grounded risk-factor evidence relevant to: {scope}
+
+Focus on these factor themes: {focus}
+
+Identify which portfolio companies and macro factors this scope implicates, then for each
+relevant factor report what is disclosed (and the magnitude where a filing quantifies it —
+revenue at risk, customer/geographic concentration, margin sensitivity), with citations. Then
+summarise the macro conditions that would activate each factor, with citations.
+
+Return a JSON object of the form:
+{{"company_factors": [{{"ticker": "NVDA", "factor": "...", "description": "...",
+  "magnitude": null, "unit": "", "citations": [{{"chunk_id": "...", "source": "arag"}}]}}],
+ "macro_factors": [{{"factor_tag": "...", "relevance": "high", "rationale": "...",
+  "citations": [{{"chunk_id": "...", "source": "macro"}}]}}],
+ "summary": "A short prose summary of the evidence."}}

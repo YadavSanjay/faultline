@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens (single source of truth). Components reference the semantic
+ * role names mapped in tailwind.config.js (bg-surface-1, text-primary, …),
+ * never a raw slate/hex value — that is what makes consistency structural.
+ *
+ * Values are stored as space-separated RGB channels so Tailwind's opacity
+ * modifiers keep working (e.g. bg-surface-2/60). Light lives on :root;
+ * dark is a [data-theme="dark"] override with the same role names.
+ *
+ * Soft, calm, technical palette — cool slate neutrals (deliberately not warm
+ * cream), one muted-indigo primary, muted semantics. See rag-ui-design system.
+ */
+:root {
+  color-scheme: light;
+
+  /* neutral surface ramp */
+  --surface-0: 247 248 250; /* app background */
+  --surface-1: 255 255 255; /* cards, panels */
+  --surface-2: 238 241 245; /* subtle raised: hover, inset, user rows */
+  --border: 226 230 236; /* hairlines, card outlines */
+  --border-subtle: 236 239 243; /* faint dividers (card headers) */
+  --border-strong: 205 211 220;
+
+  /* text ramp */
+  --text-primary: 30 37 48;
+  --text-secondary: 90 100 114;
+  --text-muted: 138 147 163;
+  --text-inverse: 247 248 250;
+
+  /* primary — muted indigo: actions, active state, links */
+  --primary: 78 99 174;
+  --primary-hover: 67 86 154;
+  --primary-tint: 234 237 247; /* selected / active background */
+  --on-primary: 255 255 255;
+
+  /* muted semantics — 3 stops each: fg (legible text) / DEFAULT (dots, marks,
+     borders) / tint (fills). Text uses -fg so "soft" never means unreadable. */
+  --success: 79 157 123; /* retrieval found / high confidence / gain */
+  --success-fg: 47 125 91;
+  --success-tint: 232 242 237;
+  --warning: 201 162 75; /* low confidence (amber, never alarm) */
+  --warning-fg: 145 106 22;
+  --warning-tint: 247 241 226;
+  --danger: 197 107 107; /* no source / error / loss (soft, not fire-red) */
+  --danger-fg: 168 75 75;
+  --danger-tint: 247 233 233;
+  --info: 91 141 190;
+  --info-fg: 60 100 145;
+  --info-tint: 231 239 247;
+
+  /* one chart/data accent beyond the semantic set */
+  --accent: 122 108 190; /* muted violet — charts, non-status highlights */
+
+  /* categorical identity palette — module / RAG-service tags. Calm, mutually
+     distinct hues (NOT status). Each has fg (text) + tint (pill fill). */
+  --cat-teal-fg: 43 122 120; /* marketdata, macrorag, live/macro */
+  --cat-teal-tint: 219 237 236;
+  --cat-indigo-fg: 74 91 158; /* pricer, arag, fixed-leg */
+  --cat-indigo-tint: 228 231 245;
+  --cat-violet-fg: 109 91 166; /* risk, llm, AI-generated */
+  --cat-violet-tint: 234 229 245;
+
+  /* code / JSON surface — intentionally dark in the light theme (editor-like),
+     delineated by a border in dark so it doesn't melt into the background */
+  --surface-code: 27 31 38;
+  --fg-code: 230 233 239;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface-0: 20 23 28;
+  --surface-1: 27 31 38;
+  --surface-2: 35 40 51;
+  --border: 46 53 66;
+  --border-subtle: 38 44 55;
+  --border-strong: 59 67 82;
+
+  --text-primary: 230 233 239;
+  --text-secondary: 166 174 188;
+  --text-muted: 114 123 138;
+  --text-inverse: 20 23 28;
+
+  --primary: 134 149 214;
+  --primary-hover: 151 164 222;
+  --primary-tint: 34 40 58;
+  --on-primary: 20 23 28;
+
+  --success: 111 182 148;
+  --success-fg: 127 195 160;
+  --success-tint: 28 40 35;
+  --warning: 216 188 114;
+  --warning-fg: 224 199 132;
+  --warning-tint: 44 39 26;
+  --danger: 208 140 140;
+  --danger-fg: 222 158 158;
+  --danger-tint: 46 33 33;
+  --info: 127 169 212;
+  --info-fg: 148 188 224;
+  --info-tint: 26 34 45;
+
+  --accent: 156 143 216;
+
+  --cat-teal-fg: 111 192 190;
+  --cat-teal-tint: 22 48 47;
+  --cat-indigo-fg: 154 166 224;
+  --cat-indigo-tint: 35 39 61;
+  --cat-violet-fg: 179 163 222;
+  --cat-violet-tint: 42 37 64;
+
+  --surface-code: 15 18 23;
+  --fg-code: 230 233 239;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-surface-0 text-fg antialiased;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Tabular figures for all financial numbers. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* a11y floor: always-visible keyboard focus (many controls had none) + honor
+   reduced-motion. Focus uses the primary token so it themes with the app. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid rgb(var(--primary));
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

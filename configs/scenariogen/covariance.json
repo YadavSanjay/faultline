@@ -1,0 +1,35 @@
+{
+  "description": "Covariance window policy for scenariogen (S0). Σ of daily factor moves is estimated from the aligned factor-move panel (src/pricer/risk/factor_history.py). 'window' selects full (equal-weight), ewma (recent-weighted, RiskMetrics λ), or crisis (sample covariance over the named crisis date ranges only — fat-tailed co-moves for stress realism). Crisis windows: COVID-2020, 2022 rates/credit, 2018-Q4.",
+  "lookback_days": 250,
+  "window": "ewma",
+  "ewma_lambda": 0.94,
+  "shrinkage": 0.5,
+  "include_style": true,
+  "implied_corr_regime": {
+    "enabled": true,
+    "source": "COR3M",
+    "shrink_systemic": 0.4,
+    "shrink_idiosyncratic": 0.65,
+    "systemic_pct": 0.66,
+    "idiosyncratic_pct": 0.33,
+    "max_shrinkage": 0.3,
+    "_max_shrinkage_comment": "Cap on the regime shrinkage (crisis-sigma-tiers, decided 2026-10-17): the calm regime set 0.62 on 2026-10-06, cutting NVDA's beta to XLK to 0.46 (raw history ~1.1); at 0.3 it is 0.85 and every authored scenario still passes the gate at mild and adverse. The regime still moves shrinkage below the cap when implied correlation is high.",
+    "_comment": "F7 market-implied Sigma regime switch. Maps today's CBOE 3-month implied-correlation percentile onto the Ledoit-Wolf shrinkage: elevated correlation (high percentile) -> low shrinkage (propagate broadly, systemic); low correlation -> high shrinkage (keep idiosyncratic). Band centered near the fixed 0.5 so authored scenarios stay promotable at both ends. Costs ZERO Sigma dimensions. enabled=false -> the fixed 'shrinkage' above (byte-identical to pre-F7). source COR3M|COR1M|DSPX (DSPX is dispersion, inverted internally)."
+  },
+  "crisis_windows": [
+    ["2020-02-15", "2020-04-30"],
+    ["2022-01-01", "2022-12-31"],
+    ["2018-10-01", "2018-12-31"]
+  ],
+  "severe": {
+    "windows": [
+      ["2020-02-15", "2020-04-30"],
+      ["2022-01-01", "2022-12-31"],
+      ["2018-10-01", "2018-12-31"]
+    ],
+    "shrinkage": 0.2,
+    "min_days": 60,
+    "_comment": "The severe tier propagates through crisis Sigma (design §3.3; docs/specs/crisis-sigma-tiers.md): the sample covariance of the full aligned history's days inside these windows, shrunk lightly (42 factors on ~142 days is rank-deficient). The aligned history starts 2022-01-20, so only the 2022 window has rows today; the others fill in if the history is extended. Fewer than min_days rows stops the severe tier (fail-loud), never a fallback to the calm Sigma."
+  },
+  "notes": "Window/λ are the production default; per-scenario overrides (e.g. crisis Σ for severe tiers) are wired in S2. Σ carries a content-addressed cov_id stamped into each scenario's provenance (design §9). shrinkage (0..1) is Ledoit-Wolf linear shrinkage toward the diagonal applied to Σ: it keeps each factor's own variance exact but scales cross-factor covariances by (1-shrinkage). Needed because the sample Σ over a few hundred days has very noisy cross-asset correlations, and the conditional-covariance propagation with near-collinear drivers otherwise amplifies them into implausible cross-factor shocks (a +100bp rate scenario propagated to a +96% equity move, which the plausibility gate then failed). 0.5 keeps the authored scenarios comfortably promotable at both the 60- and 250-day windows with margin against data drift. include_style (F4/F3) adds the DRIVER-ONLY factors style:MOM and basis:SMH_SEMI to the scenariogen Σ (33 factors); they have no bump transform, so they are never in the full-reval panel (which stays 31 factors) -- shrinkage also keeps the basis (an exact linear combo of the eq: legs) from making Σ singular."
+}

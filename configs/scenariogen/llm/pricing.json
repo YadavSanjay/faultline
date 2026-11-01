@@ -1,0 +1,21 @@
+{
+  "gpt-5": {"input": 0.00125, "output": 0.01, "cached_input": 0.000125},
+  "gpt-5-mini": {"input": 0.00025, "output": 0.002, "cached_input": 0.000025},
+  "gpt-5-nano": {"input": 0.00005, "output": 0.0004, "cached_input": 0.000005},
+  "claude-sonnet-5-5": {"input": 0.002, "output": 0.01, "cached_input": 0.0002, "cache_write": 0.0025},
+  "claude-haiku-5-5": {
+    "input": 0.0001, "output": 0.0005, "cached_input": 0.00001, "cache_write": 0.000125,
+    "tiers": [{"above_prompt_tokens": 100000, "input": 0.0005, "output": 0.0025,
+               "cached_input": 0.00005, "cache_write": 0.000625}]
+  },
+  "deepseek-flash": {
+    "input": 0.00015, "output": 0.0006, "cached_input": 0.000003,
+    "peak": {"weekdays_utc": ["01:00-04:00", "06:00-10:00"],
+             "input": 0.0003, "output": 0.0012, "cached_input": 0.000006}
+  },
+  "deepseek-v4-pro": {
+    "input": 0.00066, "output": 0.00198, "cached_input": 0.000022,
+    "peak": {"weekdays_utc": ["01:00-04:00", "06:00-10:00"],
+             "input": 0.00132, "output": 0.00396, "cached_input": 0.000044}
+  }
+}

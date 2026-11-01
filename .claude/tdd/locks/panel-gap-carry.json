@@ -1,0 +1,64 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/panel-gap-carry/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-19",
+  "criteria": {
+    "C1": [
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_hand_panel_max_gap_3",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_hand_panel_other_max_gaps",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_max_gap_zero_and_empty_panel",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_min_coverage_changes_eligibility",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_bad_parameters[-1-0.75]",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_bad_parameters[3-0.0]",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_bad_parameters[3-1.5]",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_non_increasing_index[decreasing]",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_non_increasing_index[duplicate]",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_property_rows_values_and_fills",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_metamorphic_raising_max_gap_never_unfills",
+      "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_metamorphic_raising_min_coverage_never_adds_rows"
+    ]
+  },
+  "files": {
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py": "17d17b3e45a810e211963787e36515486dbb16d293722815003e986d43bc1c60"
+  },
+  "id": "panel-gap-carry",
+  "interface": [
+    {
+      "file": "src/pricer/risk/factor_history.py",
+      "module": "src.pricer.risk.factor_history",
+      "qualname": "carry_short_gaps",
+      "signature": "def carry_short_gaps(panel: pd.DataFrame, *, max_gap: int, min_coverage: float) -> pd.DataFrame"
+    }
+  ],
+  "nodes": [
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_metamorphic_raising_max_gap_never_unfills",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_metamorphic_raising_min_coverage_never_adds_rows",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_hand_panel_max_gap_3",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_hand_panel_other_max_gaps",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_max_gap_zero_and_empty_panel",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_min_coverage_changes_eligibility",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_bad_parameters[-1-0.75]",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_bad_parameters[3-0.0]",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_bad_parameters[3-1.5]",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_non_increasing_index[decreasing]",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_point_rejects_non_increasing_index[duplicate]",
+    "tests/spec/panel-gap-carry/test_carry_short_gaps.py::test_c1_property_rows_values_and_fills"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/panel-gap-carry.md",
+    "sha256": "1ae187df52444f4d15058119ae2c2b03a85de782c6e67f92e6a1ab614c6fc268"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

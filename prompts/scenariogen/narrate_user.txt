@@ -1,0 +1,13 @@
+Write the narrative for this scenario.
+
+Scenario definition:
+{scenario}
+
+Materialized shocks (driver + propagated factors):
+{shocks}
+
+Priced result (P&L by trade/asset class, capital change):
+{priced_summary}
+
+LLM invocation cost:
+{cost_summary}

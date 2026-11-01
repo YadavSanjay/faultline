@@ -1,0 +1,12 @@
+{
+  "description": "Geopolitical-risk calibration for scenariogen (market-intelligence F8/P7). Gives a geopolitically-tagged scenario (taiwan_geopolitical) the quantitative trigger + severity calibration its narrative already names but had no data behind (design FINDING 8). A CLAMPED severity multiplier on the whole scenario shock, plus a live-trigger flag from the GPR z-score — mode-(ii), so it never enters the covariance matrix. PIT-pinned to the run's as_of (reflexivity mitigation). None / held -> no-op (multiplier 1.0, trigger off).",
+  "enabled": true,
+  "default_series": "GPRC_TWN",
+  "beta": 0.4,
+  "baseline_percentile": 0.5,
+  "min_scale": 0.85,
+  "max_scale": 1.4,
+  "trigger_z": 1.5,
+  "trigger_percentile": 0.9,
+  "_comment": "multiplier = clamp(1 + beta*(2*percentile - 1), min_scale, max_scale): percentile 0.5 -> 1.0, high GPR amplifies (up to max_scale), a calm regime damps only mildly (min_scale 0.85 keeps the stress test substantial). trigger = z-score >= trigger_z OR percentile >= trigger_percentile (a live geopolitical spike). Percentile + z are computed over all history <= as_of (PIT). GPRC_TWN is the monthly Taiwan sub-index; GPRD is the daily global index."
+}

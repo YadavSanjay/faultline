@@ -1,0 +1,100 @@
+# Faultline — AWS single-EC2 serving stack (docker-compose on the instance).
+#
+#   docker compose -f docker-compose.aws.yml pull      # normal flow: images pulled from ECR
+#   docker compose -f docker-compose.aws.yml up -d
+#
+# Differs from the local docker-compose.yml:
+#   * Images are PULLED from ECR — set QLP_BACKEND_IMAGE / QLP_BFF_IMAGE / QLP_UI_IMAGE to the ECR
+#     URIs (CI builds + pushes them). The `build:` blocks are a fallback for building on the instance
+#     from a source checkout.
+#   * SECRETS (PRICER_API_KEY, QLP_WRITE_TOKEN, PRICER_FRED_API_KEY) are rendered into an env file at
+#     instance boot from Secrets Manager / SSM Parameter Store and loaded via `env_file`. Compose
+#     FAILS TO START if that file is absent — deliberate: fail fast rather than run a keyless service
+#     or an unlocked write API. The bootstrap must create it first.
+#   * The data tree lives on a shared EFS mount (QLP_DATA_MOUNT). The backend's batch runners write
+#     there; the BFF reads it (the BFF's DuckDB layer reads a filesystem mount, NOT an s3:// URI —
+#     see ui/bff/app/settings.py). To keep the object store on S3 instead, set the backend's
+#     PRICER_DEPLOY_MODE=aws + PRICER_DATA_URI=s3://<bucket>/<prefix> and sync it down to the EFS
+#     mount for the BFF.
+#   * S3 + Secrets Manager access come from the EC2 instance IAM role — never keys on disk.
+#
+# Only the UI is published to the host (:8080 = the ALB target / front door). The backend + BFF stay
+# on the internal compose network (reached by service name). Assumes the VPC, EFS volume, S3 bucket,
+# ECR repos, IAM role and security groups are already provisioned (separate infra project).
+# See docs/design/AITrade_aws_deployment_design.md and docs/guides/deployment_guide.md.
+
+services:
+  backend:
+    image: ${QLP_BACKEND_IMAGE:-qlp-backend:latest}
+    build:
+      context: .
+      dockerfile: infra/backend/Dockerfile
+      args:
+        GIT_SHA: "${GIT_SHA:-dev}"
+    command: ["uvicorn", "src.pricer.service:app", "--host", "0.0.0.0", "--port", "8080"]
+    environment:
+      # local = the EFS mount is the filesystem data root; aws = object I/O to S3 (creds via IAM role).
+      PRICER_DEPLOY_MODE: "${PRICER_DEPLOY_MODE:-local}"
+      PRICER_DATA_URI: "${PRICER_DATA_URI:-/app/data}"
+      PRICER_ENV: "${PRICER_ENV:-prod}"
+      PRICER_LOG_LEVEL: "${PRICER_LOG_LEVEL:-INFO}"
+      PRICER_JSON_LOGS: "true"
+      PRICER_WORKERS: "${PRICER_WORKERS:-4}"
+      # Scenariogen external services (CL-Q8): non-secret endpoints the dual-RAG + LLM flow reads
+      # (configs/scenariogen/*.json use ${VAR:-localhost}). Without these forwarded, scenariogen falls
+      # back to localhost in-container and fails. Set to the in-VPC addresses; API keys go via env_file.
+      ARAG_BASE_URL: "${ARAG_BASE_URL:-http://arag.internal:8001}"
+      MACRORAG_BASE_URL: "${MACRORAG_BASE_URL:-http://macrorag.internal:8000}"
+      RAGINFER_URL: "${RAGINFER_URL:-http://raginference.internal:8799}"
+    env_file: ["${QLP_ENV_FILE:-/opt/qlp/.env}"]   # PRICER_API_KEY, ARAG_API_KEY etc., from Secrets Manager
+    volumes:
+      - "${QLP_DATA_MOUNT:-/mnt/qlp-data}:/app/data"
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8080/health').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  bff:
+    image: ${QLP_BFF_IMAGE:-qlp-bff:latest}
+    build:
+      context: .
+      dockerfile: infra/bff/Dockerfile
+    environment:
+      QLP_ROOT: "/app"                                   # BFF reads /app/data (the EFS mount)
+      QLP_SERVICE_URL: "http://backend:8080"
+      QLP_CORS_ORIGINS: "${QLP_CORS_ORIGINS:-*}"         # set to the ALB/UI origin(s) in prod
+      PRICER_DEPLOY_MODE: "${PRICER_DEPLOY_MODE:-local}"
+    env_file: ["${QLP_ENV_FILE:-/opt/qlp/.env}"]         # QLP_WRITE_TOKEN (locks the 4 gated writes)
+    volumes:
+      - "${QLP_DATA_MOUNT:-/mnt/qlp-data}:/app/data:ro"   # read-only: the BFF never writes the data tree
+    expose:
+      - "8088"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8088/api/health').status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ui:
+    image: ${QLP_UI_IMAGE:-qlp-ui:latest}
+    build:
+      context: .
+      dockerfile: ui/app/Dockerfile
+    environment:
+      API_UPSTREAM: "${API_UPSTREAM:-bff:8088}"          # nginx reverse-proxy target for /api
+    ports:
+      - "8080:8080"                                       # ALB target (front door): SPA + /api proxy
+    depends_on:
+      bff:
+        condition: service_healthy
+    restart: unless-stopped

@@ -1,0 +1,974 @@
+{
+  "description": "ARag integration (dual-RAG). 'connection' targets ARag's REST v1 Analyst API (GET /api/health, GET /api/v1/coverage, POST /api/v1/narrative/search, POST /api/v1/facts/lookup, POST /api/v1/answer). ARag supplies the COMPANY legs of a scenario (per-name eq:<TICKER> idiosyncratic moves) grounded in what each company discloses in its SEC 10-K/Q Risk Factors; MacroRAG supplies the macro legs (see macro.json). Set 'base_url' to the deployed ARag REST URL (its own port; must not collide with MacroRAG's :8000) and, if ARag enforces auth, the key in the env var named by 'api_key_env'. 'timeout_s' is the GENEROUS per-call ceiling (600s = 10 min) for the heavy narrative_search CPU-inference call; a call that still exceeds it is logged/documented and stops that specific scenario's generation (fail-loud, no static substitution). 'scenarios' declares, per named scenario, which services it requires (required_services, fail-loud) and the ARag company Risk-Factor queries to run. Each companies[] entry: 'ticker'; 'seed_move' (optional decimal return, e.g. -0.30 = -30%; if omitted the seed comes from the authored eq:<TICKER> driver in scenarios.json); 'narrative_query'/'section_hint'/'fiscal_years' for the Risk-Factor retrieval; and an optional 'calibration' block that deterministically scales the seed by a cited ARag fact — scaled_move = seed * clamp(1 + elasticity*(exposure - baseline), min_scale, max_scale), where for mode='share' exposure = facts_lookup(concept, dimension) / facts_lookup(denominator_concept) at fiscal_year. Where no clean fact exists (e.g. key-man, geopolitical) omit 'calibration' and ARag contributes grounding + citations only. This file is the authorable home for the scenario set: add a new named/hypothetical scenario here (+ its macro.json + scenarios.json baseline) and the runner drives the full dual-RAG process for it.",
+  "connection": {
+    "enabled": true,
+    "base_url": "${ARAG_BASE_URL:-http://localhost:8001}",
+    "api_key_env": "ARAG_API_KEY",
+    "health_timeout_s": 60,
+    "timeout_s": 600,
+    "max_attempts": 2,
+    "backoff_s": 2.0,
+    "backoff_max_s": 30.0,
+    "breaker_threshold": 3,
+    "budget": {
+      "_comment": "Run-level ARag breaker (F5): total data-call count and cumulative wall-clock ceilings across all scenarios in one run, so a runaway loop can't pound the shared inference service. timeout_s bounds a single call; this bounds the whole run. Either may be null for unlimited.",
+      "max_total_calls": 200,
+      "max_total_wall_clock_s": 3600
+    }
+  },
+  "gate": {
+    "freshness_years": 2,
+    "min_chunks_per_leg": 1,
+    "require_citations": true
+  },
+  "defaults": {
+    "section_hint": "Risk Factors",
+    "top_k": 8,
+    "top_n_chunks": 3
+  },
+  "scenarios": {
+    "ai_deflation": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "dependence on sustained AI data-center capital spending by a concentrated set of hyperscaler customers; risk of demand digestion, order cancellation or slowdown in AI infrastructure investment",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "product": "Data Center"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 0.6,
+            "baseline": 0.5,
+            "min_scale": 0.5,
+            "max_scale": 1.6
+          }
+        },
+        {
+          "ticker": "AMD",
+          "narrative_query": "dependence on AI accelerator and data-center demand; customer concentration and risk of a slowdown in AI infrastructure capital spending",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2023,
+            2024
+          ],
+          "_calibration_note": "ARag exposes no data-center Revenue dimension for AMD (UNRESOLVED_DIMENSION; FY2025 total NOT_FOUND, latest FY2024) -> grounding-only, seed stands."
+        },
+        {
+          "ticker": "AVGO",
+          "narrative_query": "dependence on AI networking and custom accelerator demand from a small number of hyperscale customers; risk of a slowdown or digestion in data-center capital spending",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "segment": "Semiconductor Solutions"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 0.6,
+            "baseline": 0.5,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "MU",
+          "narrative_query": "dependence on data-center and AI demand for HBM and DRAM; risk of a slowdown in customer capital spending, inventory digestion and memory price declines",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "TSM",
+          "narrative_query": "dependence on demand for advanced-node wafers for AI accelerators and high-performance computing; risk of customer inventory adjustment and reduced customer capital spending",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "TSM files IFRS 20-F: no usable XBRL facts (Revenue FY2024 only, in TWD; no dimensions) -> grounding-only."
+        },
+        {
+          "ticker": "GOOGL",
+          "narrative_query": "significant capital expenditures on AI and data-center technical infrastructure that may not generate expected returns; risk of overinvestment",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "META",
+          "narrative_query": "substantial capital expenditures on AI and data-center infrastructure that may not be successful or generate expected returns",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "MSFT",
+          "narrative_query": "significant investment in AI and cloud data-center capacity; risk that demand does not materialise and the investment does not earn expected returns",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "CEG",
+          "narrative_query": "dependence on growth in electricity demand from data centers; risk that data-center load growth, contracts or power prices fall short of expectations",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "VST",
+          "narrative_query": "dependence on growth in electricity demand from data centers; risk that data-center load growth, contracts or power prices fall short of expectations",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD",
+        "AVGO",
+        "MU",
+        "TSM",
+        "GOOGL",
+        "META",
+        "MSFT",
+        "CEG",
+        "VST"
+      ]
+    },
+    "ai_efficiency_shock": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "risk that advances in AI model efficiency or alternative architectures reduce demand for accelerated computing; customer concentration in hyperscaler AI capital spending",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "product": "Data Center"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 0.6,
+            "baseline": 0.5,
+            "min_scale": 0.5,
+            "max_scale": 1.6
+          }
+        },
+        {
+          "ticker": "AMD",
+          "narrative_query": "dependence on AI accelerator and data-center demand; risk that efficiency gains or competing technologies reduce demand for data-center GPUs",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2023,
+            2024
+          ]
+        },
+        {
+          "ticker": "AVGO",
+          "narrative_query": "risk that changes in AI model architectures or efficiency reduce demand for custom accelerators and data-center networking",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "MU",
+          "narrative_query": "risk that changes in AI workloads or technology reduce demand for high-bandwidth memory and data-center DRAM",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "TSM",
+          "narrative_query": "risk that technological change or shifts in customer demand reduce demand for advanced process technologies used in AI and high-performance computing",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "TSM files IFRS 20-F: no usable XBRL facts (Revenue FY2024 only, in TWD; no dimensions) -> grounding-only."
+        },
+        {
+          "ticker": "CEG",
+          "narrative_query": "uncertainty in projected electricity demand from data centers; risk that load growth from AI data centers is lower than expected",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "VST",
+          "narrative_query": "uncertainty in projected electricity demand from data centers; risk that load growth from AI data centers is lower than expected",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD",
+        "AVGO",
+        "MU",
+        "TSM",
+        "CEG",
+        "VST"
+      ]
+    },
+    "taiwan_geopolitical": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "seed_move": -0.2,
+          "narrative_query": "supply-chain concentration in Taiwan and dependence on TSMC foundry capacity; export-control, tariff and cross-strait geopolitical risk to data-center GPU supply and revenue",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "Taiwan"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.14,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "AMD",
+          "seed_move": -0.18,
+          "narrative_query": "reliance on third-party Taiwan-based foundries (TSMC) for advanced-node manufacturing; geopolitical and supply concentration risk",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "Taiwan"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.14,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "AVGO",
+          "narrative_query": "reliance on third-party foundries in Taiwan (TSMC) for wafer manufacturing; cross-strait geopolitical tension disrupting supply",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "seed_move": -0.18,
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "Taiwan"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.14,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "MU",
+          "narrative_query": "manufacturing operations in Taiwan; geopolitical and cross-strait risks that could disrupt production of DRAM and HBM",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "seed_move": -0.15,
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "Taiwan"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.14,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "INTC",
+          "narrative_query": "reliance on third-party foundries including TSMC for some products; geopolitical tensions involving Taiwan and China affecting the supply chain",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "seed_move": -0.05,
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "Taiwan"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.14,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "AAPL",
+          "narrative_query": "dependence on outsourcing partners and single-source suppliers in Asia, including Taiwan; geopolitical tensions disrupting manufacturing and component supply",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "seed_move": -0.12,
+          "_calibration_note": "Taiwan revenue not reported by AAPL -> grounding-only."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD",
+        "AVGO",
+        "MU",
+        "INTC",
+        "AAPL"
+      ]
+    },
+    "tariff_shock": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "tariffs, trade restrictions and export controls affecting supply chain costs, China revenue and data-center GPU demand",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "China Including Hong Kong"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.16,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "AMD",
+          "narrative_query": "tariffs, trade policy and export-control risk to manufacturing costs and international revenue",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2023,
+            2024
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "China"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.16,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "AVGO",
+          "narrative_query": "significant revenue from China; exposure to tariffs, export controls and trade restrictions between the United States and China",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "China (including Hong Kong)"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.16,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "MU",
+          "narrative_query": "exposure to China: restrictions by the Chinese government on sales of our products, tariffs and US-China trade tensions",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "China"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.16,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "AAPL",
+          "narrative_query": "tariffs and trade restrictions affecting manufacturing in China and sales in Greater China; US-China trade tensions",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "China"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.16,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "TSLA",
+          "narrative_query": "tariffs, trade restrictions and US-China tensions affecting Gigafactory Shanghai, the supply chain and sales in China",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "geography": "China"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 2.0,
+            "baseline": 0.16,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "TSM",
+          "narrative_query": "tariffs, export controls and trade restrictions between the United States and China affecting customers and operations",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "TSM files IFRS 20-F: no usable XBRL facts (Revenue FY2024 only, in TWD; no dimensions) -> grounding-only."
+        },
+        {
+          "ticker": "INTC",
+          "narrative_query": "export controls, tariffs and US-China trade tensions affecting sales to China and the supply chain",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "China revenue resolves AMBIGUOUS in XbrlRag -> grounding-only."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD",
+        "AVGO",
+        "MU",
+        "AAPL",
+        "TSLA",
+        "TSM",
+        "INTC"
+      ]
+    },
+    "crowded_unwind": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "volatility of the stock price and concentration of investor positioning; dependence on sustained AI data-center demand",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        },
+        {
+          "ticker": "AMD",
+          "narrative_query": "stock price volatility and dependence on AI accelerator and data-center demand",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2023,
+            2024
+          ]
+        },
+        {
+          "ticker": "AVGO",
+          "narrative_query": "volatility of our stock price; changes in market expectations for AI-related demand could cause significant declines in the trading price",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "MU",
+          "narrative_query": "volatility of our stock price; changes in market expectations for AI and memory demand could cause significant declines in the trading price",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "TSM",
+          "narrative_query": "volatility of the trading price of our ADSs; changes in market expectations for AI demand and foreign investor flows",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "TSM files IFRS 20-F: no usable XBRL facts (Revenue FY2024 only, in TWD; no dimensions) -> grounding-only."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD",
+        "AVGO",
+        "MU",
+        "TSM"
+      ]
+    },
+    "inflation_repricing": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "macroeconomic conditions including inflation and interest rates affecting customer demand, capital spending and the valuation of long-duration growth",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        },
+        {
+          "ticker": "GOOGL",
+          "narrative_query": "inflation, rising interest rates and macroeconomic conditions affecting advertising spending and the cost of capital-intensive infrastructure investment",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "META",
+          "narrative_query": "inflation, rising interest rates and macroeconomic conditions affecting advertising spending and the cost of capital-intensive infrastructure investment",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "MSFT",
+          "narrative_query": "inflation, rising interest rates and macroeconomic conditions affecting customer IT spending and the cost of data-center investment",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          }
+        },
+        {
+          "ticker": "TSLA",
+          "narrative_query": "inflation and higher interest rates increasing the cost of vehicle financing and reducing consumer demand; raw-material cost inflation",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "GOOGL",
+        "META",
+        "MSFT",
+        "TSLA"
+      ]
+    },
+    "rate_capital": {
+      "required_services": [
+        "macro"
+      ],
+      "companies": [],
+      "expect_tickers": []
+    },
+    "ai_rotation": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "concentration of investor positioning and stock price volatility; dependence on sustained AI data-center demand",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        },
+        {
+          "ticker": "AMD",
+          "narrative_query": "stock price volatility and competition in AI accelerators",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2023,
+            2024
+          ]
+        },
+        {
+          "ticker": "AVGO",
+          "narrative_query": "market expectations about AI growth and volatility of our stock price",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "MU",
+          "narrative_query": "market expectations about AI-driven memory demand and volatility of our stock price",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "TSM",
+          "narrative_query": "market expectations about AI and high-performance computing demand and volatility of the trading price of our ADSs",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "TSM files IFRS 20-F: no usable XBRL facts (Revenue FY2024 only, in TWD; no dimensions) -> grounding-only."
+        },
+        {
+          "ticker": "GOOGL",
+          "narrative_query": "competition in AI and uncertainty about returns on AI investments",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "CEG",
+          "narrative_query": "expectations of data-center power demand growth may not be realized; volatility of our stock price",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        },
+        {
+          "ticker": "VST",
+          "narrative_query": "expectations of data-center power demand growth may not be realized; volatility of our stock price",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "No resolving theme concept in XbrlRag (customer concentration NOT_FOUND for every filer) -> grounding-only."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD",
+        "AVGO",
+        "MU",
+        "TSM",
+        "GOOGL",
+        "CEG",
+        "VST"
+      ]
+    },
+    "keyman_nvda": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "dependence on key personnel and founder/CEO leadership; concentration of technical and strategic know-how in a small number of individuals; succession and key-man risk",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        }
+      ],
+      "expect_tickers": [
+        "NVDA"
+      ]
+    },
+    "ai_capex_credit": {
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "META",
+          "narrative_query": "debt-financed capital expenditures on AI and data-center infrastructure; risk that the investment does not earn expected returns and that indebtedness or credit ratings are affected",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          },
+          "seed_move": -0.1
+        },
+        {
+          "ticker": "MSFT",
+          "narrative_query": "significant capital expenditures on AI and cloud data-center capacity and the financing of that investment; risk that demand does not materialise",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          },
+          "seed_move": -0.08
+        },
+        {
+          "ticker": "GOOGL",
+          "narrative_query": "significant capital expenditures on AI and data-center technical infrastructure that may not generate expected returns",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Capex",
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 1.5,
+            "baseline": 0.27,
+            "min_scale": 0.5,
+            "max_scale": 1.5
+          },
+          "seed_move": -0.08
+        },
+        {
+          "ticker": "AAPL",
+          "narrative_query": "indebtedness, access to capital markets and credit ratings; changes in the cost of debt financing",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "_calibration_note": "Theme concept is debt/FCF; XbrlRag Debt resolves AMBIGUOUS -> grounding-only.",
+          "seed_move": -0.03
+        }
+      ],
+      "expect_tickers": [
+        "META",
+        "MSFT",
+        "GOOGL",
+        "AAPL"
+      ]
+    }
+  }
+}

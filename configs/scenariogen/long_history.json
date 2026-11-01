@@ -1,0 +1,40 @@
+{
+  "description": "Long move history per scenario factor, for the severity anchors (docs/design/scenario_set_and_ablation_design.md §3.3; src/scenariogen/long_history.py). Each factor reads its own long series; a factor too young for the dot-com / 2008 analogs gets a proxy's moves spliced in front of its own, volatility-matched over the shared dates (beta = sigma_own / sigma_proxy, at least min_overlap shared days). A factor with a match series (credit: BAA10Y matched to the ICE BofA IG OAS BAMLC0A0CM the credit factor is built from) uses its long series scaled to the match series volatility over the shared dates (replay.vol_matched), never raw. Units follow factor_keys.py: eq:/fx: simple returns; ir:/credit/eqvol percent-point change / 100. Inputs come from the market-data sources equity.yahoo_history and stress.fred_long.",
+  "files": {
+    "prices": "equity/long_history_prices.csv",
+    "fred": "stress/fred_long_history.csv",
+    "match": "stress/fred_stress_macro.csv"
+  },
+  "min_overlap": 250,
+  "factors": {
+    "eq:NVDA":  { "ticker": "NVDA" },
+    "eq:TSM":   { "ticker": "TSM" },
+    "eq:MU":    { "ticker": "MU" },
+    "eq:INTC":  { "ticker": "INTC" },
+    "eq:AMD":   { "ticker": "AMD" },
+    "eq:AAPL":  { "ticker": "AAPL" },
+    "eq:MSFT":  { "ticker": "MSFT" },
+    "eq:XLK":   { "ticker": "XLK" },
+    "eq:SPX":   { "ticker": "^GSPC" },
+    "eq:AVGO":  { "ticker": "AVGO",  "proxy": "^SOX" },
+    "eq:SMH":   { "ticker": "SMH",   "proxy": "^SOX" },
+    "eq:QQQ":   { "ticker": "QQQ",   "proxy": "^IXIC" },
+    "eq:META":  { "ticker": "META",  "proxy": "^IXIC" },
+    "eq:GOOGL": { "ticker": "GOOGL", "proxy": "^IXIC" },
+    "eq:TSLA":  { "ticker": "TSLA",  "proxy": "^IXIC" },
+    "eq:CEG":   { "ticker": "CEG",   "proxy": "XLU" },
+    "eq:VST":   { "ticker": "VST",   "proxy": "XLU" },
+    "eq:GLD":   { "ticker": "GLD" },
+    "ir:DGS1":  { "fred": "DGS1" },
+    "ir:DGS2":  { "fred": "DGS2" },
+    "ir:DGS5":  { "fred": "DGS5" },
+    "ir:DGS10": { "fred": "DGS10" },
+    "ir:DGS30": { "fred": "DGS30" },
+    "credit":   { "fred": "BAA10Y", "match": "BAMLC0A0CM" },
+    "credit:ORCL": { "fred": "BAA10Y", "match": "BAMLC0A0CM", "_why": "No long issuer history (DTCC since 2025): anchored at IG-scale credit stress, the floor for a BBB issuer (scenario #8 lead)." },
+    "credit:META": { "fred": "BAA10Y", "match": "BAMLC0A0CM" },
+    "eqvol":    { "fred": "VIXCLS" },
+    "fx:JPY":   { "fred": "DEXJPUS" },
+    "fx:TWD":   { "fred": "DEXTAUS" }
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "description": "Authored stress-scenario definitions: the default set of docs/design/scenario_set_and_ablation_design.md §4.2. A 'replay' block (start, end, idiosyncratic) makes a historical replay: its drivers are the episode's observed factor moves over (start, end] minus the labelled idiosyncratic ones, and horizon_days is the eq:XLK trading-day count over the window, both resolved when the catalog loads (src/scenariogen/replay.py, catalog.py); a multi-month replay is applied as one instantaneous shock to today's book. Otherwise a scenario is authored drivers (the few factor moves the narrative asserts) + method + idiosyncratic overlays; the generator propagates the drivers through Σ (conditional_covariance) to a complete, correlated factor vector, then adds overlays. A 'severity' block (lead factor + direction) anchors a scenario's tiers to history (configs/scenariogen/severity.json); severity_tiers then applies only to unanchored scenarios. 'sensitivities' is the on-demand sensitivity library: same shape, not in the default run (runner --sensitivities). Keys are canonical factor keys (factor_keys.py); magnitudes are authored in human units (move_pct / move_bp / move_pts / move_rel).",
+  "severity_tiers": {
+    "mild": 1.0,
+    "adverse": 1.5,
+    "severe": 2.0
+  },
+  "scenarios": {
+    "ai_deflation": {
+      "narrative": "AI deflation, multi-month: the AI thesis unwinds over months across the whole chain -- the 2022 peak-to-trough replay (NVDA -66%, SMH -44%, XLK -31%), applied as one instantaneous shock to today's book (no option expiries, carry or rebalancing over the window).",
+      "trigger": "Hyperscaler capex guidance cut / AI demand digestion; EIA-FERC power-demand signal",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "eq:XLK",
+        "direction": "down"
+      },
+      "throughput": {},
+      "replay": {
+        "start": "2021-11-29",
+        "end": "2022-10-14",
+        "idiosyncratic": {}
+      }
+    },
+    "ai_efficiency_shock": {
+      "narrative": "AI efficiency shock: a cheaper-model breakthrough (DeepSeek, 27 Jan 2025) cuts the expected compute and power demand of AI -- power 'diversifiers' (VST -28%, CEG -21%) lose more than the chips (NVDA -17%) while platforms are flat. One-day replay.",
+      "trigger": "Model-efficiency breakthrough / open-weight release undercutting frontier compute demand",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "eq:NVDA",
+        "direction": "down"
+      },
+      "replay": {
+        "start": "2025-01-24",
+        "end": "2025-01-27",
+        "idiosyncratic": {}
+      }
+    },
+    "taiwan_geopolitical": {
+      "narrative": "Taiwan crisis: export-control escalation + foundry disruption",
+      "trigger": "BIS-Commerce rule / Section 232 / GPR-index spike",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "fx:TWD": {
+          "move_pct": 8
+        },
+        "eq:TSM": {
+          "move_pct": -25
+        }
+      },
+      "overlays": {
+        "eq:TSM": {
+          "move_pct": -10
+        },
+        "eqvol": {
+          "move_pts": 5
+        }
+      },
+      "severity": {
+        "lead": "eq:TSM",
+        "direction": "down"
+      },
+      "geopolitical": {
+        "series": "GPRC_TWN"
+      }
+    },
+    "tariff_shock": {
+      "narrative": "Tariff / trade-war shock: the 2-8 Apr 2025 'Liberation Day' tariff replay -- equities, Treasuries and gold fall together (SPX -12%, VIX 22->52, HY +115bp, 30Y +17bp), the dollar weakens and the yen strengthens.",
+      "trigger": "Broad reciprocal tariffs / retaliation; Section 232 / IEEPA actions",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "eq:XLK",
+        "direction": "down"
+      },
+      "replay": {
+        "start": "2025-04-02",
+        "end": "2025-04-08",
+        "idiosyncratic": {}
+      }
+    },
+    "crowded_unwind": {
+      "narrative": "Crowded unwind / yen carry: the 10 Jul - 5 Aug 2024 replay -- USD/JPY -12%, VIX 13->39 and semis -25% to -40% as the carry trade and crowded AI longs unwind together. INTC's move in the window was mostly its own earnings miss, so it is labelled idiosyncratic and filled from the covariance instead.",
+      "trigger": "BoJ hike / yen-carry unwind; positioning and crowding reversal",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "fx:JPY",
+        "direction": "down"
+      },
+      "replay": {
+        "start": "2024-07-10",
+        "end": "2024-08-05",
+        "idiosyncratic": {
+          "eq:INTC": "Q2-2024 earnings miss and dividend suspension reported 1 Aug 2024, not the carry unwind"
+        }
+      }
+    },
+    "inflation_repricing": {
+      "narrative": "Inflation and real-rate repricing: the 16 Aug - 14 Oct 2022 replay (2Y +123bp, 10Y +118bp, NVDA -41%, SMH -29%, GLD -7.5%) -- bonds, equities and gold fall together on a hawkish real-rate shock.",
+      "trigger": "Hot CPI / hawkish Fed (Jackson Hole); real yields and term premium rebuild",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "ir:DGS10",
+        "direction": "up"
+      },
+      "replay": {
+        "start": "2022-08-16",
+        "end": "2022-10-14",
+        "idiosyncratic": {}
+      }
+    },
+    "rate_capital": {
+      "narrative": "Fiscal / term-premium bear steepener (2023-Q3 analog): the long end sells off hardest (2Y +50bp, 10Y +100bp, 30Y +150bp) and the swap spread widens +30bp, hitting long-end bonds, the payer swaption and the swap-spread basis.",
+      "trigger": "Treasury refunding / TBAC issuance surprise; CBO deficit path; term-premium rebuild",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "ir:DGS2": {
+          "move_bp": 50
+        },
+        "ir:DGS10": {
+          "move_bp": 100
+        },
+        "ir:DGS30": {
+          "move_bp": 150
+        }
+      },
+      "overlays": {
+        "basis:SWAP_SPREAD": {
+          "move_bp": 30
+        }
+      },
+      "severity": {
+        "lead": "ir:DGS10",
+        "direction": "up"
+      }
+    },
+    "ai_rotation": {
+      "narrative": "AI-to-broad-market rotation: the 10-24 Jul 2024 replay (SMH -14%, QQQ -8%, SPX -3.7%) -- money rotates out of AI leaders into the broad market, so index hedges barely pay while AI longs and power fall.",
+      "trigger": "Soft CPI / rate-cut repricing driving a rotation into small caps and laggards",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "eq:SMH",
+        "direction": "down"
+      },
+      "replay": {
+        "start": "2024-07-10",
+        "end": "2024-07-24",
+        "idiosyncratic": {}
+      }
+    },
+    "keyman_nvda": {
+      "narrative": "Largest-name event: an earnings or guidance miss (or a key-person / restatement event) at the book's largest single-name long, NVDA, with partial peer spillover through the covariance. Sized by the option market: the tiers are the 5% / 1% quantiles of NVDA's point-in-time one-month risk-neutral distribution (severe = adverse x 1.5, capped at the hard bound), not its history record.",
+      "trigger": "8-K 5.02 (officer departure) or 4.02 (restatement) from NVDA; results (2.02) as the news amplifier",
+      "method": "conditional_covariance",
+      "horizon_days": 21,
+      "drivers": {
+        "eq:NVDA": {
+          "move_pct": -30
+        }
+      },
+      "overlays": {
+        "eqvol": {
+          "move_pts": 8
+        }
+      },
+      "severity": {
+        "lead": "eq:NVDA",
+        "direction": "down",
+        "source": "options"
+      }
+    },
+    "ai_capex_credit": {
+      "narrative": "AI-capex credit repricing: the 1 Oct 2025 - 30 Jan 2026 replay, when Oracle's 5Y CDS went from about 54bp to about 157bp on debt-funded AI data-center capex while IG OAS stayed flat -- a single-driver credit replay (Oracle's own CDS move only, IG and META credit from the covariance; the window's AI equity rally and rates moves are excluded and filled from the covariance, with debt-funded capex names marked down by XbrlRag) of an issuer-level credit repricing that hits the long-dated ORCL 2053 / META 2054 bonds, nets against the ORCL / META CDS hedges and leaves the CDX protection sold on the common credit move.",
+      "trigger": "Debt issuance by an AI-capex issuer (8-K item 2.03 from ORCL, META, AMZN, MSFT or AAPL)",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {},
+      "overlays": {},
+      "severity": {
+        "lead": "credit:ORCL",
+        "direction": "up",
+        "severe_sigma": "production"
+      },
+      "replay": {
+        "start": "2025-10-01",
+        "end": "2026-01-30",
+        "idiosyncratic": {
+          "ir:DGS1MO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS3MO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS6MO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS1": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS2": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS3": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS5": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS7": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS10": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS20": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ir:DGS30": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:NVDA": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:TSM": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:AVGO": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:MU": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:SMH": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:XLK": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:AAPL": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:MSFT": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:META": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:TSLA": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:QQQ": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:SPX": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:GLD": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:CEG": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:VST": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:GOOGL": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:INTC": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eq:AMD": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eqvol": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eqvol_term": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "eqvol_skew": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "ratesvol": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "fx:JPY": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "fx:TWD": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "fxrate:JPY": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "style:MOM": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "basis:SMH_SEMI": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "real:DFII10": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "be:T10YIE": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "tp:ACMTP10": "credit-only replay: over the window this factor moved with the AI rally and the rates cycle, not the credit repricing; filled from the covariance given the credit drivers (replaying the collinear rate tenors as drivers gives unstable equity betas)",
+          "credit": "single-driver credit replay: before the DTCC history the issuer factors are exact multiples of credit, so replaying credit and credit:META as well would condition on a degenerate combination; filled from the covariance given credit:ORCL",
+          "credit:META": "single-driver credit replay: before the DTCC history the issuer factors are exact multiples of credit, so replaying credit and credit:META as well would condition on a degenerate combination; filled from the covariance given credit:ORCL"
+        }
+      }
+    }
+  },
+  "sensitivities": {
+    "momentum_crash": {
+      "narrative": "Momentum crash: a crowded high-momentum tech book unwinds as positioning reverses. The MOM style factor drops sharply while the market factor is roughly flat, so high-momentum names (NVDA/AVGO/MU/XLK) fall well beyond what their market beta alone would imply.",
+      "trigger": "Positioning unwind / factor rotation (not a fundamental or macro shock)",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "style:MOM": {
+          "move_pct": -12
+        }
+      },
+      "overlays": {}
+    },
+    "semis_dispersion": {
+      "narrative": "Semiconductor dispersion: the single-name semis (NVDA/TSM/AVGO/MU) sell off hard while the SMH ETF holds up, so the short-SMH / long-single-name relative-value trade #6 loses on both legs at once -- the classic ETF-vs-basket hedge failure a name-level covariance model nets to flat.",
+      "trigger": "Single-name idiosyncratic shocks / index-vs-constituent flow divergence (not a broad tech selloff)",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "basis:SMH_SEMI": {
+          "move_pct": 8
+        }
+      },
+      "overlays": {}
+    },
+    "funding_basis_squeeze": {
+      "severity": {
+        "lead": "credit",
+        "direction": "up"
+      },
+      "narrative": "Funding squeeze: dealer balance-sheet stress widens the SOFR-OIS swap spread and blows out the CDS-bond basis while broad IG credit gaps out. The book's rate hedge (SOFR swap vs USTs) and credit hedge (single-name CDS vs corporate bonds) both fail on the spread, not the level -- the basis risk carried at zero.",
+      "trigger": "Dealer balance-sheet / repo funding stress; quarter-end or a credit-event scramble",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "credit": {
+          "move_bp": 40
+        }
+      },
+      "overlays": {
+        "basis:SWAP_SPREAD": {
+          "move_bp": 30
+        },
+        "basis:CDS_BOND": {
+          "move_bp": 60
+        }
+      }
+    }
+  }
+}

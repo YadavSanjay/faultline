@@ -1,0 +1,12 @@
+{
+  "description": "Momentum-crash scenario (market-intelligence F4). A positioning-unwind co-move where crowded high-momentum names fall hard while the broad index is roughly flat -- a pattern a name-level covariance model structurally cannot see, because it is driven by positioning rather than fundamentals (2009-03/04, 2016-11, 2018-Q4, 2020-11 vaccine rotation, 2021-01, 2022). Driven by the Ken French style:MOM factor, propagated to the equity legs through the covariance matrix; no macro/ARag services needed.",
+  "scenarios": {
+    "momentum_crash": {
+      "narrative": "Momentum crash: a crowded high-momentum tech book unwinds as positioning reverses. The MOM style factor drops sharply while the market factor is roughly flat, so high-momentum names (NVDA/AVGO/MU/XLK) fall well beyond what their market beta alone would imply.",
+      "trigger": "Positioning unwind / factor rotation (not a fundamental or macro shock)",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {"style:MOM": {"move_pct": -12}}
+    }
+  }
+}

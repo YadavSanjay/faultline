@@ -1,0 +1,261 @@
+{
+  "description": "Exported dual-RAG scenario set (authoring single-source).",
+  "scenarios": {
+    "taiwan_geopolitical": {
+      "narrative": "Taiwan crisis: export-control escalation + foundry disruption",
+      "trigger": "BIS-Commerce rule / Section 232 / GPR-index spike",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "fx:TWD": {
+          "move_pct": 8
+        },
+        "eq:TSM": {
+          "move_pct": -25
+        }
+      },
+      "overlays": {
+        "eq:TSM": {
+          "move_pct": -10
+        },
+        "eqvol": {
+          "move_pts": 5
+        }
+      },
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "seed_move": -0.2,
+          "narrative_query": "supply-chain concentration in Taiwan and dependence on TSMC foundry capacity; export-control, tariff and cross-strait geopolitical risk to data-center GPU supply and revenue",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        },
+        {
+          "ticker": "AMD",
+          "seed_move": -0.18,
+          "narrative_query": "reliance on third-party Taiwan-based foundries (TSMC) for advanced-node manufacturing; geopolitical and supply concentration risk",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD",
+        "TSM"
+      ],
+      "macro": {
+        "synthesis_question": "Given an escalation of US-China semiconductor export controls and a Taiwan foundry-supply disruption, quantify the 10-day shocks to USD/TWD, USD/JPY, IG and HY credit spreads (OAS), the MOVE index, VIX, and the UST 2/5/10/30 curve, with citations.",
+        "filters": {
+          "factor_tags": [
+            "fx",
+            "credit_spread",
+            "rates_vol",
+            "equity_vol",
+            "term_premium"
+          ],
+          "entity_tags": [
+            "taiwan",
+            "china",
+            "TSMC"
+          ]
+        },
+        "expect_fields": [
+          "USDTWD",
+          "USDJPY",
+          "IG_OAS",
+          "HY_OAS",
+          "MOVE",
+          "VIX",
+          "UST_10Y"
+        ]
+      }
+    },
+    "ai_bust": {
+      "narrative": "AI capex bust / 'metaverse moment': hyperscaler de-rate, capex run-rate cut",
+      "trigger": "BlackRock/JPM capex framing + EIA/FERC power-demand signal",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "eq:NVDA": {
+          "move_pct": -35
+        },
+        "eq:XLK": {
+          "move_pct": -30
+        }
+      },
+      "overlays": {},
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "dependence on sustained AI data-center capital spending by a concentrated set of hyperscaler customers; risk of demand digestion, order cancellation or slowdown in AI infrastructure investment",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ],
+          "calibration": {
+            "mode": "share",
+            "concept": "Revenue",
+            "dimension": {
+              "product": "Data Center"
+            },
+            "denominator_concept": "Revenue",
+            "fiscal_year": 2025,
+            "elasticity": 0.6,
+            "baseline": 0.5,
+            "min_scale": 0.5,
+            "max_scale": 1.6
+          }
+        },
+        {
+          "ticker": "AMD",
+          "seed_move": -0.3,
+          "narrative_query": "dependence on AI accelerator and data-center demand; customer concentration and risk of a slowdown in AI infrastructure capital spending",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2023,
+            2024
+          ],
+          "_calibration_note": "ARag exposes no data-center Revenue dimension for AMD (UNRESOLVED_DIMENSION; FY2025 total NOT_FOUND, latest FY2024) -> grounding-only, seed stands."
+        }
+      ],
+      "expect_tickers": [
+        "NVDA",
+        "AMD"
+      ],
+      "macro": {
+        "synthesis_question": "If AI data-center capex and hyperscaler guidance roll over (an AI-capex bust), quantify the 10-day shocks to IG and HY credit spreads, MOVE, VIX, and the UST curve, with citations. (Equity legs are set separately.)",
+        "filters": {
+          "factor_tags": [
+            "credit_spread",
+            "equity_vol",
+            "rates_vol",
+            "ai_capex",
+            "data_center_power"
+          ],
+          "entity_tags": [
+            "nvidia",
+            "hyperscalers",
+            "semiconductors"
+          ]
+        },
+        "expect_fields": [
+          "IG_OAS",
+          "HY_OAS",
+          "MOVE",
+          "VIX",
+          "UST_10Y"
+        ]
+      }
+    },
+    "rate_capital": {
+      "narrative": "Term-premium repricing: parallel rate sell-off + bear-steepener (capital impact)",
+      "trigger": "FOMC/SEP + Treasury Refunding/TBAC + CBO",
+      "method": "conditional_covariance",
+      "horizon_days": 10,
+      "drivers": {
+        "ir:DGS2": {
+          "move_bp": 100
+        },
+        "ir:DGS10": {
+          "move_bp": 100
+        },
+        "ir:DGS30": {
+          "move_bp": 150
+        }
+      },
+      "overlays": {},
+      "required_services": [
+        "macro"
+      ],
+      "macro": {
+        "synthesis_question": "Given the latest FOMC/SEP guidance and Treasury refunding/TBAC issuance outlook, quantify the 10-day shock to the UST 2/5/10/30 curve and term premium, the MOVE index, and IG credit spreads, with citations.",
+        "filters": {
+          "factor_tags": [
+            "term_premium",
+            "rates_vol",
+            "credit_spread"
+          ],
+          "entity_tags": [],
+          "publishers": [
+            "Federal Reserve",
+            "U.S. Treasury",
+            "CBO"
+          ]
+        },
+        "expect_fields": [
+          "UST_2Y",
+          "UST_5Y",
+          "UST_10Y",
+          "UST_30Y",
+          "MOVE",
+          "IG_OAS"
+        ]
+      }
+    },
+    "keyman_nvda": {
+      "narrative": "NVDA key-man / idiosyncratic shock with partial peer spillover",
+      "trigger": "Firm-specific (news/GPR), not macro",
+      "method": "conditional_covariance",
+      "horizon_days": 5,
+      "drivers": {
+        "eq:NVDA": {
+          "move_pct": -30
+        }
+      },
+      "overlays": {
+        "eqvol": {
+          "move_pts": 8
+        }
+      },
+      "required_services": [
+        "macro",
+        "arag"
+      ],
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "narrative_query": "dependence on key personnel and founder/CEO leadership; concentration of technical and strategic know-how in a small number of individuals; succession and key-man risk",
+          "section_hint": "Risk Factors",
+          "fiscal_years": [
+            2024,
+            2025
+          ]
+        }
+      ],
+      "expect_tickers": [
+        "NVDA"
+      ],
+      "macro": {
+        "synthesis_question": "For an idiosyncratic NVIDIA key-man shock, quantify any systematic 10-day spillover to IG credit spreads, MOVE, and VIX, with citations. (The single-name equity move is set separately.)",
+        "filters": {
+          "factor_tags": [
+            "equity_vol",
+            "credit_spread"
+          ],
+          "entity_tags": [
+            "nvidia"
+          ]
+        },
+        "expect_fields": [
+          "VIX",
+          "IG_OAS"
+        ]
+      }
+    }
+  }
+}

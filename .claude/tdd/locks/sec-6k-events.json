@@ -1,0 +1,93 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/sec-6k-events/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-16",
+  "criteria": {
+    "C1": [
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_committed_rules_classify_tsm_file_names",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_first_matching_rule_decides",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_matching_is_case_insensitive",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_no_matching_rule_gives_none",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[[unclosed]",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[(?P<x]",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[*tsm]",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[board)]",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_rules_after_the_first_match_never_change_the_result",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_appending_a_rule_that_matches_nothing_changes_nothing",
+      "tests/spec/sec-6k-events/test_classify_6k.py::test_prepending_a_catch_all_routine_rule_makes_every_result_none"
+    ],
+    "C2": [
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_block_gives_exactly_the_in_window_allowlisted_6ks",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_window_ends_are_inclusive",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_rows_keep_the_block_order",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_no_qualifying_filing_gives_an_empty_list",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[9.99]",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[8.1]",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[Item 5.02]",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[]",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_rows_are_the_hand_selected_6ks_with_allowlist_weights",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_narrowing_the_window_never_adds_a_row",
+      "tests/spec/sec-6k-events/test_six_k_rows.py::test_a_block_of_only_8ks_gives_no_rows"
+    ]
+  },
+  "files": {
+    "tests/spec/sec-6k-events/test_classify_6k.py": "c79b65946ab669d96e103d457e16c5159aacec589951e4e7b44bb71740ba4d42",
+    "tests/spec/sec-6k-events/test_six_k_rows.py": "4b03d8fe758e42ae5dd44c4577763b3a6c1897f528805ad2c8a485497e306134"
+  },
+  "id": "sec-6k-events",
+  "interface": [
+    {
+      "file": "src/marketdata/news/sec_events_downloader.py",
+      "module": "src.marketdata.news.sec_events_downloader",
+      "qualname": "classify_6k",
+      "signature": "def classify_6k(primary_document: str, rules: Sequence[Mapping[str, str | None]]) -> str | None"
+    },
+    {
+      "file": "src/marketdata/news/sec_events_downloader.py",
+      "module": "src.marketdata.news.sec_events_downloader",
+      "qualname": "six_k_rows",
+      "signature": "def six_k_rows(recent: Mapping[str, Sequence[str]], rules: Sequence[Mapping[str, str | None]], allowlist: Mapping[str, float], *, ticker: str, cik: str, start: str, end: str) -> list[dict[str, object]]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_appending_a_rule_that_matches_nothing_changes_nothing",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_committed_rules_classify_tsm_file_names",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_first_matching_rule_decides",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[(?P<x]",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[*tsm]",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[[unclosed]",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_invalid_regex_raises_value_error[board)]",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_matching_is_case_insensitive",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_no_matching_rule_gives_none",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_prepending_a_catch_all_routine_rule_makes_every_result_none",
+    "tests/spec/sec-6k-events/test_classify_6k.py::test_rules_after_the_first_match_never_change_the_result",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_a_block_of_only_8ks_gives_no_rows",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_block_gives_exactly_the_in_window_allowlisted_6ks",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_narrowing_the_window_never_adds_a_row",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_no_qualifying_filing_gives_an_empty_list",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_rows_are_the_hand_selected_6ks_with_allowlist_weights",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_rows_keep_the_block_order",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[8.1]",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[9.99]",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[Item 5.02]",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_rule_item_outside_the_allowlist_raises[]",
+    "tests/spec/sec-6k-events/test_six_k_rows.py::test_window_ends_are_inclusive"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/sec-6k-events.md",
+    "sha256": "9f6e8796fb24f05897ea4ccc009f9d34fde245ff7b288f9d56077d3993ff5bee"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

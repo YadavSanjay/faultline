@@ -1,0 +1,12 @@
+{
+  "description": "Signal health per stress run (docs/specs/signal-health.md; src/scenariogen/signal_health.py). max_staleness_days is the largest gap, in days, between the run's as_of and the newest date a source's data carries before the source counts as stale (degraded). null marks a source that is not dated (MacroRAG, XbrlRag and throughput report coverage and holds only). Stricter than the news gate (200 days): health flags a stale feed long before the gate holds it.",
+  "max_staleness_days": {
+    "macrorag": null,
+    "xbrlrag": null,
+    "news": 30,
+    "crowding": 30,
+    "options": 30,
+    "gpr": 60,
+    "throughput": null
+  }
+}

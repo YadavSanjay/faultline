@@ -1,0 +1,11 @@
+{
+  "description": "Physical-throughput calibration for scenariogen (market-intelligence F9/P7). The whole book is one bet on the AI-capex cycle; this corroborates it with PHYSICAL data — FRED semiconductor industrial production (IPG3344S) + EIA datacenter-region power demand — and sizes the ai_bust scenario by it: DECELERATING throughput (the thesis breaking) amplifies the bust, accelerating throughput damps it. The inverse of the GPR calibration (F8). A CLAMPED severity multiplier + a thesis flag; mode-(ii), no covariance cost. PIT-pinned to the run's as_of. None / held -> no-op.",
+  "enabled": true,
+  "beta": 0.35,
+  "min_scale": 0.85,
+  "max_scale": 1.4,
+  "yoy_months": 12,
+  "trigger_low_percentile": 0.15,
+  "power_respondents": ["CISO", "ERCO", "PJM", "MISO"],
+  "_comment": "Primary signal: IPG3344S year-over-year growth, percentiled over its full history <= as_of (long, robust). multiplier = clamp(1 + beta*(1 - 2*percentile), min_scale, max_scale): LOW growth percentile (decelerating vs history) amplifies, high growth damps. trigger = percentile <= trigger_low_percentile OR yoy < 0 (contracting = thesis breaking). EIA power-demand YoY is reported alongside as corroboration (accelerating/decelerating), aggregated across power_respondents."
+}

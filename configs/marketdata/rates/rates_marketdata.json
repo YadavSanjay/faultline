@@ -1,0 +1,152 @@
+{
+  "asset_class": "rates",
+  "description": "SOFR OIS curve data for Fixed-Income Derivatives trades #22-25 (10Y SOFR IRS, 5Yx10Y swaption, 2Yx5Y Bermudan swaption, 1Y SOFR cap). See docs/design/AITrade_quantlib_portfolio_marketdata.md §4.4.",
+
+  "time_window": {
+    "start_date": "2022-01-01",
+    "end_date": "today",
+    "granularity": "daily",
+    "stress_cadence": "weekly",
+    "notes": [
+      "4-year lookback from 2022-01-01 captures the 2022 rate-shock episode (MOVE ~160, critical for swaption vol calibration) and full post-LIBOR SOFR curve history.",
+      "Daily granularity preserved: the QL curve-bootstrap runs on daily snapshots; weekly sub-sampling happens in the stress-scenario layer.",
+      "DTCC SDR data is available only from 2023-12-29 — that source uses its own start_date_override."
+    ]
+  },
+
+  "sources": {
+
+    "nyfed_sofr": {
+      "enabled": true,
+      "name": "NY Fed SOFR Reference Rates",
+      "description": "SOFR overnight fixing + EFFR from NY Fed (authoritative source). Compounded averages and SOFR Index are sourced from FRED (fred_rates) which republishes the same NY Fed data. The sofr30day/sofr90day/sofr180day/sofrai NY Fed endpoints do not support the search.json pattern and return HTTP 400.",
+      "base_url": "https://markets.newyorkfed.org",
+      "auth": { "type": "none" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "series": {
+        "sofr_overnight": {
+          "endpoint": "/api/rates/secured/sofr/search.json",
+          "rate_field": "percentRate",
+          "output_col": "sofr_rate",
+          "description": "SOFR overnight rate — primary anchor for SOFR OIS curve bootstrap"
+        },
+        "effr": {
+          "endpoint": "/api/rates/unsecured/effr/search.json",
+          "rate_field": "percentRate",
+          "output_col": "effr_rate",
+          "description": "Effective Federal Funds Rate — policy rate upper bound"
+        }
+      },
+      "output_file": "nyfed_sofr_rates.csv"
+    },
+
+    "fred_rates": {
+      "enabled": true,
+      "name": "FRED Rate Series",
+      "description": "UST par yields (DGS2/5/10/30) for curve anchoring + SOFR averages as cross-check. Uses fredgraph.csv endpoint (no API key, avoids /fred/series 504 on large FX series).",
+      "base_url": "https://fred.stlouisfed.org",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/graph/fredgraph.csv?id={series_id}",
+      "series": {
+        "SOFR":          "SOFR overnight (backup to NY Fed)",
+        "SOFR30DAYAVG":  "30-day avg SOFR (backup to NY Fed)",
+        "SOFR90DAYAVG":  "90-day avg SOFR (backup to NY Fed)",
+        "SOFR180DAYAVG": "180-day avg SOFR (backup to NY Fed)",
+        "SOFRINDEX":     "SOFR Index (backup to NY Fed)",
+        "DGS1MO":        "1M UST CMT par yield — front-end node (risk curve granularity, GAP 3)",
+        "DGS3MO":        "3M UST CMT par yield — front-end node (GAP 3)",
+        "DGS6MO":        "6M UST CMT par yield — front-end node (GAP 3)",
+        "DGS1":          "1Y UST CMT par yield (GAP 3)",
+        "DGS2":          "2Y UST CMT par yield — short-end anchor for curve",
+        "DGS3":          "3Y UST CMT par yield (GAP 3)",
+        "DGS5":          "5Y UST CMT par yield",
+        "DGS7":          "7Y UST CMT par yield (GAP 3)",
+        "DGS10":         "10Y UST CMT par yield — primary duration hedge point (trade #22)",
+        "DGS20":         "20Y UST CMT par yield (GAP 3)",
+        "DGS30":         "30Y UST CMT par yield — long-end anchor",
+        "IORB":          "Interest on Reserve Balances — policy rate floor"
+      },
+      "output_file": "fred_rates.csv"
+    },
+
+    "fred_real_rates": {
+      "enabled": true,
+      "name": "FRED Real-Rate / Breakeven Series (F6)",
+      "description": "TIPS-implied real 10Y yield + market breakeven inflation, for the FINDING 6 nominal->real/breakeven decomposition. Written to a SEPARATE file (fred_real_rates.csv) so these scenariogen-only driver series stay out of the pricing-adjacent fred_rates.csv snapshot. Same fredgraph.csv path (no API key).",
+      "base_url": "https://fred.stlouisfed.org",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/graph/fredgraph.csv?id={series_id}",
+      "series": {
+        "DFII10": "10Y TIPS (real) yield — real-rate driver (FINDING 6)",
+        "T10YIE": "10Y breakeven inflation (nominal 10Y - real 10Y) — breakeven driver",
+        "T5YIFR": "5Y5Y forward inflation expectation — forward breakeven (reference)"
+      },
+      "output_file": "fred_real_rates.csv"
+    },
+
+    "nyfed_acm": {
+      "enabled": true,
+      "name": "NY Fed ACM Term Premium (F6)",
+      "description": "Adrian-Crump-Moench 10Y term premium (ACMTP10), grounding the rate_capital scenario's '10s30s steepener (term premium)' driver. Binary .xls parsed via BytesIO (trap 2).",
+      "base_url": "https://www.newyorkfed.org",
+      "auth": { "type": "user_agent_only" },
+      "timeout_s": 60,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint": "/medialibrary/media/research/data_indicators/ACMTermPremium.xls",
+      "sheet": "ACM Daily",
+      "columns": ["ACMTP10"],
+      "output_file": "nyfed_acm_term_premium.csv"
+    },
+
+    "pensford_forward_curve": {
+      "enabled": true,
+      "name": "Pensford SOFR Forward Curve",
+      "description": "SOFR OIS par swap rates at 1Y/2Y/3Y/5Y/7Y/10Y plus projected forward path. Primary source for mid-to-long-end par nodes in SOFR OIS curve bootstrap. Updated weekly every Friday.",
+      "base_url": "https://www.pensford.com",
+      "auth": { "type": "user_agent_only" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "current_endpoint": "/forward-curve",
+      "archive_endpoint": "/resources/forward-curve-archive",
+      "swap_tenors_years": [1, 2, 3, 5, 7, 10],
+      "output_file": "pensford_forward_curve.csv",
+      "notes": "Page may be JavaScript-rendered. If the scraper returns empty tables, manually download the Excel from pensford.com/forward-curve and save to data/marketdata/rates/pensford_manual.xlsx — the downloader will pick it up on the next run."
+    },
+
+    "dtcc_sdr_rates": {
+      "enabled": true,
+      "name": "DTCC/CFTC SDR RATES Cumulative",
+      "description": "CFTC Part-43 reportable USD interest-rate derivatives. Provides: (a) par SOFR OIS swap rates per tenor via median fixed-rate of spot-starting IRS trades; (b) cap/floor/swaption premiums + strikes for implied-vol proxy. Available from 2023-12-29.",
+      "base_url": "https://kgc0418-tdw-data-0.s3.amazonaws.com",
+      "auth": { "type": "none" },
+      "timeout_s": 120,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 30.0 },
+      "file_pattern": "/cftc/eod/CFTC_CUMULATIVE_RATES_{date}.zip",
+      "date_format": "%Y_%m_%d",
+      "start_date_override": "2024-01-01",
+      "notes": "Confirmed S3 path: cftc/eod/ (not slices/). Asset Class = IR. Key filter field is UPI Underlier Name (not Underlying Asset Name which is empty). Volume (measured 2026-10-05): ~5,700 USD SOFR records/day (~4,600 NEWT), mostly cleared SEF trades — the earlier '~27 rows/day' note was an artefact of the date-keyed dedup bug (fixed in sdr-dedup: records keyed on Dissemination Identifier, every action type kept so CORR/EROR apply). lookback_business_days keeps a rolling window (records older than it are dropped) so the files stay bounded.",
+      "filters": {
+        "upi_underlier_keywords":   ["USD-SOFR", "USD SOFR", "SOFR-OIS"],
+        "currency":                 "USD"
+      },
+      "lookback_business_days": 20,
+      "irs_max_spot_lag_days": 5,
+      "output_files": {
+        "irs":     "dtcc_sdr_irs.csv",
+        "options": "dtcc_sdr_ir_options.csv"
+      }
+    }
+
+  }
+}

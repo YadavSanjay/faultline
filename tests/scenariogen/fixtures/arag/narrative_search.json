@@ -1,0 +1,30 @@
+{
+  "company": {"ticker": "NVDA", "resolution": "exact_ticker", "similarity": 1.0},
+  "query": "Taiwan/TSMC supply concentration and export-control risk",
+  "chunks": [
+    {
+      "chunk_id": "nvda::2025::rf::07",
+      "text": "We depend on TSMC in Taiwan for advanced-node manufacturing ...",
+      "section_path": "Item 1A Risk Factors",
+      "ticker": "NVDA",
+      "cik": "0001045810",
+      "fiscal_year": 2025,
+      "form_type": "10-K",
+      "accession_no": "0001045810-25-000010",
+      "rerank_score": 0.88,
+      "is_expansion": false
+    },
+    {
+      "chunk_id": "nvda::2024::rf::05",
+      "text": "Geopolitical tensions in the Taiwan Strait could disrupt supply ...",
+      "section_path": "Item 1A Risk Factors",
+      "ticker": "NVDA",
+      "cik": "0001045810",
+      "fiscal_year": 2024,
+      "form_type": "10-K",
+      "accession_no": "0001045810-24-000008",
+      "rerank_score": 0.71,
+      "is_expansion": false
+    }
+  ]
+}

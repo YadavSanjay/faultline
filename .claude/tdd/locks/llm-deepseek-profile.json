@@ -1,0 +1,67 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-21",
+  "criteria": {
+    "C1": [
+      "tests/spec/llm-deepseek-profile/test_effort.py::test_c1_deepseek_effort_levels",
+      "tests/spec/llm-deepseek-profile/test_effort.py::test_c1_no_effort_or_openai_gives_none",
+      "tests/spec/llm-deepseek-profile/test_effort.py::test_c1_property_only_deepseek_with_effort_gets_a_body"
+    ],
+    "C2": [
+      "tests/spec/llm-deepseek-profile/test_effort.py::test_c2_deepseek_requests_carry_effort_and_openai_requests_do_not",
+      "tests/spec/llm-deepseek-profile/test_effort.py::test_c2_metamorphic_effort_is_invariant_to_the_request_and_the_stage"
+    ],
+    "C3": [
+      "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c3_prompt_cache_hit_tokens_are_counted",
+      "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c3_precedence_details_then_hits_then_zero",
+      "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c3_property_hits_pass_through_and_prompt_is_unchanged"
+    ],
+    "C4": [
+      "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c4_flash_and_pro_peak_and_off_peak",
+      "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c4_property_cost_follows_the_formula_at_both_rates"
+    ]
+  },
+  "files": {
+    "tests/spec/llm-deepseek-profile/conftest.py": "74261b587c4d393a1291175266d8c32668631500dfb6c061716cd3c1aa5442de",
+    "tests/spec/llm-deepseek-profile/test_cache_hits.py": "2ffc20fbe76cd3bbcf27ed94aa3d9b67dbede5fd039fc010a7675c34dfcf6d54",
+    "tests/spec/llm-deepseek-profile/test_effort.py": "29c89db5f62583bb09828e21319c05bf85c9434625d998b72de6bfd1e04c26f5"
+  },
+  "id": "llm-deepseek-profile",
+  "interface": [
+    {
+      "file": "src/scenariogen/llm/gateway.py",
+      "module": "src.scenariogen.llm.gateway",
+      "qualname": "reasoning_extra_body",
+      "signature": "def reasoning_extra_body(provider: str, effort: str | None) -> dict[str, Any] | None"
+    }
+  ],
+  "nodes": [
+    "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c3_precedence_details_then_hits_then_zero",
+    "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c3_prompt_cache_hit_tokens_are_counted",
+    "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c3_property_hits_pass_through_and_prompt_is_unchanged",
+    "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c4_flash_and_pro_peak_and_off_peak",
+    "tests/spec/llm-deepseek-profile/test_cache_hits.py::test_c4_property_cost_follows_the_formula_at_both_rates",
+    "tests/spec/llm-deepseek-profile/test_effort.py::test_c1_deepseek_effort_levels",
+    "tests/spec/llm-deepseek-profile/test_effort.py::test_c1_no_effort_or_openai_gives_none",
+    "tests/spec/llm-deepseek-profile/test_effort.py::test_c1_property_only_deepseek_with_effort_gets_a_body",
+    "tests/spec/llm-deepseek-profile/test_effort.py::test_c2_deepseek_requests_carry_effort_and_openai_requests_do_not",
+    "tests/spec/llm-deepseek-profile/test_effort.py::test_c2_metamorphic_effort_is_invariant_to_the_request_and_the_stage"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/llm-deepseek-profile.md",
+    "sha256": "05d7aa991b06e5e49ed5e848e8d6e6eaff42fdc58bf5bcf7e88936e07b087682"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

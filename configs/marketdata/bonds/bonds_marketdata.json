@@ -1,0 +1,153 @@
+{
+  "asset_class": "bonds",
+  "description": "Market data for Bond trades #15-21 (5 corp bullet bonds + 2Y/10Y UST). See docs/design/AITrade_quantlib_portfolio_marketdata.md §1.3, §2.4, §3.2, §4.3, §4.5.",
+
+  "portfolio_bonds": {
+    "corporate": [
+      {
+        "trade": 15, "issuer": "AAPL", "name": "Apple Inc.",
+        "description": "Apple 4.75% 2035 senior unsecured (issued May 2025)",
+        "cusip": "037833FB1", "coupon": 0.0475,
+        "maturity": "2035-05-12", "day_count": "30/360",
+        "cik": "0000320193",
+        "cds_underlier_keywords": ["APPLE", "AAPL"]
+      },
+      {
+        "trade": 16, "issuer": "MSFT", "name": "Microsoft Corporation",
+        "description": "Microsoft 4.10% 2037 (2017 issuance; MSFT's last USD bond deal)",
+        "cusip": "594918BZ6", "coupon": 0.041,
+        "maturity": "2037-02-06", "day_count": "30/360",
+        "cik": "0000789019",
+        "cds_underlier_keywords": ["MICROSOFT", "MSFT"]
+      },
+      {
+        "trade": 17, "issuer": "ORCL", "name": "Oracle Corporation",
+        "description": "Oracle 5.55% 2053 long-end credit (issued Feb 2023)",
+        "cusip": "68389XCQ6", "coupon": 0.0555,
+        "maturity": "2053-02-06", "day_count": "30/360",
+        "cik": "0001341439",
+        "cds_underlier_keywords": ["ORACLE", "ORCL"]
+      },
+      {
+        "trade": 18, "issuer": "META", "name": "Meta Platforms Inc.",
+        "description": "Meta 5.40% 2054 long-end credit (issued Aug 2024)",
+        "cusip": "30303M8V7", "coupon": 0.054,
+        "maturity": "2054-08-15", "day_count": "30/360",
+        "cik": "0001326801",
+        "cds_underlier_keywords": ["META PLATFORMS", "META", "FACEBOOK"]
+      },
+      {
+        "trade": 19, "issuer": "AMZN", "name": "Amazon.com Inc.",
+        "description": "Amazon 4.70% 2032 (issued Dec 2022)",
+        "cusip": "023135CR5", "coupon": 0.047,
+        "maturity": "2032-12-01", "day_count": "30/360",
+        "cik": "0001018724",
+        "cds_underlier_keywords": ["AMAZON", "AMZN"]
+      }
+    ],
+    "treasury": [
+      {"trade": 20, "term": "10Y", "description": "UST 10Y on-the-run"},
+      {"trade": 21, "term": "2Y",  "description": "UST 2Y on-the-run"}
+    ]
+  },
+
+  "time_window": {
+    "start_date": "2022-01-01",
+    "end_date": "today",
+    "granularity": "daily",
+    "stress_cadence": "weekly",
+    "notes": "4-year lookback from 2022-01-01 covers the 2022 rate shock (critical for duration/credit stress). Issuer CDS comes from the credit single-name feed (configs/marketdata/credit); the bonds dtcc_credits feed is retired (credit-sdr-dedup)."
+  },
+
+  "sources": {
+
+    "treasury_gov": {
+      "enabled": true,
+      "name": "Treasury.gov Daily Par Yield Curve",
+      "description": "Full 14-tenor UST par yield curve (1M to 30Y) from Treasury.gov. Primary discount-curve anchor for all bond pricing in QL. Updated daily by 3pm ET.",
+      "base_url": "https://home.treasury.gov",
+      "auth": { "type": "none" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/all/{yyyymm}?type=daily_treasury_yield_curve&field_tdr_date_value_month={yyyymm}&page&_format=csv",
+      "output_columns": ["date", "1Mo", "2Mo", "3Mo", "4Mo", "6Mo", "1Yr", "2Yr", "3Yr", "5Yr", "7Yr", "10Yr", "20Yr", "30Yr"],
+      "output_file": "treasury_par_yields.csv"
+    },
+
+    "treasurydirect": {
+      "enabled": true,
+      "name": "TreasuryDirect Securities API",
+      "description": "Announced and auctioned UST securities with CUSIP, term, auction/issue dates. Used to identify the current on-the-run 2Y and 10Y CUSIPs for trades #20-21.",
+      "base_url": "https://www.treasurydirect.gov",
+      "auth": { "type": "none" },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoints": {
+        "auctioned": "/TA_WS/securities/auctioned?format=json",
+        "announced": "/TA_WS/securities/announced?format=json"
+      },
+      "on_the_run_terms": ["2-Year", "10-Year"],
+      "output_files": {
+        "auctioned": "treasurydirect_auctioned.csv",
+        "announced": "treasurydirect_announced.csv"
+      }
+    },
+
+    "edgar": {
+      "enabled": true,
+      "name": "SEC EDGAR Submissions — Bond Reference Data",
+      "description": "424B5 prospectus filing index per issuer to confirm our bond CUSIPs and retrieve bond terms. Static reference — refetch quarterly or when new bonds are added. Requires User-Agent header.",
+      "base_url": "https://data.sec.gov",
+      "auth": {
+        "type": "user_agent_only"
+      },
+      "extra_headers": {
+        "Accept-Encoding": "gzip, deflate"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.15,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/submissions/CIK{cik}.json",
+      "min_expected_filings": 3,
+      "form_type_filter": ["424B5", "424B2", "424B3"],
+      "notes": "Apple and Microsoft use 424B2 (shelf supplement); Oracle and Amazon use 424B5. Meta may use either. Filter covers all prospectus supplement types.",
+      "output_file": "edgar_bond_filings.csv"
+    },
+
+    "finra": {
+      "enabled": true,
+      "name": "FINRA Fixed Income Market Data API",
+      "description": "Corp bond breadth/sentiment + UST daily aggregates. Macro stress context for bond liquidity; not per-CUSIP prices. OAuth2 client-credentials auth.",
+      "base_url": "https://api.finra.org",
+      "auth": {
+        "type": "oauth2_client_credentials",
+        "token_url": "https://ews.fip.finra.org/fip/rest/ews/oauth2/access_token",
+        "client_id_env": "FINRA_API_KEY",
+        "client_secret_env": "FINRA_API_KEY_SECRET"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "datasets": {
+        "treasury_daily":  "/data/group/fixedIncomeMarket/name/treasuryDailyAggregates"
+      },
+      "date_field": "tradeDate",
+      "disabled_datasets_notes": {
+        "corp_breadth":     "404 — requires additional FINRA entitlement beyond standard API credentials",
+        "corp_sentiment":   "404 — same as above",
+        "corp_volume":      "404 — same as above",
+        "treasury_monthly": "400 — uses a different date field name (not 'tradeDate'); daily aggregates resample to monthly client-side"
+      },
+      "output_files": {
+        "corp_breadth":    "finra_corp_breadth.csv",
+        "corp_sentiment":  "finra_corp_sentiment.csv",
+        "corp_volume":     "finra_corp_volume.csv",
+        "treasury_daily":  "finra_treasury_daily.csv",
+        "treasury_monthly":"finra_treasury_monthly.csv"
+      }
+    }
+
+  }
+}

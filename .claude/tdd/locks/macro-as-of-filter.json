@@ -1,0 +1,112 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-18",
+  "criteria": {
+    "C1": [
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_none_date_to_is_set_to_as_of",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2026-10-07]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2026-10-13]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2027-01-01]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2099-12-31]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2026-10-06]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2026-10-05]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2026-01-31]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2025-06-30]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_to_with_time_suffix_compares_by_first_ten_chars",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_dates_compare_as_dates_not_by_position",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_none_date_from_is_allowed_and_kept",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_equal_to_as_of_is_allowed",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_input_not_mutated_and_result_is_new[None-2026-10-06]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_input_not_mutated_and_result_is_new[2026-10-13-2026-10-06]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_input_not_mutated_and_result_is_new[2026-01-31-2026-01-31]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_after_as_of_raises[2026-10-07]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_after_as_of_raises[2027-01-01]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_after_as_of_raises[2026-10-07T00:00:00]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[2026/10/01]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[01-10-2026]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[Oct 1 2026]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[2026-13-01]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[2026-02-30]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[not-a-date]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2026/10/01]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[01-10-2026]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[Oct 1 2026]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2026-13-01]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2026-02-30]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[not-a-date]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2027/01/01]",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_date_to_never_after_as_of",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_idempotent",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_independent_of_date_to_on_or_after_as_of",
+      "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_date_from_after_as_of_always_raises"
+    ]
+  },
+  "files": {
+    "tests/spec/macro-as-of-filter/conftest.py": "ba94d6d2e8295c92836ac6b6ca32f06e83ab8f412cdd821bf5bb30cb3f4cb8e3",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py": "327a0b8ff519e8c563b681182edf2cedef5b36b21d6c874442bf13bb6a4d4bbd"
+  },
+  "id": "macro-as-of-filter",
+  "interface": [
+    {
+      "file": "src/scenariogen/macro/models.py",
+      "module": "src.scenariogen.macro.models",
+      "qualname": "point_in_time_filter",
+      "signature": "def point_in_time_filter(filters: MacroFilter, as_of: date) -> MacroFilter"
+    }
+  ],
+  "nodes": [
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_after_as_of_raises[2026-10-07T00:00:00]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_after_as_of_raises[2026-10-07]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_after_as_of_raises[2027-01-01]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_from_equal_to_as_of_is_allowed",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_date_to_with_time_suffix_compares_by_first_ten_chars",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_dates_compare_as_dates_not_by_position",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2025-06-30]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2026-01-31]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2026-10-05]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_earlier_or_equal_date_to_is_kept[2026-10-06]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_input_not_mutated_and_result_is_new[2026-01-31-2026-01-31]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_input_not_mutated_and_result_is_new[2026-10-13-2026-10-06]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_input_not_mutated_and_result_is_new[None-2026-10-06]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2026-10-07]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2026-10-13]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2027-01-01]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_later_date_to_is_capped[2099-12-31]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[01-10-2026]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[2026-02-30]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[2026-13-01]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[2026/10/01]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[Oct 1 2026]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_from_raises[not-a-date]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[01-10-2026]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2026-02-30]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2026-13-01]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2026/10/01]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[2027/01/01]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[Oct 1 2026]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_non_iso_date_to_raises[not-a-date]",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_none_date_from_is_allowed_and_kept",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_point_none_date_to_is_set_to_as_of",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_date_from_after_as_of_always_raises",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_date_to_never_after_as_of",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_idempotent",
+    "tests/spec/macro-as-of-filter/test_point_in_time_filter.py::test_c1_property_independent_of_date_to_on_or_after_as_of"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/macro-as-of-filter.md",
+    "sha256": "09f34d3805e8ff945bf2f86d867005ac1802da634c8992e8dd98f9951f76cbb0"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

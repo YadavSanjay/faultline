@@ -1,0 +1,698 @@
+{
+  "name": "AI-Themed Portfolio (BASE / unsized book)",
+  "description": "38-trade AI-themed book, BASE (unsized) \u2014 the canonical ~$50mm-per-trade placeholder book. Risk-appetite variants (portfolio_balanced/aggressive/risky.json) are generated from this by the sizing runner; the active default portfolio.json is a copy of the core variant. Select a book with --book.",
+  "default_valuation_date": "2026-10-06",
+  "default_valuation_type": "PV",
+  "assumptions": [
+    "Trade economics (notionals $50mm, strikes, fixed rates) are REPRESENTATIVE placeholders \u00e2\u20ac\u201d the design doc specifies instrument types, not terms. Adjust per real trade tickets.",
+    "default_valuation_date = 2026-05-29 is the latest Pensford SOFR forward-curve snapshot (the binding curve input). Override with --valuation-date.",
+    "Swaptions/cap strikes set to null => priced ATM-forward. Swaption/cap vol = flat normal (Bachelier) level from configs/pricer/pricer_config.json (MOVE-anchored).",
+    "Bonds #15-19: terms (coupon/maturity/CUSIP) from configs/marketdata/bonds. Discounted on SOFR + issuer credit spread (config fallback, since free CDS is unusable). Bonds #20-21 are the on-the-run 2Y/10Y USTs (from TreasuryDirect), discounted on the bootstrapped UST par curve. Face amounts $50mm placeholders.",
+    "Equity options #7-14: strikes/expiries are REPRESENTATIVE (expiries chosen on real chain dates; strikes round near recovered spot). Spot + dividend yield recovered from the chain via put-call parity; per-leg IV from the chain (skew-aware). These value at the 2026-06-17 chain snapshot \u00e2\u20ac\u201d run equities with --valuation-date 2026-06-17. Contract counts are placeholders.",
+    "Cash equity #1-6: signed share quantities are REPRESENTATIVE (~$50mm gross each). Marked at the daily close on/before the valuation date; SMH (#6) is a short. These have full daily history so value at the 2026-05-29 default like rates/bonds.",
+    "Credit/CDS #28-30: $50mm notionals (placeholders). 5Y par spreads from DTCC (single-name SEC path / index CFTC path), filtered to the 5Y bucket; flat hazard calibrated to par under IsdaCdsEngine. ORCL/META buy protection (hedge bonds #17/#18); CDX.NA.IG sell protection. Standard 100bp IG running coupon, 40% recovery.",
+    "FX #26-27: REPRESENTATIVE terms. #26 USD/TWD 5Y CCS modelled fixed-for-fixed with notional exchange (seasoned: started 2025-05-29 at contract FX 30.00, matures 2030-05-29) - LONG_USD = receive USD / pay TWD, hedging the long-TWD TSM-ADR (#2); gains as TWD weakened to ~31.4. #27 USD/JPY 3M forward, buy USD (carry), struck at-market when rolled (2026-10-06: 156.94, see roll_history). Options #9/#11/#12/#14 were likewise rolled on expiry to the same tenor and moneyness."
+  ],
+  "trades": [
+    {
+      "trade_id": "TRADE_1",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "NVDA common stock - long (core AI beta)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "NVDA",
+        "quantity": 240000
+      }
+    },
+    {
+      "trade_id": "TRADE_2",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "TSM ADR - long (foundry exposure)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "TSM",
+        "quantity": 120000
+      }
+    },
+    {
+      "trade_id": "TRADE_3",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "AVGO common - long (networking/custom silicon)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "AVGO",
+        "quantity": 110000
+      }
+    },
+    {
+      "trade_id": "TRADE_4",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "MU common - long (HBM cycle play)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "MU",
+        "quantity": 50000
+      }
+    },
+    {
+      "trade_id": "TRADE_5",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "XLK ETF - long (sector hedge basket)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "XLK",
+        "quantity": 260000
+      }
+    },
+    {
+      "trade_id": "TRADE_6",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "SMH ETF - short (relative-value hedge vs single-name semis)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "SMH",
+        "quantity": -85000
+      }
+    },
+    {
+      "trade_id": "TRADE_22",
+      "asset_class": "rates",
+      "trade_type": "ois_swap",
+      "description": "10Y SOFR payer IRS (rates hedge for bond book)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "direction": "payer",
+        "swap_tenor": "10Y",
+        "fixed_rate": 0.038,
+        "forward_start": "0D"
+      }
+    },
+    {
+      "trade_id": "TRADE_23",
+      "asset_class": "rates",
+      "trade_type": "european_swaption",
+      "description": "5Y x 10Y European payer swaption (rate-rise hedge)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "direction": "payer",
+        "option_tenor": "5Y",
+        "swap_tenor": "10Y",
+        "strike": null,
+        "settlement": "physical"
+      }
+    },
+    {
+      "trade_id": "TRADE_24",
+      "asset_class": "rates",
+      "trade_type": "bermudan_swaption",
+      "description": "2Y x 5Y Bermudan receiver swaption",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "direction": "receiver",
+        "option_tenor": "2Y",
+        "swap_tenor": "5Y",
+        "exercise_frequency": "Annual",
+        "strike": null,
+        "settlement": "physical"
+      }
+    },
+    {
+      "trade_id": "TRADE_25",
+      "asset_class": "rates",
+      "trade_type": "cap",
+      "description": "1Y SOFR cap, ATM strike (tail hedge on funding)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "cap_tenor": "1Y",
+        "strike": null,
+        "caplet_frequency": "Quarterly"
+      }
+    },
+    {
+      "trade_id": "TRADE_15",
+      "asset_class": "bonds",
+      "trade_type": "corp_bond",
+      "description": "Apple 4.75% 2035 senior unsecured",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "issuer": "AAPL",
+        "cusip": "037833FB1",
+        "coupon": 0.0475,
+        "issue_date": "2025-05-12",
+        "maturity_date": "2035-05-12",
+        "coupon_frequency": "Semiannual",
+        "day_count": "30/360"
+      }
+    },
+    {
+      "trade_id": "TRADE_16",
+      "asset_class": "bonds",
+      "trade_type": "corp_bond",
+      "description": "Microsoft 4.10% 2037",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "issuer": "MSFT",
+        "cusip": "594918BZ6",
+        "coupon": 0.041,
+        "issue_date": "2017-02-06",
+        "maturity_date": "2037-02-06",
+        "coupon_frequency": "Semiannual",
+        "day_count": "30/360"
+      }
+    },
+    {
+      "trade_id": "TRADE_17",
+      "asset_class": "bonds",
+      "trade_type": "corp_bond",
+      "description": "Oracle 5.55% 2053 (long-end credit)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "issuer": "ORCL",
+        "cusip": "68389XCQ6",
+        "coupon": 0.0555,
+        "issue_date": "2023-02-06",
+        "maturity_date": "2053-02-06",
+        "coupon_frequency": "Semiannual",
+        "day_count": "30/360"
+      }
+    },
+    {
+      "trade_id": "TRADE_18",
+      "asset_class": "bonds",
+      "trade_type": "corp_bond",
+      "description": "Meta 5.40% 2054 (long-end credit)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "issuer": "META",
+        "cusip": "30303M8V7",
+        "coupon": 0.054,
+        "issue_date": "2024-08-15",
+        "maturity_date": "2054-08-15",
+        "coupon_frequency": "Semiannual",
+        "day_count": "30/360"
+      }
+    },
+    {
+      "trade_id": "TRADE_19",
+      "asset_class": "bonds",
+      "trade_type": "corp_bond",
+      "description": "Amazon 4.70% 2032",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "issuer": "AMZN",
+        "cusip": "023135CR5",
+        "coupon": 0.047,
+        "issue_date": "2022-12-01",
+        "maturity_date": "2032-12-01",
+        "coupon_frequency": "Semiannual",
+        "day_count": "30/360"
+      }
+    },
+    {
+      "trade_id": "TRADE_20",
+      "asset_class": "bonds",
+      "trade_type": "ust_bond",
+      "description": "UST 10Y on-the-run (4.375% 2036-05-15)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "term": "10Y",
+        "cusip": "91282CQQ7",
+        "coupon": 0.04375,
+        "issue_date": "2026-05-15",
+        "maturity_date": "2036-05-15",
+        "coupon_frequency": "Semiannual",
+        "day_count": "ActualActual.Bond"
+      }
+    },
+    {
+      "trade_id": "TRADE_21",
+      "asset_class": "bonds",
+      "trade_type": "ust_bond",
+      "description": "UST 2Y on-the-run (4.00% 2028-05-31)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "term": "2Y",
+        "cusip": "91282CQS3",
+        "coupon": 0.04,
+        "issue_date": "2026-06-01",
+        "maturity_date": "2028-05-31",
+        "coupon_frequency": "Semiannual",
+        "day_count": "ActualActual.Bond"
+      }
+    },
+    {
+      "trade_id": "TRADE_7",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "AAPL Jan-27 LEAPS call (American)",
+      "currency": "USD",
+      "notional": 32000000,
+      "params": {
+        "underlier": "AAPL",
+        "structure": "vanilla",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "call",
+            "strike": 320,
+            "expiry": "2027-01-15",
+            "exercise": "american",
+            "quantity": 1000
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_8",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "NVDA 6M ATM put (American, protective)",
+      "currency": "USD",
+      "notional": 41000000,
+      "params": {
+        "underlier": "NVDA",
+        "structure": "vanilla",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "put",
+            "strike": 205,
+            "expiry": "2026-12-18",
+            "exercise": "american",
+            "quantity": 2000
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_9",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "MSFT 3M 25-delta call spread (American)",
+      "currency": "USD",
+      "notional": 40000000,
+      "params": {
+        "underlier": "MSFT",
+        "structure": "call_spread",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "call",
+            "strike": 545,
+            "expiry": "2027-01-15",
+            "exercise": "american",
+            "quantity": 1000
+          },
+          {
+            "right": "call",
+            "strike": 585,
+            "expiry": "2027-01-15",
+            "exercise": "american",
+            "quantity": -1000
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_10",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "META 6M put spread (skew play, American)",
+      "currency": "USD",
+      "notional": 58000000,
+      "params": {
+        "underlier": "META",
+        "structure": "put_spread",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "put",
+            "strike": 580,
+            "expiry": "2026-12-18",
+            "exercise": "american",
+            "quantity": 1000
+          },
+          {
+            "right": "put",
+            "strike": 500,
+            "expiry": "2026-12-18",
+            "exercise": "american",
+            "quantity": -1000
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_11",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "TSLA 1M ATM straddle (vol/event, American)",
+      "currency": "USD",
+      "notional": 40000000,
+      "params": {
+        "underlier": "TSLA",
+        "structure": "straddle",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "call",
+            "strike": 380,
+            "expiry": "2026-11-20",
+            "exercise": "american",
+            "quantity": 500
+          },
+          {
+            "right": "put",
+            "strike": 380,
+            "expiry": "2026-11-20",
+            "exercise": "american",
+            "quantity": 500
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_12",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "SPX 3M ATM put (European, portfolio hedge)",
+      "currency": "USD",
+      "notional": 37500000,
+      "params": {
+        "underlier": "SPX",
+        "structure": "vanilla",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "put",
+            "strike": 7850,
+            "expiry": "2027-01-15",
+            "exercise": "european",
+            "quantity": 50
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_13",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "SPX 6M 90-80% put spread (European)",
+      "currency": "USD",
+      "notional": 37500000,
+      "params": {
+        "underlier": "SPX",
+        "structure": "put_spread",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "put",
+            "strike": 6800,
+            "expiry": "2026-12-18",
+            "exercise": "european",
+            "quantity": 50
+          },
+          {
+            "right": "put",
+            "strike": 6050,
+            "expiry": "2026-12-18",
+            "exercise": "european",
+            "quantity": -50
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_14",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "QQQ 3M collar overlay (American): long put, short call",
+      "currency": "USD",
+      "notional": 73000000,
+      "params": {
+        "underlier": "QQQ",
+        "structure": "collar",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "put",
+            "strike": 730,
+            "expiry": "2027-01-15",
+            "exercise": "american",
+            "quantity": 1000
+          },
+          {
+            "right": "call",
+            "strike": 810,
+            "expiry": "2027-01-15",
+            "exercise": "american",
+            "quantity": -1000
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_28",
+      "asset_class": "credit",
+      "trade_type": "cds",
+      "description": "5Y ORCL CDS - buy protection (issuer hedge for bond #17)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "reference": "ORCL",
+        "kind": "single_name",
+        "protection": "buy",
+        "tenor": "5Y",
+        "running_coupon": 0.01,
+        "recovery": 0.4
+      }
+    },
+    {
+      "trade_id": "TRADE_29",
+      "asset_class": "credit",
+      "trade_type": "cds",
+      "description": "5Y META CDS - buy protection (issuer hedge for bond #18)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "reference": "META",
+        "kind": "single_name",
+        "protection": "buy",
+        "tenor": "5Y",
+        "running_coupon": 0.01,
+        "recovery": 0.4
+      }
+    },
+    {
+      "trade_id": "TRADE_30",
+      "asset_class": "credit",
+      "trade_type": "cds",
+      "description": "5Y CDX.NA.IG on-the-run - sell protection (carry/diversifier)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "reference": "CDX.NA.IG",
+        "kind": "index",
+        "protection": "sell",
+        "tenor": "5Y",
+        "running_coupon": 0.01,
+        "recovery": 0.4
+      }
+    },
+    {
+      "trade_id": "TRADE_26",
+      "asset_class": "fx",
+      "trade_type": "xccy_swap",
+      "description": "5Y USD/TWD cross-currency swap - hedge TSM ADR FX (trade #2)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "foreign_ccy": "TWD",
+        "usd_notional": 50000000,
+        "contract_fx": 30.0,
+        "usd_fixed_rate": 0.038,
+        "foreign_fixed_rate": 0.02,
+        "start_date": "2025-05-29",
+        "maturity_date": "2030-05-29",
+        "direction": "long_usd",
+        "frequency_months": 12
+      }
+    },
+    {
+      "trade_id": "TRADE_27",
+      "asset_class": "fx",
+      "trade_type": "fx_forward",
+      "description": "3M USD/JPY FX forward - carry overlay (buy USD)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "foreign_ccy": "JPY",
+        "usd_notional": 50000000,
+        "strike": 156.94,
+        "maturity_date": "2027-01-08",
+        "direction": "long_usd"
+      }
+    },
+    {
+      "trade_id": "TRADE_31",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "CEG common - long (AI-power / nuclear diversifier, Part 2 rebalance)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "CEG",
+        "quantity": 198902
+      }
+    },
+    {
+      "trade_id": "TRADE_32",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "VST common - long (AI-power / IPP diversifier, Part 2 rebalance)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "VST",
+        "quantity": 314743
+      }
+    },
+    {
+      "trade_id": "TRADE_33",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "GOOGL common - long (hyperscaler / AI monetization, Part 2 rebalance)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "GOOGL",
+        "quantity": 139985
+      }
+    },
+    {
+      "trade_id": "TRADE_34",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "GLD ETF - long (gold ballast / crisis diversifier, Part 2 rebalance)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "GLD",
+        "quantity": 132622
+      }
+    },
+    {
+      "trade_id": "TRADE_35",
+      "asset_class": "options",
+      "trade_type": "equity_option",
+      "description": "SPX 6M ~85% put (European, tail-convexity sleeve, Part 2 rebalance)",
+      "currency": "USD",
+      "notional": 16000000,
+      "params": {
+        "underlier": "SPX",
+        "structure": "vanilla",
+        "contract_multiplier": 100,
+        "legs": [
+          {
+            "right": "put",
+            "strike": 6400,
+            "expiry": "2026-12-18",
+            "exercise": "european",
+            "quantity": 25
+          }
+        ]
+      }
+    },
+    {
+      "trade_id": "TRADE_36",
+      "asset_class": "bonds",
+      "trade_type": "ust_bond",
+      "description": "UST 1Y note - short-duration liquidity buffer / dry powder (Part 2 rebalance)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "term": "1Y",
+        "cusip": null,
+        "coupon": 0.04,
+        "issue_date": "2026-06-15",
+        "maturity_date": "2027-06-15",
+        "coupon_frequency": "Semiannual",
+        "day_count": "ActualActual.Bond"
+      }
+    },
+    {
+      "trade_id": "TRADE_37",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "INTC common - long (semis dispersion pair, laggard leg; Part 2 N5)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "INTC",
+        "quantity": 455208
+      }
+    },
+    {
+      "trade_id": "TRADE_38",
+      "asset_class": "equity",
+      "trade_type": "stock",
+      "description": "AMD common - short (semis dispersion pair, leader leg; Part 2 N5)",
+      "currency": "USD",
+      "notional": 50000000,
+      "params": {
+        "ticker": "AMD",
+        "quantity": -89623
+      }
+    }
+  ],
+  "roll_history": [
+    {
+      "trade_id": "TRADE_9",
+      "rolled_on": "2026-10-06",
+      "note": "MSFT spot 388.62 (2026-06-17) -> 529.69 (2026-10-06); call 400@2026-09-18 (K/S 1.029) -> 545@2027-01-15 (K/S 1.029); call 430@2026-09-18 (K/S 1.106) -> 585@2027-01-15 (K/S 1.104)"
+    },
+    {
+      "trade_id": "TRADE_11",
+      "rolled_on": "2026-10-06",
+      "note": "TSLA spot 398.49 (2026-06-17) -> 380.51 (2026-10-06); call 400@2026-07-17 (K/S 1.004) -> 380@2026-11-20 (K/S 0.999); put 400@2026-07-17 (K/S 1.004) -> 380@2026-11-20 (K/S 0.999)"
+    },
+    {
+      "trade_id": "TRADE_12",
+      "rolled_on": "2026-10-06",
+      "note": "SPX spot 7517.06 (2026-06-17) -> 7817.39 (2026-10-06); put 7550@2026-09-18 (K/S 1.004) -> 7850@2027-01-15 (K/S 1.004)"
+    },
+    {
+      "trade_id": "TRADE_14",
+      "rolled_on": "2026-10-06",
+      "note": "QQQ spot 731.12 (2026-06-17) -> 759.93 (2026-10-06); put 700@2026-09-18 (K/S 0.957) -> 730@2027-01-15 (K/S 0.961); call 780@2026-09-18 (K/S 1.067) -> 810@2027-01-15 (K/S 1.066)"
+    },
+    {
+      "trade_id": "TRADE_27",
+      "rolled_on": "2026-10-06",
+      "note": "USD/JPY fwd 157.5@2026-08-31 -> 156.94@2027-01-08 (at-market, fair 156.9413)"
+    }
+  ]
+}

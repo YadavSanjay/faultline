@@ -1,0 +1,92 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/crisis-sigma-tiers/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-17",
+  "criteria": {
+    "C1": [
+      "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_point_overlapping_and_empty_windows",
+      "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_point_date_string_index_and_no_shrinkage",
+      "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_refusals_and_min_days_boundary",
+      "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_matches_hand_selection",
+      "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_diagonal_independent_of_shrinkage",
+      "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_window_order_and_outside_rows_irrelevant",
+      "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_full_shrinkage_is_diagonal"
+    ],
+    "C2": [
+      "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_point_map_and_cap",
+      "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_point_production_parameters_and_refusals",
+      "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_property_non_increasing_and_capped",
+      "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_property_cap_at_or_above_idio_leaves_map"
+    ],
+    "C3": [
+      "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_point_overlays_signs_and_unbounded",
+      "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_point_overlay_on_bound_and_basis_point_units",
+      "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_point_no_binding_constraint_and_refusals",
+      "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_property_within_bounds_and_one_binds",
+      "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_property_scaling_moves_scales_cap_inversely",
+      "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_property_unbounded_factor_changes_nothing"
+    ]
+  },
+  "files": {
+    "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py": "e18ae35e99025183d73504a1d2958c8f099db03124d0c0b76a5bc1f4df55f909",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py": "f8a524de7e1697bfc0e299a1001423b32d87859b26878d11514b88c9edc44273",
+    "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py": "9e85dd25ac4d5372298a15d587c372885ea73e2f3c70d2cfbfe75403191520e9"
+  },
+  "id": "crisis-sigma-tiers",
+  "interface": [
+    {
+      "file": "src/scenariogen/covariance.py",
+      "module": "src.scenariogen.covariance",
+      "qualname": "crisis_covariance",
+      "signature": "def crisis_covariance(panel: pd.DataFrame, windows: Sequence[tuple[str, str]], *, shrinkage: float, min_days: int) -> tuple[FactorCovariance, dict[str, int]]"
+    },
+    {
+      "file": "src/scenariogen/implied_corr.py",
+      "module": "src.scenariogen.implied_corr",
+      "qualname": "regime_shrinkage",
+      "signature": "def regime_shrinkage(percentile: float, *, shrink_systemic: float, shrink_idiosyncratic: float, max_shrinkage: float) -> float"
+    },
+    {
+      "file": "src/scenariogen/severity.py",
+      "module": "src.scenariogen.severity",
+      "qualname": "bound_scale_cap",
+      "signature": "def bound_scale_cap(moves: Mapping[str, float], bounds: Mapping[str, float], overlays: Mapping[str, float] | None=None) -> float"
+    }
+  ],
+  "nodes": [
+    "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_point_no_binding_constraint_and_refusals",
+    "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_point_overlay_on_bound_and_basis_point_units",
+    "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_point_overlays_signs_and_unbounded",
+    "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_property_scaling_moves_scales_cap_inversely",
+    "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_property_unbounded_factor_changes_nothing",
+    "tests/spec/crisis-sigma-tiers/test_bound_scale_cap.py::test_c3_property_within_bounds_and_one_binds",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_point_date_string_index_and_no_shrinkage",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_point_overlapping_and_empty_windows",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_diagonal_independent_of_shrinkage",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_full_shrinkage_is_diagonal",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_matches_hand_selection",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_property_window_order_and_outside_rows_irrelevant",
+    "tests/spec/crisis-sigma-tiers/test_crisis_covariance.py::test_c1_refusals_and_min_days_boundary",
+    "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_point_map_and_cap",
+    "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_point_production_parameters_and_refusals",
+    "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_property_cap_at_or_above_idio_leaves_map",
+    "tests/spec/crisis-sigma-tiers/test_regime_shrinkage.py::test_c2_property_non_increasing_and_capped"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/crisis-sigma-tiers.md",
+    "sha256": "d6536f435e6dda587d87210da7b121153d29163b05dbe412f68ad8d6311f2bb7"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

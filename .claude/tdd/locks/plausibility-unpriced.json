@@ -1,0 +1,59 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-22",
+  "criteria": {
+    "C1": [
+      "tests/spec/plausibility-unpriced/test_unpriced_finding.py::test_c1_point_downside_zero_prob_is_unpriced",
+      "tests/spec/plausibility-unpriced/test_unpriced_finding.py::test_c1_point_upside_zero_prob_is_unpriced_and_not_implied",
+      "tests/spec/plausibility-unpriced/test_unpriced_finding.py::test_c1_property_zero_prob_always_one_unpriced_finding"
+    ],
+    "C2": [
+      "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_point_small_prob_implied_next_to_zero_prob_unpriced",
+      "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_point_no_finding_cases_beside_unpriced",
+      "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_metamorphic_disabled_or_no_provider_records_nothing",
+      "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_property_market_finding_kind_by_prob"
+    ],
+    "C3": [
+      "tests/spec/plausibility-unpriced/test_status_promotable.py::test_c3_point_only_unpriced_is_flag_and_promotable",
+      "tests/spec/plausibility-unpriced/test_status_promotable.py::test_c3_point_bound_breach_with_unpriced_fails",
+      "tests/spec/plausibility-unpriced/test_status_promotable.py::test_c3_property_fail_regardless_of_order"
+    ]
+  },
+  "files": {
+    "tests/spec/plausibility-unpriced/conftest.py": "1c986ff14389f74aad0872663c3495db5c875a1c7d3a34f62ac27758524c8ec0",
+    "tests/spec/plausibility-unpriced/test_market_finding_kind.py": "35e90b58395e1ec3be8553455d0538ea9ce12eba5d7622ef0e49c11fe2869472",
+    "tests/spec/plausibility-unpriced/test_status_promotable.py": "aa579442748a14ca241ff75506908ae25762b3432c45afa0fe3be5f94c7958bf",
+    "tests/spec/plausibility-unpriced/test_unpriced_finding.py": "a1ff4ead82c85eb95d77f99d715a49469a2e712803cf377f740d1188777a8b95"
+  },
+  "id": "plausibility-unpriced",
+  "interface": [],
+  "nodes": [
+    "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_metamorphic_disabled_or_no_provider_records_nothing",
+    "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_point_no_finding_cases_beside_unpriced",
+    "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_point_small_prob_implied_next_to_zero_prob_unpriced",
+    "tests/spec/plausibility-unpriced/test_market_finding_kind.py::test_c2_property_market_finding_kind_by_prob",
+    "tests/spec/plausibility-unpriced/test_status_promotable.py::test_c3_point_bound_breach_with_unpriced_fails",
+    "tests/spec/plausibility-unpriced/test_status_promotable.py::test_c3_point_only_unpriced_is_flag_and_promotable",
+    "tests/spec/plausibility-unpriced/test_status_promotable.py::test_c3_property_fail_regardless_of_order",
+    "tests/spec/plausibility-unpriced/test_unpriced_finding.py::test_c1_point_downside_zero_prob_is_unpriced",
+    "tests/spec/plausibility-unpriced/test_unpriced_finding.py::test_c1_point_upside_zero_prob_is_unpriced_and_not_implied",
+    "tests/spec/plausibility-unpriced/test_unpriced_finding.py::test_c1_property_zero_prob_always_one_unpriced_finding"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/plausibility-unpriced.md",
+    "sha256": "62a920d879d54897a45b92a677fe209a3f39d4accea12493f70e45fa959f21e8"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

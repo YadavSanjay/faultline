@@ -1,0 +1,16 @@
+{
+  "description": "News-event calibration for scenariogen (market-intelligence P3/A3). Turns the SEC 8-K event stream + GDELT salience into a CLAMPED multiplier on the ARag idiosyncratic company leg: final(eq:NVDA) = systematic(macro) + idiosyncratic(ARag x news_multiplier). News modulates a governed baseline; it can never invent one. Mode-(ii): it never enters the covariance matrix. PIT-pinned to the run's as_of date so a re-run reproduces exactly (reflexivity mitigation, design §2.7).",
+  "enabled": true,
+  "beta_event": 0.15,
+  "beta_tone": 0.10,
+  "window_days": 90,
+  "decay_halflife_days": 30,
+  "min_scale": 0.8,
+  "max_scale": 1.5,
+  "earnings_items": ["2.02"],
+  "gate": {
+    "max_staleness_days": 200,
+    "min_names_with_events": 3,
+    "_comment": "Freshness + minimum-coverage gate (mirrors arag/gate.py). If the newest 8-K is older than max_staleness_days, or fewer than min_names_with_events names have any event in the window, news is held out (multiplier 1.0 everywhere) rather than applied on stale/thin data. 8-Ks are episodic so max_staleness is generous."
+  }
+}

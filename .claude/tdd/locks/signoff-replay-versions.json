@@ -1,0 +1,50 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/signoff-replay-versions/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-16",
+  "criteria": {
+    "C1": [
+      "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_point_resolved_versions_in_catalog_order",
+      "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_point_authored_only_catalog_keeps_config_versions",
+      "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_property_windows_with_different_moves_get_different_versions",
+      "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_metamorphic_non_economic_keys_leave_versions_unchanged",
+      "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_metamorphic_history_under_window_changes_version"
+    ]
+  },
+  "files": {
+    "tests/spec/signoff-replay-versions/test_scenario_versions.py": "129dd893f91b580d2393236b5f2a1a5061943ffa75f8662af23e9aab1983506f"
+  },
+  "id": "signoff-replay-versions",
+  "interface": [
+    {
+      "file": "src/scenariogen/signoff.py",
+      "module": "src.scenariogen.signoff",
+      "qualname": "scenario_versions",
+      "signature": "def scenario_versions(catalog: ScenarioCatalog) -> dict[str, str]"
+    }
+  ],
+  "nodes": [
+    "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_metamorphic_history_under_window_changes_version",
+    "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_metamorphic_non_economic_keys_leave_versions_unchanged",
+    "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_point_authored_only_catalog_keeps_config_versions",
+    "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_point_resolved_versions_in_catalog_order",
+    "tests/spec/signoff-replay-versions/test_scenario_versions.py::test_c1_property_windows_with_different_moves_get_different_versions"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/signoff-replay-versions.md",
+    "sha256": "a04d6bf975712b7f73375533096f3dc6519a3469ef7ba47dca2b2e1a89e06c74"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

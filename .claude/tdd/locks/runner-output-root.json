@@ -1,0 +1,83 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-19",
+  "criteria": {
+    "C1": [
+      "tests/spec/runner-output-root/test_run_to.py::test_c1_input_root_untouched_single_trade",
+      "tests/spec/runner-output-root/test_run_to.py::test_c1_input_root_untouched_any_selection_and_workers"
+    ],
+    "C2": [
+      "tests/spec/runner-output-root/test_run_to.py::test_c2_output_layout_under_output_root",
+      "tests/spec/runner-output-root/test_run_to.py::test_c2_two_output_roots_same_layout_and_pv"
+    ],
+    "C3": [
+      "tests/spec/runner-output-root/test_run_to.py::test_c3_second_run_appends_to_same_output_root_only",
+      "tests/spec/runner-output-root/test_run_to.py::test_c3_n_runs_leave_n_run_ids"
+    ],
+    "C4": [
+      "tests/spec/runner-output-root/test_governance_and_service.py::test_c4_governance_report_written_under_output_root",
+      "tests/spec/runner-output-root/test_governance_and_service.py::test_c4_two_governance_runs_two_reports_in_that_root_only"
+    ],
+    "C5": [
+      "tests/spec/runner-output-root/test_governance_and_service.py::test_c5_app_serves_results_of_its_output_root",
+      "tests/spec/runner-output-root/test_governance_and_service.py::test_c5_app_serves_exactly_the_trade_that_was_run"
+    ]
+  },
+  "files": {
+    "tests/spec/runner-output-root/conftest.py": "d60c0a6769d657da9a860ca0889ddea2e0f101aab5544e816669f1f5b2beebae",
+    "tests/spec/runner-output-root/fixture_marketdata/equity/dividends.csv": "926c5b05ba663b70813be07565a9926804feb6a71957510c728cc96ce1a31145",
+    "tests/spec/runner-output-root/fixture_marketdata/equity/prices_daily.csv": "fc9d3256d8fad8d4d84b79a34c19852703e507aea11717e315df44d6698c2625",
+    "tests/spec/runner-output-root/test_governance_and_service.py": "2a1a1c0da1e712f3ad774138afc2dfcfde4dc4322081258ab1252bbc32e147f1",
+    "tests/spec/runner-output-root/test_run_to.py": "1a1eca9d4a00969b6f7615509d40a2d20b41f7eef46fef7c162780c9e0801e22"
+  },
+  "id": "runner-output-root",
+  "interface": [
+    {
+      "file": "src/pricer/governance_runner.py",
+      "module": "src.pricer.governance_runner",
+      "qualname": "run_governance_to",
+      "signature": "def run_governance_to(output_root: Path, *, input_root: Path | None=None, asset_class: str | None=None, valuation_date: date | None=None) -> GovernanceReport"
+    },
+    {
+      "file": "src/pricer/runner.py",
+      "module": "src.pricer.runner",
+      "qualname": "run_to",
+      "signature": "def run_to(output_root: Path, *, input_root: Path | None=None, asset_class: str | None=None, trade_id: str | None=None, valuation_date: date | None=None, valuation_type: str | None=None, workers: int=1, book: str | None=None) -> list[dict]"
+    },
+    {
+      "file": "src/pricer/service.py",
+      "module": "src.pricer.service",
+      "qualname": "create_app_at",
+      "signature": "def create_app_at(output_root: Path, *, input_root: Path | None=None) -> FastAPI"
+    }
+  ],
+  "nodes": [
+    "tests/spec/runner-output-root/test_governance_and_service.py::test_c4_governance_report_written_under_output_root",
+    "tests/spec/runner-output-root/test_governance_and_service.py::test_c4_two_governance_runs_two_reports_in_that_root_only",
+    "tests/spec/runner-output-root/test_governance_and_service.py::test_c5_app_serves_exactly_the_trade_that_was_run",
+    "tests/spec/runner-output-root/test_governance_and_service.py::test_c5_app_serves_results_of_its_output_root",
+    "tests/spec/runner-output-root/test_run_to.py::test_c1_input_root_untouched_any_selection_and_workers",
+    "tests/spec/runner-output-root/test_run_to.py::test_c1_input_root_untouched_single_trade",
+    "tests/spec/runner-output-root/test_run_to.py::test_c2_output_layout_under_output_root",
+    "tests/spec/runner-output-root/test_run_to.py::test_c2_two_output_roots_same_layout_and_pv",
+    "tests/spec/runner-output-root/test_run_to.py::test_c3_n_runs_leave_n_run_ids",
+    "tests/spec/runner-output-root/test_run_to.py::test_c3_second_run_appends_to_same_output_root_only"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/runner-output-root.md",
+    "sha256": "7df4c010e490321017e237995b9247bc786b15ab5d592318e14db8221a0c78a7"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

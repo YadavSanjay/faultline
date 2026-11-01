@@ -1,0 +1,11 @@
+{
+  "_comment": "Per-operator RBAC for gated BFF writes. Roles (ascending): viewer < approver < operator < admin. An operator not listed in 'roles' gets 'default_role'. Each write action requires the role in 'action_roles' (a higher role satisfies it). Permissive by default (default_role=operator) so local use is not blocked; tighten by listing operators and/or lowering default_role. NOTE: under local-trust the X-QLP-Actor header is self-declared, so this enforces role discipline + audit, not identity — it becomes a real identity boundary once QLP_WRITE_TOKEN / real auth authenticates the actor.",
+  "default_role": "operator",
+  "roles": {},
+  "action_roles": {
+    "scenario.signoff": "approver",
+    "risk.limit.edit": "operator",
+    "sizing.activate_variant": "operator",
+    "job.launch": "operator"
+  }
+}

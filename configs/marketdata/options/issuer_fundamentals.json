@@ -1,0 +1,18 @@
+{
+  "description": "Per-issuer fundamentals for the option-implied credit signal (market-intelligence B3, signal 6 Merton/CreditGrades). Leverage = total_debt vs equity market cap (recovered spot x shares_outstanding); the Merton model then implies a credit spread from that leverage plus the option-implied equity vol. cds_reference_bp is the desk's current single-name CDS level for the cross-check (Merton is an INDICATOR, never a pricing input -- the DTCC CDS feed stays the pricing mark).",
+  "provenance": "total_debt_usd: EDGAR XBRL LongTermDebtNoncurrent (data/marketdata/reference/edgar_xbrl_facts.csv, FY2026) where available, else the issuer 10-K. shares_outstanding: issuer 10-K cover / latest 10-Q (approximate, slow-moving). cds_reference_bp: the effective single-name CDS spread the pricer uses (ORCL/META from DTCC; AAPL/MSFT/AMZN are the hardcoded fallbacks per the risk data-gap analysis). REFRESH PATH: these are the values ARag facts_lookup would auto-populate (LongTermDebt, shares) -- wiring that refresh is a later enhancement; the config is the reproducible, offline, dual-mode source in the meantime.",
+  "horizon_years": 1.0,
+  "risk_free_rate": 0.04,
+  "recovery_rate": 0.40,
+  "issuers": {
+    "AAPL": {"total_debt_usd": 78328000000,  "shares_outstanding": 14840000000, "cds_reference_bp": 60.0,  "debt_source": "XBRL FY2026"},
+    "MSFT": {"total_debt_usd": 31423000000,  "shares_outstanding": 7430000000,  "cds_reference_bp": 60.0,  "debt_source": "XBRL FY2026"},
+    "AMZN": {"total_debt_usd": 119074000000, "shares_outstanding": 10620000000, "cds_reference_bp": 75.0,  "debt_source": "XBRL FY2026"},
+    "META": {"total_debt_usd": 58748000000,  "shares_outstanding": 2540000000,  "cds_reference_bp": 73.5,  "debt_source": "XBRL FY2026"},
+    "NVDA": {"total_debt_usd": 7470000000,   "shares_outstanding": 24400000000, "cds_reference_bp": null,  "debt_source": "XBRL FY2027"},
+    "ORCL": {"total_debt_usd": 84000000000,  "shares_outstanding": 2790000000,  "cds_reference_bp": 177.0, "debt_source": "10-K FY2025 (absent from XBRL cache tag)"},
+    "AVGO": {"total_debt_usd": 66000000000,  "shares_outstanding": 4700000000,  "cds_reference_bp": null,  "debt_source": "10-K FY2025 approx (post-VMware)"},
+    "MU":   {"total_debt_usd": 13000000000,  "shares_outstanding": 1120000000,  "cds_reference_bp": null,  "debt_source": "10-K FY2025 approx"},
+    "TSLA": {"total_debt_usd": 5000000000,   "shares_outstanding": 3210000000,  "cds_reference_bp": null,  "debt_source": "10-K FY2025 approx (low-debt)"}
+  }
+}

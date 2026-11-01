@@ -1,0 +1,73 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "tests/spec/scenario-decision-impact/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-17",
+  "criteria": {
+    "C1": [
+      "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_largest_loss",
+      "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_every_scenario_gains_gives_negative_loss",
+      "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_tie_goes_to_first_name",
+      "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_single_scenario_and_zero_multiplier",
+      "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_refusals",
+      "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_property_matches_explicit_loop",
+      "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_metamorphic_scale_permute_append"
+    ],
+    "C2": [
+      "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_point_binding_budget",
+      "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_point_non_binding_budget_is_one",
+      "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_refusals",
+      "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_property_closed_form_and_budget_respected",
+      "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_metamorphic_joint_scaling_and_monotone_budget"
+    ]
+  },
+  "files": {
+    "tests/spec/scenario-decision-impact/test_stress_scale.py": "6d9b2f1d15b26ead1b10d39ea929663b15944e7a3d581211ad2291fceb8b3cb8",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py": "859096442ba6fa2b4d10583fdef285a0ea272bf28cb5bf75399e3fd354d42987"
+  },
+  "id": "scenario-decision-impact",
+  "interface": [
+    {
+      "file": "src/pricer/sizing/stress_constraint.py",
+      "module": "src.pricer.sizing.stress_constraint",
+      "qualname": "worst_stress",
+      "signature": "def worst_stress(multipliers: np.ndarray, scenario_pnl: np.ndarray, names: Sequence[str]) -> tuple[str, float]"
+    },
+    {
+      "file": "src/pricer/sizing/stress_constraint.py",
+      "module": "src.pricer.sizing.stress_constraint",
+      "qualname": "stress_scale",
+      "signature": "def stress_scale(multipliers: np.ndarray, scenario_pnl: np.ndarray, budget: float) -> float"
+    }
+  ],
+  "nodes": [
+    "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_metamorphic_joint_scaling_and_monotone_budget",
+    "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_point_binding_budget",
+    "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_point_non_binding_budget_is_one",
+    "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_property_closed_form_and_budget_respected",
+    "tests/spec/scenario-decision-impact/test_stress_scale.py::test_c2_refusals",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_metamorphic_scale_permute_append",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_every_scenario_gains_gives_negative_loss",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_largest_loss",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_single_scenario_and_zero_multiplier",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_point_tie_goes_to_first_name",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_property_matches_explicit_loop",
+    "tests/spec/scenario-decision-impact/test_worst_stress.py::test_c1_refusals"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/scenario-decision-impact.md",
+    "sha256": "a26aae7a5430d3ee8b1e54d6aa158138db00656a1acd0202b26fd1b279862789"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

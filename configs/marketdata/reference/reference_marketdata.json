@@ -1,0 +1,114 @@
+{
+  "asset_class": "reference",
+  "description": "Reference / static data (§2.7, §4.8): the canonical instruments.json identifier map for all 30 trades (CUSIP/ISIN -> FIGI -> ticker via OpenFIGI) and SEC EDGAR XBRL company fundamentals + hyperscaler capex used for stress-scenario calibration (§2.8). Holiday calendars, day-count conventions and ISDA definitions are shipped by QuantLib / are documents — nothing to download. See docs/design/AITrade_quantlib_portfolio_marketdata.md §1, §2.7, §4.8.",
+
+  "time_window": {
+    "start_date": "2018-01-01",
+    "end_date": "today",
+    "granularity": "quarterly",
+    "stress_cadence": "quarterly",
+    "notes": [
+      "Reference identifiers (OpenFIGI) are effectively static — re-run only when a trade is added (one-time setup, not in the weekly loop).",
+      "EDGAR XBRL fundamentals/capex update quarterly after each earnings season; an 8-year lookback from 2018 captures the pre-AI-capex baseline through the current GPU-capex boom for stress sizing."
+    ]
+  },
+
+  "portfolio": [
+    {"trade": 1,  "display": "NVDA stock",        "asset_class": "equity",  "figi_query": {"idType": "TICKER", "idValue": "NVDA", "exchCode": "US"}},
+    {"trade": 2,  "display": "TSM ADR",           "asset_class": "equity",  "figi_query": {"idType": "TICKER", "idValue": "TSM",  "exchCode": "US"}},
+    {"trade": 3,  "display": "AVGO stock",        "asset_class": "equity",  "figi_query": {"idType": "TICKER", "idValue": "AVGO", "exchCode": "US"}},
+    {"trade": 4,  "display": "MU stock",          "asset_class": "equity",  "figi_query": {"idType": "TICKER", "idValue": "MU",   "exchCode": "US"}},
+    {"trade": 5,  "display": "XLK ETF",           "asset_class": "equity",  "figi_query": {"idType": "TICKER", "idValue": "XLK",  "exchCode": "US"}},
+    {"trade": 6,  "display": "SMH ETF",           "asset_class": "equity",  "figi_query": {"idType": "TICKER", "idValue": "SMH",  "exchCode": "US"}},
+
+    {"trade": 7,  "display": "AAPL LEAPS call",   "asset_class": "option",  "underlier": "AAPL", "figi_query": {"idType": "TICKER", "idValue": "AAPL", "exchCode": "US"}},
+    {"trade": 8,  "display": "NVDA put",          "asset_class": "option",  "underlier": "NVDA"},
+    {"trade": 9,  "display": "MSFT call spread",  "asset_class": "option",  "underlier": "MSFT", "figi_query": {"idType": "TICKER", "idValue": "MSFT", "exchCode": "US"}},
+    {"trade": 10, "display": "META put spread",   "asset_class": "option",  "underlier": "META", "figi_query": {"idType": "TICKER", "idValue": "META", "exchCode": "US"}},
+    {"trade": 11, "display": "TSLA straddle",     "asset_class": "option",  "underlier": "TSLA", "figi_query": {"idType": "TICKER", "idValue": "TSLA", "exchCode": "US"}},
+    {"trade": 12, "display": "SPX put",           "asset_class": "option",  "underlier": "SPX",  "notes": "SPX is a cash index (no security-level FIGI); priced off ECB/CBOE data, not OpenFIGI."},
+    {"trade": 13, "display": "SPX put spread",    "asset_class": "option",  "underlier": "SPX"},
+    {"trade": 14, "display": "QQQ collar",        "asset_class": "option",  "underlier": "QQQ",  "figi_query": {"idType": "TICKER", "idValue": "QQQ",  "exchCode": "US"}},
+
+    {"trade": 15, "display": "AAPL 4.75% 2035",   "asset_class": "bond", "issuer": "AAPL", "cik": "0000320193", "cusip": "037833FB1", "figi_query": {"idType": "ID_CUSIP", "idValue": "037833FB1"}},
+    {"trade": 16, "display": "MSFT 4.10% 2037",   "asset_class": "bond", "issuer": "MSFT", "cik": "0000789019", "cusip": "594918BZ6", "figi_query": {"idType": "ID_CUSIP", "idValue": "594918BZ6"}},
+    {"trade": 17, "display": "ORCL 5.55% 2053",   "asset_class": "bond", "issuer": "ORCL", "cik": "0001341439", "cusip": "68389XCQ6", "figi_query": {"idType": "ID_CUSIP", "idValue": "68389XCQ6"}},
+    {"trade": 18, "display": "META 5.40% 2054",   "asset_class": "bond", "issuer": "META", "cik": "0001326801", "cusip": "30303M8V7", "figi_query": {"idType": "ID_CUSIP", "idValue": "30303M8V7"}},
+    {"trade": 19, "display": "AMZN 4.70% 2032",   "asset_class": "bond", "issuer": "AMZN", "cik": "0001018724", "cusip": "023135CR5", "figi_query": {"idType": "ID_CUSIP", "idValue": "023135CR5"}},
+    {"trade": 20, "display": "UST 10Y OTR",       "asset_class": "treasury", "notes": "On-the-run CUSIP rolls at each auction; resolved dynamically by the bonds/treasurydirect source, not a static FIGI."},
+    {"trade": 21, "display": "UST 2Y OTR",        "asset_class": "treasury", "notes": "On-the-run; see trade #20."},
+
+    {"trade": 22, "display": "10Y SOFR IRS",          "asset_class": "rates", "notes": "OTC swap — no security FIGI; identified by SOFR curve nodes."},
+    {"trade": 23, "display": "5Yx10Y swaption",       "asset_class": "rates", "notes": "OTC — no FIGI."},
+    {"trade": 24, "display": "2Yx5Y Bermudan swaption","asset_class": "rates", "notes": "OTC — no FIGI."},
+    {"trade": 25, "display": "1Y SOFR cap",           "asset_class": "rates", "notes": "OTC — no FIGI."},
+
+    {"trade": 26, "display": "USD/TWD NDS", "asset_class": "fx", "pair": "USDTWD", "notes": "OTC FX/NDF — no security FIGI; identified by currency pair."},
+    {"trade": 27, "display": "USD/JPY FWD", "asset_class": "fx", "pair": "USDJPY", "notes": "OTC FX forward — no FIGI."},
+
+    {"trade": 28, "display": "ORCL CDS",     "asset_class": "credit", "issuer": "ORCL", "cik": "0001341439", "notes": "Single-name CDS — no security FIGI; reference entity = bond issuer (trade #17)."},
+    {"trade": 29, "display": "META CDS",     "asset_class": "credit", "issuer": "META", "cik": "0001326801", "notes": "Single-name CDS — reference entity = bond issuer (trade #18)."},
+    {"trade": 30, "display": "CDX.NA.IG",    "asset_class": "credit", "notes": "Index CDS — composition reference is the S&P DJI annex (credit pipeline), not OpenFIGI."}
+  ],
+
+  "sources": {
+
+    "openfigi": {
+      "enabled": true,
+      "name": "OpenFIGI Mapping — CUSIP/ISIN/ticker -> FIGI (canonical instrument map)",
+      "description": "Resolves every trade carrying a figi_query (equities/ETFs by ticker, corp bonds by CUSIP) to its FIGI + standardized name/ticker/exchange, then writes the full 30-trade portfolio (FIGI-enriched where resolvable) to instruments.json — the canonical cross-source identifier table (CUSIP for TRACE/EDGAR, ticker for Yahoo/CBOE, FIGI as the canonical key). One-time setup; re-run only when a trade is added. Free anonymous tier: 25 requests/min, max 10 mapping jobs per request (a free X-OPENFIGI-APIKEY raises this to 25 jobs/6s but is not required at this volume).",
+      "base_url": "https://api.openfigi.com",
+      "auth": {
+        "type": "api_key_header",
+        "key_env": "OPENFIGI_API_KEY",
+        "header_name": "X-OPENFIGI-APIKEY"
+      },
+      "auth_notes": "The API key is OPTIONAL — anonymous tier (25 req/min, 10 jobs/req) is sufficient for this one-time map. If OPENFIGI_API_KEY is unset the HttpClient logs a benign 'env var not set' warning and proceeds anonymously.",
+      "timeout_s": 30,
+      "rate_limit_delay_s": 2.6,
+      "retry": { "max_attempts": 3, "wait_min_s": 3.0, "wait_max_s": 30.0 },
+      "endpoint": "/v3/mapping",
+      "batch_size": 10,
+      "output_json": "instruments.json",
+      "output_csv": "instruments_figi.csv"
+    },
+
+    "edgar_xbrl": {
+      "enabled": false,
+      "_deprecated": "DEPRECATED 2026-07 (harness-audit F2). Superseded by ARag facts_lookup (POST /api/v1/facts/lookup), which serves the same issuer fundamentals WITH filing citations and is the path scenariogen actually consumes. This standalone CSV was never wired into pricing/risk (the §4.8 use-case-2 credit-spread-stress consumer was never built), so ARag is now the single source of truth for issuer fundamentals. Disabled (no longer refreshed) and de-listed from the DQ gate; the downloader code is retained so it can be re-enabled if a non-ARag fundamentals feed is ever needed.",
+      "name": "SEC EDGAR XBRL — company fundamentals + hyperscaler capex (stress calibration)",
+      "description": "Per-issuer XBRL fact series via the companyconcept API: hyperscaler GPU/capex spend for the AI-capex bust scenario (§2.8 use case 1) and leverage/coverage/liquidity tags for bond-issuer credit-spread stress (§4.8 use case 2). Quarterly cadence (refresh after each earnings season). Requires a descriptive User-Agent or SEC returns 403. Tags that an issuer does not report (e.g. Revenues vs RevenueFromContractWithCustomerExcludingAssessedTax) return 404 and are skipped.",
+      "base_url": "https://data.sec.gov",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "Accept-Encoding": "gzip, deflate"
+      },
+      "timeout_s": 30,
+      "rate_limit_delay_s": 0.15,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "concept_template": "/api/xbrl/companyconcept/CIK{cik}/us-gaap/{tag}.json",
+      "min_expected_facts": 10,
+      "issuers": [
+        {"ticker": "NVDA",  "cik": "0001045810", "role": "hyperscaler_supplier"},
+        {"ticker": "MSFT",  "cik": "0000789019", "role": "hyperscaler+bond_issuer"},
+        {"ticker": "AMZN",  "cik": "0001018724", "role": "hyperscaler+bond_issuer"},
+        {"ticker": "META",  "cik": "0001326801", "role": "hyperscaler+bond_issuer"},
+        {"ticker": "GOOGL", "cik": "0001652044", "role": "hyperscaler"},
+        {"ticker": "AAPL",  "cik": "0000320193", "role": "hyperscaler+bond_issuer"},
+        {"ticker": "ORCL",  "cik": "0001341439", "role": "bond_issuer"}
+      ],
+      "tags": {
+        "PaymentsToAcquirePropertyPlantAndEquipment": "Capex (PP&E tag) — used by MSFT/META/GOOGL/AAPL/ORCL",
+        "PaymentsToAcquireProductiveAssets": "Capex (productive-assets tag) — used by AMZN/NVDA instead of the PP&E tag; both are the GPU/datacenter spend for AI stress calibration",
+        "Revenues": "Revenue (primary tag) — revenue trajectory for equity + credit stress sizing",
+        "RevenueFromContractWithCustomerExcludingAssessedTax": "Revenue (ASC 606 tag) — fallback for issuers not using us-gaap:Revenues",
+        "LongTermDebtNoncurrent": "Long-term debt — leverage ratio for bond spread stress",
+        "NetIncomeLoss": "Net income — interest-coverage numerator, issuer credit quality",
+        "InterestExpense": "Interest expense — interest-coverage denominator",
+        "CashAndCashEquivalentsAtCarryingValue": "Cash — liquidity cushion, downside scenario floor"
+      },
+      "output_file": "edgar_xbrl_facts.csv"
+    }
+
+  }
+}

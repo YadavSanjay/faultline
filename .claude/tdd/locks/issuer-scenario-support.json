@@ -1,0 +1,111 @@
+{
+  "absent": [
+    "conftest.py",
+    "sitecustomize.py",
+    "tests/conftest.py",
+    "usercustomize.py"
+  ],
+  "created": "2026-10-18",
+  "criteria": {
+    "C1": [
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:ORCL-driver]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:ORCL-overlay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:ORCL-replay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:META-driver]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:META-overlay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:META-replay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_both_issuers_in_every_place_at_once",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[credit:-driver]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[credit:-overlay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[credit:-replay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[creditx:ORCL-driver]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[creditx:ORCL-overlay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[creditx:ORCL-replay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[bogus-driver]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[bogus-overlay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[bogus-replay]",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_property_any_uppercase_issuer_driver_validates",
+      "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_property_issuer_accepted_and_other_prefix_rejected_everywhere"
+    ],
+    "C2": [
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_valid_values_returned[production]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_valid_values_returned[crisis]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[absent]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[no-key]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[empty]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[str]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[int]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[list]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[none]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[Production]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[none]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[empty]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[1]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[None]",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_property_result_is_a_source_or_config_error",
+      "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_metamorphic_unrelated_keys_do_not_change_result"
+    ]
+  },
+  "files": {
+    "tests/spec/issuer-scenario-support/conftest.py": "12b7235621214d237188b7b1749d2285407d558c71728bb25de08e145d2f2504",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py": "3522b78b09f55e76e5528ad85effb8de05c5778e690ec23f4b6958f1c463f04b",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py": "a90757a2f555c67507ea2ac7e5096795de41add617aca158d0cd12b8352fbd9b"
+  },
+  "id": "issuer-scenario-support",
+  "interface": [
+    {
+      "file": "src/scenariogen/catalog.py",
+      "module": "src.scenariogen.catalog",
+      "qualname": "severe_covariance_source",
+      "signature": "def severe_covariance_source(spec: Mapping[str, Any]) -> str"
+    }
+  ],
+  "nodes": [
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_both_issuers_in_every_place_at_once",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:META-driver]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:META-overlay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:META-replay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:ORCL-driver]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:ORCL-overlay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_issuer_key_accepted[credit:ORCL-replay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[bogus-driver]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[bogus-overlay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[bogus-replay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[credit:-driver]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[credit:-overlay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[credit:-replay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[creditx:ORCL-driver]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[creditx:ORCL-overlay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_point_non_issuer_keys_still_rejected[creditx:ORCL-replay]",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_property_any_uppercase_issuer_driver_validates",
+    "tests/spec/issuer-scenario-support/test_authoring_issuer_keys.py::test_c1_property_issuer_accepted_and_other_prefix_rejected_everywhere",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_metamorphic_unrelated_keys_do_not_change_result",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[1]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[None]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[Production]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[empty]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_bad_value_raises_config_error[none]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[absent]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[empty]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[int]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[list]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[no-key]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[none]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_default_is_crisis[str]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_valid_values_returned[crisis]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_point_valid_values_returned[production]",
+    "tests/spec/issuer-scenario-support/test_severe_covariance_source.py::test_c2_property_result_is_a_source_or_config_error"
+  ],
+  "red_exempt": [],
+  "retired": {
+    "date": "2026-10-31",
+    "record": "legacy: completed in the private development repository"
+  },
+  "schema": "tdd-lock/1",
+  "spec": {
+    "path": "docs/specs/issuer-scenario-support.md",
+    "sha256": "948cfa2d4c67b2fea73cdeaed3f7729cfa9ceaff0ae6fdccdaffe1c7e029ed47"
+  },
+  "status": "retired",
+  "tool_version": "0.4.0"
+}

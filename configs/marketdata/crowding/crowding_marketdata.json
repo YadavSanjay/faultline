@@ -1,0 +1,25 @@
+{
+  "asset_class": "crowding",
+  "description": "Crowding / positioning data (market-intelligence F5/P7). Every name in this book is consensus-long; the dominant non-fundamental risk is that everyone owns the same AI names and leaves together -- a STATE, not a covariance, so Σ cannot represent it. Verified free source: FINRA consolidated short interest (twice-monthly, days-to-cover per name). NOTE: CFTC COT is unreachable (§8 item 2 / §11.5 gate 2) and is dropped; the 13F holder-concentration leg is a possible follow-on. The #6 SMH position is a SHORT, so a crowded SMH short is squeeze risk -- an upside tail a long-book stress framework will never flag. See design §2/§5 FINDING 5.",
+
+  "time_window": { "start_date": "2023-01-01", "end_date": "today", "granularity": "biweekly" },
+
+  "tickers": ["NVDA", "TSM", "AVGO", "MU", "SMH", "AAPL", "MSFT", "META", "TSLA", "AMZN", "ORCL", "QQQ", "XLK", "GOOGL", "CEG", "VST", "INTC", "AMD"],
+
+  "sources": {
+    "finra_short_interest": {
+      "enabled": true,
+      "name": "FINRA Consolidated Short Interest — F5",
+      "description": "Twice-monthly consolidated short interest per symbol: current short position, average daily volume, and days-to-cover (short position / ADV) -- the direct crowding + squeeze-risk metric. Free JSON/CSV API, no key (POST query).",
+      "base_url": "https://api.finra.org",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 0.5,
+      "retry": { "max_attempts": 3, "wait_min_s": 1.0, "wait_max_s": 16.0 },
+      "endpoint": "/data/group/otcMarket/name/consolidatedShortInterest",
+      "page_limit": 300,
+      "min_expected_rows": 20,
+      "output_file": "short_interest.csv"
+    }
+  }
+}

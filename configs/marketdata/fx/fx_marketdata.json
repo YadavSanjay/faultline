@@ -1,0 +1,115 @@
+{
+  "asset_class": "fx",
+  "description": "Market data for FX Derivatives trades #26-27 (5Y USD/TWD non-deliverable cross-currency swap hedging the TSM-ADR FX exposure; 3M USD/JPY FX forward carry overlay). See docs/design/AITrade_quantlib_portfolio_marketdata.md §1.5, §2.5, §4.6.",
+
+  "portfolio": [
+    {
+      "trade": 26, "display": "USD/TWD NDS", "kind": "xccy_swap",
+      "pair": "USDTWD",
+      "instrument": "5Y USD/TWD non-deliverable cross-currency swap — hedge TSM ADR FX (trade #2)",
+      "ql_engine": "two IborLegs + FX notional resets, multi-curve DiscountingSwapEngine on FX-basis-adjusted discount curve",
+      "spot_source": "fed_h10 (USD/TWD primary) + cbc_twd_spot (NDF settlement fixing)",
+      "fwd_method": "CIP-derived: F = S * (1 + SOFR*T) / (1 + TWD_rate*T) — no free TWD NDF forward feed exists (EMTA retired)",
+      "notes": "USD/TWD spot is the dominant risk driver; the TWD rate differential is second-order (hold fixed or parallel-shift in stress)."
+    },
+    {
+      "trade": 27, "display": "USD/JPY FWD", "kind": "fx_forward",
+      "pair": "USDJPY",
+      "instrument": "3M USD/JPY FX forward — carry overlay",
+      "ql_engine": "FxSwap instrument, trivial discount pricing",
+      "spot_source": "ecb_fx (USD/JPY cross, primary) + fed_h10 (USD/JPY backup)",
+      "fwd_method": "CIP-derived: F = S * (1 + SOFR*T) / (1 + TONAR*T), TONAR from boj_tonar"
+    }
+  ],
+
+  "time_window": {
+    "start_date": "2022-01-01",
+    "end_date": "today",
+    "granularity": "daily",
+    "stress_cadence": "weekly",
+    "notes": [
+      "4-year+ lookback captures the 2022 USD strength episode and TWD devaluation moves for Taiwan-geopolitical stress calibration (§2.8).",
+      "FX forward points are NOT downloaded — no free NDF/forward-point feed survives (EMTA retired, TAIFEX 404). Forwards are CIP-derived at pricing time from spot + short rates (SOFR from the rates pipeline, TONAR from boj_tonar, TWD policy rate from pricing_constants below).",
+      "USD discount leg uses SOFR already captured by the rates pipeline (data/marketdata/rates/nyfed_sofr_rates.csv) — not re-downloaded here."
+    ]
+  },
+
+  "pricing_constants": {
+    "TWD_DISCOUNT_RATE": 0.020,
+    "TWD_DISCOUNT_RATE_notes": "CBC rediscount (policy) rate, currently 2.00%. Anchors the flat TWD OIS curve for the TWD leg of trade #26. Per §4.6 this changes ~4x/year at scheduled CBC board meetings (headline news) — DO NOT automate; update this constant manually on board-decision days. The floating overnight interbank call-loan rate (~0.83%, CBC lp-696-2.html) is a JS-rendered HTML table with no CSV/JSON API and is not automated.",
+    "recovery": null,
+    "day_count": "ACT/360 for USD & TWD money-market legs; CIP tenor T in years"
+  },
+
+  "sources": {
+
+    "ecb_fx": {
+      "enabled": true,
+      "name": "ECB Daily Reference Rates — USD/JPY cross (primary)",
+      "description": "ECB publishes EUR-base reference rates daily (~16:00 CET). USD/JPY is derived as (JPY/EUR)/(USD/EUR) from the two series below — no FRED needed (FRED FX series 504-timeout per §4.6). ECB does NOT carry TWD (use fed_h10). Primary spot for trade #27.",
+      "base_url": "https://data-api.ecb.europa.eu",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/service/data/EXR/D.{ccy}.EUR.SP00.A?format=csvdata",
+      "series": {
+        "usd_eur": "USD",
+        "jpy_eur": "JPY"
+      },
+      "cross": { "name": "usdjpy", "formula": "jpy_eur / usd_eur" },
+      "output_file": "ecb_fx_rates.csv"
+    },
+
+    "fed_h10": {
+      "enabled": true,
+      "name": "Fed H.10 Foreign Exchange Rates — USD/TWD (primary) + USD/JPY (backup)",
+      "description": "Federal Reserve H.10 historical FX tables (one HTML table per pair, Date + Rate columns, units = foreign-ccy per USD, 'ND' on holidays). Updated Mondays ~16:15 ET; coverage 2000-present in a single fetch. Primary source for USD/TWD spot (trade #26, dominant risk driver) and backup for USD/JPY. Date format in the table is DD-MMM-YY.",
+      "base_url": "https://www.federalreserve.gov",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "series": {
+        "usdtwd": "/releases/h10/hist/dat00_ta.htm",
+        "usdjpy": "/releases/h10/hist/dat00_ja.htm"
+      },
+      "output_file": "fed_h10_fx_rates.csv"
+    },
+
+    "boj_tonar": {
+      "enabled": true,
+      "name": "Bank of Japan — Uncollateralized Overnight Call Rate (TONAR, JPY OIS anchor)",
+      "description": "BOJ Time-Series API (launched Feb 2026, free, no auth). Series db=FM01 code=STRDCLUCON = 'Call Rate, Uncollateralized Overnight, Average (Daily)', unit % p.a. Anchors the JPY OIS curve for CIP forward derivation of trade #27 (r_JPY in F = S*(1+r_USD*T)/(1+r_JPY*T)). NOTE: the API's startDate parameter takes YYYYMM (month) format even though the series is daily; the response carries SURVEY_DATES as YYYYMMDD integers (null on non-business days).",
+      "base_url": "https://www.stat-search.boj.or.jp",
+      "auth": { "type": "none" },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "endpoint_template": "/api/v1/getDataCode?lang=en&db=FM01&code=STRDCLUCON&startDate={start_yyyymm}",
+      "series_code": "STRDCLUCON",
+      "output_file": "boj_tonar.csv"
+    },
+
+    "cbc_twd_spot": {
+      "enabled": true,
+      "name": "CBC (Taiwan) — USD/TWD interbank closing rate (NDF settlement fixing)",
+      "description": "Central Bank of the Republic of China (Taiwan) daily NT$/US$ interbank closing rate, lp-700-2.html. This IS the reference rate USD/TWD NDFs settle against in practice — the NDF fixing for trade #26. Paginated HTML (20 rows/page, ~166 pages back to ~2013); page URL pattern lp-700-2-{page}-20.html (page 1 = most recent). No CSV/JSON API (EMTA retired, TAIFEX dailyFXRates 404). Date format YYYY/MM/DD. Complements fed_h10 USD/TWD (Fed rate and CBC fixing differ slightly).",
+      "base_url": "https://www.cbc.gov.tw",
+      "auth": { "type": "user_agent_only" },
+      "extra_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "timeout_s": 45,
+      "rate_limit_delay_s": 1.0,
+      "retry": { "max_attempts": 3, "wait_min_s": 2.0, "wait_max_s": 16.0 },
+      "page_template": "/en/lp-700-2-{page}-20.html",
+      "max_pages": 200,
+      "output_file": "cbc_twd_ndf_fix.csv"
+    }
+
+  }
+}

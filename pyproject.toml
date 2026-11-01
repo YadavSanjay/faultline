@@ -1,0 +1,94 @@
+# Tooling configuration (P0d). No build system declared — the project runs from
+# source in the conda py312 env; this file only configures ruff, mypy, and pytest.
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+src = ["src", "tests", "scripts"]
+# Ad-hoc check scripts and notebooks are out of the gate; src/marketdata is now in it
+# (item 6). The gate covers src/common + src/pricer + src/scenariogen + src/marketdata + tests.
+# tools/tdd is vendored from the tdd-spec skill, checksum-pinned by its MANIFEST.json and only
+# refreshed by `tdd init`; it follows the skill's own standards, not this repo's.
+extend-exclude = ["scripts", "notebooks", "tools/tdd"]
+# Existing findings under the rules below live in the burn-down list, which may only shrink
+# (tools/standards/check_standards.py ratchet). Coding standard: Google Python Style Guide with
+# house deviations (ClaudeConfig rules/python.md).
+extend = "ruff-burndown.toml"
+
+[tool.ruff.lint]
+# A strict, comprehensive selection (not the literal "ALL", which includes mutually
+# exclusive/stylistic noise like one-line-per-docstring): correctness (E/W/F),
+# imports (I), modern syntax (UP), bugs (B), comprehensions (C4), simplify (SIM),
+# returns (RET), misc lint (PIE), perf (PERF), and ruff-native rules (RUF).
+# Standards tier 1 adds naive datetimes (DTZ), security (S), pytest style (PT), print (T20),
+# TODO format (TD), naming (N), f-strings in logging (G004), blanket type-ignores (PGH003),
+# numpy (NPY) and pandas (PD).
+select = [
+    "E", "W", "F", "I", "UP", "B", "C4", "SIM", "RET", "PIE", "PERF", "RUF",
+    "DTZ", "S", "PT", "T20", "TD", "N", "G004", "PGH003", "NPY", "PD",
+]
+ignore = [
+    "RUF012",  # mutable class attrs without ClassVar — our dataclass defaults are intentional
+    "PERF203", # try/except in loop — used deliberately for per-trade fault isolation
+    "N813",    # `import QuantLib as ql` — standard alias (house deviation from the guide)
+]
+
+# `extend-` keeps these alongside the burn-down list's per-file-ignores instead of replacing them.
+[tool.ruff.lint.extend-per-file-ignores]
+# The runner and test bootstrap mutate sys.path before importing src.* by design.
+"src/pricer/runner.py" = ["E402"]
+"src/pricer/risk_runner.py" = ["E402"]
+"src/pricer/governance_runner.py" = ["E402"]
+"src/pricer/lineage_runner.py" = ["E402"]
+"src/pricer/sizing/sizing_runner.py" = ["E402"]
+"src/scenariogen/runner.py" = ["E402"]
+"src/scenariogen/authoring.py" = ["E402"]
+"src/scenariogen/signoff_runner.py" = ["E402"]
+"src/scenariogen/llm/runner.py" = ["E402"]
+# Market-data runners mutate sys.path before importing src.* (same pattern as above).
+"src/marketdata/**/*runner.py" = ["E402"]
+# Tests: assert is the point (S101, PT018), prints are fine (T20), docstrings optional (D).
+"tests/**" = ["E402", "S101", "PT018", "T20", "D"]
+"scripts/**" = ["E402"]
+# The standards checker and its tests exist to run git/ruff/mypy as subprocesses (fixed argument
+# lists, no shell). Kept here rather than as noqa comments so the script stays identical across
+# repos whose tier doesn't select S yet.
+"tools/standards/*" = ["S603", "S607"]
+"tests/tools/*" = ["S603", "S607"]
+
+[tool.standards]
+# Settings for tools/standards/check_standards.py (Stop hook and CI).
+mypy_at_stop = true
+mypy_paths = ["src/common", "src/pricer", "src/scenariogen", "src/marketdata", "tools/standards"]
+protected = ["tests/spec/*", ".claude/tdd/*"]
+
+[tool.mypy]
+python_version = "3.12"
+# QuantLib ships no type stubs; pandas/numpy are typed but third-party edges aren't.
+ignore_missing_imports = true
+# Strict typing is enforced on the pricing module under active hardening.
+strict = true
+files = ["src/common", "src/pricer", "src/scenariogen", "src/marketdata", "tools/standards"]
+# Every `# type: ignore` must name its error code (strict already warns on unused ignores).
+enable_error_code = ["ignore-without-code"]
+# The one relaxation of --strict: allow bare generics (`dict`, `list`, `ndarray`)
+# in signatures. On a config-/QuantLib-/pandas-heavy codebase these would force
+# `dict[str, Any]` everywhere — high churn, ~zero correctness value. Every other
+# strict check (no untyped defs, no implicit Any returns, arg-type, etc.) is ON.
+disallow_any_generics = false
+
+[[tool.mypy.overrides]]
+# The downloaders import `requests`, which ships no type stubs in this env. Suppress only
+# the untyped-import noise; every other strict check still applies to src/marketdata.
+module = "src.marketdata.*"
+disable_error_code = ["import-untyped"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]   # "tests": a site-packages package can also be called tests
+# tests/spec is run only by the tdd gate's controlled run (tools/tdd); locked spec tests fail by
+# design until their implementation merges, so plain pytest leaves them out.
+addopts = "-q --ignore=tests/spec"
+markers = [
+    "needs_market_data: reads ingested data/marketdata; skipped until the core feeds are in (tests/market_data_marker.py)",
+]

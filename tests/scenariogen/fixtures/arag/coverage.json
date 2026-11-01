@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "cik": "0001045810",
+      "ticker": "NVDA",
+      "company_name": "NVIDIA Corp",
+      "fiscal_years": [2023, 2024, 2025],
+      "form_types": ["10-K", "10-Q"]
+    },
+    {
+      "cik": "0000002488",
+      "ticker": "AMD",
+      "company_name": "Advanced Micro Devices Inc",
+      "fiscal_years": [2024, 2025],
+      "form_types": ["10-K"]
+    }
+  ]
+}
